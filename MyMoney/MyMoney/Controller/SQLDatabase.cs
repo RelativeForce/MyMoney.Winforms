@@ -14,12 +14,12 @@ namespace MyMoney.Data_Storage
     /// the singleton pattern and the instance of this class can be accessed
     /// using <see cref="#getInstance"/>.
     /// </summary>
-    public class SQLHandler
+    public class SQLDatabase
     {
         /// <summary>
-        /// The singleton static instance of the <see cref="SQLHandler"/>.
+        /// The singleton static instance of the <see cref="SQLDatabase"/>.
         /// </summary>
-        private static SQLHandler INSTANCE = new SQLHandler();
+        private static SQLDatabase INSTANCE = new SQLDatabase();
 
         /// <summary>
         /// The connection to the SQL database file.
@@ -27,9 +27,9 @@ namespace MyMoney.Data_Storage
         private SQLiteConnection DBConnection;
 
         /// <summary>
-        /// Constructs the <see cref="SQLHandler"/>.
+        /// Constructs the <see cref="SQLDatabase"/>.
         /// </summary>
-        private SQLHandler()
+        private SQLDatabase()
         {
             connect();
         }
@@ -43,18 +43,18 @@ namespace MyMoney.Data_Storage
             try
             {
 
-                if (!DatabaseHandler.FILE_PATH.Equals("undefined"))
+                if (!TableManager.FILE_PATH.Equals("undefined"))
                 {
-                    System.IO.File.WriteAllText(DatabaseHandler.STORAGE_FILE, DatabaseHandler.FILE_PATH);
+                    System.IO.File.WriteAllText(TableManager.STORAGE_FILE, TableManager.FILE_PATH);
 
                     // Attempt to open the connection to the database file.
-                    DBConnection = new SQLiteConnection(@"Data Source=" + DatabaseHandler.FILE_PATH + ";Version=3;");
+                    DBConnection = new SQLiteConnection(@"Data Source=" + TableManager.FILE_PATH + ";Version=3;");
                     DBConnection.Open();
 
                     // If this line is reached then the connection was successfully established.
                     Console.Out.WriteLine("Connection Establised");
 
-                    DatabaseHandler.getInstance().load(DateTime.Today);
+                    TableManager.getInstance().load(DateTime.Today);
 
                 }
 
@@ -282,8 +282,8 @@ namespace MyMoney.Data_Storage
         /// <summary>
         /// Retrieves the instance of this object.
         /// </summary>
-        /// <returns><see cref="SQLHandler"/></returns>
-        public static SQLHandler getInstance()
+        /// <returns><see cref="SQLDatabase"/></returns>
+        public static SQLDatabase getInstance()
         {
             return INSTANCE;
         }

@@ -38,7 +38,7 @@ namespace MyMoney.Database
 
 
         /// <summary>
-        /// Creates the Repeat table in the local sql database using the <see cref="SQLHandler"/>.
+        /// Creates the Repeat table in the local sql database using the <see cref="SQLDatabase"/>.
         /// </summary>
         public override void create()
         {
@@ -52,7 +52,7 @@ namespace MyMoney.Database
                 + ");";
 
             // Executes the command
-            SQLHandler.getInstance().executeNONQuery(SQL);
+            SQLDatabase.getInstance().executeNONQuery(SQL);
 
         }
     }

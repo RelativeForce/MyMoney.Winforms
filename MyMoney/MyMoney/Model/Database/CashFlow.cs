@@ -81,7 +81,7 @@ namespace MyMoney.Database
                 + "-" + endMonthString[3] + "" + endMonthString[4]
                 + "-" + "01";
 
-            SQLHandler.getInstance().executeQuery("SELECT * FROM CashFlow"
+            SQLDatabase.getInstance().executeQuery("SELECT * FROM CashFlow"
                 + " WHERE " + DATE_COLOUMN
                 + " BETWEEN '" + startMonth + "' AND '" + endMonth + "'"
                 + " ORDER BY " + DATE_COLOUMN + " DESC;", out this.rawTable);
@@ -179,7 +179,7 @@ namespace MyMoney.Database
                 + "-" + date[3] + "" + date[4]
                 + "-" + date[0] + "" + date[1];
 
-            SQLHandler.getInstance().executeNONQuery(
+            SQLDatabase.getInstance().executeNONQuery(
                 "INSERT INTO CashFlow VALUES ('" + id
                 + "', '" + description
                 + "', '" + formattedDate
@@ -200,7 +200,7 @@ namespace MyMoney.Database
             string MAX_COLOUMN = "Maximum";
 
             // Hold the highest transaction id in the CashFlow table plus one.
-            int id = SQLHandler.getInstance().executeQuery("SELECT MAX(" + CashFlow.TRANSACTION_ID_COLOUMN
+            int id = SQLDatabase.getInstance().executeQuery("SELECT MAX(" + CashFlow.TRANSACTION_ID_COLOUMN
                     + ") AS " + MAX_COLOUMN
                     + " FROM " + CashFlow.TABLE_NAME + ";", MAX_COLOUMN) + 1;
 
@@ -280,7 +280,7 @@ namespace MyMoney.Database
         }
 
         /// <summary>
-        /// Creates the CashFlow table in the local sql database using the <see cref="SQLHandler"/>.
+        /// Creates the CashFlow table in the local sql database using the <see cref="SQLDatabase"/>.
         /// </summary>
         public override void create()
         {
@@ -294,7 +294,7 @@ namespace MyMoney.Database
                 + ");";
 
             // Executes the command
-            SQLHandler.getInstance().executeNONQuery(SQL);
+            SQLDatabase.getInstance().executeNONQuery(SQL);
 
         }
 
@@ -310,7 +310,7 @@ namespace MyMoney.Database
             string SQL = "DELETE FROM " + TABLE_NAME + " WHERE " + CashFlow.TRANSACTION_ID_COLOUMN + " = " + id;
 
             // Execute the query that will remove the transaction from the database.
-            SQLHandler.getInstance().executeNONQuery(SQL);
+            SQLDatabase.getInstance().executeNONQuery(SQL);
 
             // Holds the row from the CashFlow table to be removed.
             Row toDelete = null;
@@ -414,7 +414,7 @@ namespace MyMoney.Database
 
             }
             // Exectute the update on the SQL database.
-            SQLHandler.getInstance().executeNONQuery(
+            SQLDatabase.getInstance().executeNONQuery(
                 "UPDATE " + TABLE_NAME + " SET " + updatedCol
                 + " = " + (updatedCol.Equals(AMOUNT_COLOUMN) ? newValue : "'" + newValue + "'")
                 + " WHERE " + TRANSACTION_ID_COLOUMN + " = " + id + ";"
@@ -454,7 +454,7 @@ namespace MyMoney.Database
             public override void loadFromSource(DateTime startDate)
             {
 
-                SQLHandler.getInstance().executeQuery("SELECT MAX(" + CashFlow.TRANSACTION_ID_COLOUMN
+                SQLDatabase.getInstance().executeQuery("SELECT MAX(" + CashFlow.TRANSACTION_ID_COLOUMN
                     + ") AS " + MAX_COLOUMN
                     + " FROM " + CashFlow.TABLE_NAME + ";", out this.rawTable);
 

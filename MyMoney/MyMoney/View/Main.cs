@@ -25,9 +25,9 @@ namespace MyMoney.Windows
     {
 
         /// <summary>
-        /// Stores a refernece to the singleton of <see cref="SQLHandler"/>.
+        /// Stores a refernece to the singleton of <see cref="SQLDatabase"/>.
         /// </summary>
-        private SQLHandler SQL = SQLHandler.getInstance();
+        private SQLDatabase SQL = SQLDatabase.getInstance();
 
         /// <summary>
         /// Handles all the behaviours of the graph on this form
@@ -152,27 +152,27 @@ namespace MyMoney.Windows
         private void checkStorageFile()
         {
             // If there is no current database file open in program.
-            if (DatabaseHandler.FILE_PATH.Equals("undefined"))
+            if (TableManager.FILE_PATH.Equals("undefined"))
             {
                 // If the storage file does not exist in the local storage.
-                if (!System.IO.File.Exists(DatabaseHandler.STORAGE_FILE))
+                if (!System.IO.File.Exists(TableManager.STORAGE_FILE))
                 {
                     // Feedback and create the file.
                     Console.Out.WriteLine("Storage Created");
-                    System.IO.File.Create(DatabaseHandler.STORAGE_FILE);
+                    System.IO.File.Create(TableManager.STORAGE_FILE);
                 }
                 else
                 {
                     // Feedback and read the contents of the storage file.
                     Console.Out.WriteLine("Storage Located");
-                    string storageFileText = System.IO.File.ReadAllText(DatabaseHandler.STORAGE_FILE);
+                    string storageFileText = System.IO.File.ReadAllText(TableManager.STORAGE_FILE);
 
                     // Check that the file specified in the storage exists.
                     if (System.IO.File.Exists(storageFileText))
                     {
                         // Feedback and set the specified file as the file to be loaded.
                         Console.Out.WriteLine("Stored File Loaded");
-                        DatabaseHandler.FILE_PATH = storageFileText;
+                        TableManager.FILE_PATH = storageFileText;
 
                         // Connect to the database file and enable the controls on the main form.
                         SQL.connect();
@@ -182,7 +182,7 @@ namespace MyMoney.Windows
                     {
                         // The file is wiped because the contents are invalid.
                         Console.Out.WriteLine("Stored File Invalid, Wiping Storage File.");
-                        System.IO.File.WriteAllText(DatabaseHandler.STORAGE_FILE, "");
+                        System.IO.File.WriteAllText(TableManager.STORAGE_FILE, "");
                     }
                 }
             }
@@ -331,7 +331,7 @@ namespace MyMoney.Windows
         {
 
             // Import new month
-            DatabaseHandler.getInstance().load(highlightedMonth);
+            TableManager.getInstance().load(highlightedMonth);
 
             updateView();
         }
@@ -518,19 +518,19 @@ namespace MyMoney.Windows
             {
                 // IF the file specified in the open file €dialog is 
                 // NOT the same as the current database.
-                if (!DatabaseHandler.FILE_PATH.Equals(dialog.FileName))
+                if (!TableManager.FILE_PATH.Equals(dialog.FileName))
                 {
                     // Clear the internal storage.
-                    DatabaseHandler.getInstance().clear();
+                    TableManager.getInstance().clear();
 
                     // Assign the specified file as the new database file.
-                    DatabaseHandler.FILE_PATH = dialog.FileName;
+                    TableManager.FILE_PATH = dialog.FileName;
 
                     // Connect to the new database.
                     SQL.connect();
 
                     // Load the new database into internal storage.
-                    DatabaseHandler.getInstance().load(highlightedMonth);
+                    TableManager.getInstance().load(highlightedMonth);
 
                     // Enable the view controls.
                     enableOperationControls();
@@ -562,22 +562,22 @@ namespace MyMoney.Windows
             {
 
                 // If the specified file path is different to that in internal storage.
-                if (!DatabaseHandler.FILE_PATH.Equals(dialog.FileName))
+                if (!TableManager.FILE_PATH.Equals(dialog.FileName))
                 {
                     // Assign the new file path.
-                    DatabaseHandler.FILE_PATH = dialog.FileName;
+                    TableManager.FILE_PATH = dialog.FileName;
 
                     // Clear the internal database.
-                    DatabaseHandler.getInstance().clear();
+                    TableManager.getInstance().clear();
 
                     // Create the database structure in the new file.
-                    DatabaseHandler.getInstance().create();
+                    TableManager.getInstance().create();
 
                     // Connect to new database.
                     SQL.connect();
 
                     // Load databasde into internal memory.
-                    DatabaseHandler.getInstance().load(highlightedMonth);
+                    TableManager.getInstance().load(highlightedMonth);
 
                     enableOperationControls();
                 }
@@ -655,13 +655,13 @@ namespace MyMoney.Windows
             {
                 // IF the file specified in the open file €dialog is 
                 // NOT the same as the current database.
-                if (!DatabaseHandler.FILE_PATH.Equals(dialog.FileName))
+                if (!TableManager.FILE_PATH.Equals(dialog.FileName))
                 {
                     // Clear the internal storage.
-                    DatabaseHandler.getInstance().clear();
+                    TableManager.getInstance().clear();
 
                     // Assign the specified file as the new database file.
-                    DatabaseHandler.FILE_PATH = dialog.FileName;
+                    TableManager.FILE_PATH = dialog.FileName;
 
                     // Connect to the new database.
                     SQL.connect();
@@ -670,7 +670,7 @@ namespace MyMoney.Windows
                     SQL.updateDB();
 
                     // Load the new database into internal storage.
-                    DatabaseHandler.getInstance().load(highlightedMonth);
+                    TableManager.getInstance().load(highlightedMonth);
 
                     // Enable the view controls.
                     enableOperationControls();

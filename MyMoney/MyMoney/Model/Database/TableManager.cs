@@ -11,10 +11,10 @@ namespace MyMoney.Database
     /// <summary>
     /// Encapsulates the functionality of the Database. This includes creating all the tables.
     /// </summary>
-    public class DatabaseHandler
+    public class TableManager
     {
 
-        private static DatabaseHandler INSTANCE = new DatabaseHandler();
+        private static TableManager INSTANCE = new TableManager();
 
         /// <summary>
         /// The file name given to the local sql database.
@@ -40,7 +40,7 @@ namespace MyMoney.Database
         public void create()
         {
             // Create the database file.
-            SQLHandler.getInstance().createDBFile(FILE_PATH);
+            SQLDatabase.getInstance().createDBFile(FILE_PATH);
 
             // Create the CashFlow Table
             CashFlow.getInstance().create();
@@ -49,7 +49,7 @@ namespace MyMoney.Database
             Budget.getInstance().create();
         }
 
-        public static DatabaseHandler getInstance() {
+        public static TableManager getInstance() {
             return INSTANCE;
         }
 

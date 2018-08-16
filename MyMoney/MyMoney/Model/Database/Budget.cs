@@ -52,7 +52,7 @@ namespace MyMoney.Database
         /// </summary>
         public override void loadFromSource(DateTime date)
         {
-            SQLHandler.getInstance().executeQuery("SELECT * FROM " + TABLE_NAME + ";", out this.rawTable);
+            SQLDatabase.getInstance().executeQuery("SELECT * FROM " + TABLE_NAME + ";", out this.rawTable);
             Console.WriteLine("Budget Loaded");
         }
 
@@ -69,7 +69,7 @@ namespace MyMoney.Database
                     + ");";
 
             // Executes the command
-            SQLHandler.getInstance().executeNONQuery(SQL);
+            SQLDatabase.getInstance().executeNONQuery(SQL);
 
         }
 
@@ -93,7 +93,7 @@ namespace MyMoney.Database
 
                 allowance.updateColoumn(AMOUNT_COLOUMN, row.getValue(AMOUNT_COLOUMN));
 
-                SQLHandler.getInstance().executeNONQuery(
+                SQLDatabase.getInstance().executeNONQuery(
                     "UPDATE " + TABLE_NAME
                     + " SET " + AMOUNT_COLOUMN + " = " + row.getValue(AMOUNT_COLOUMN)
                     + " WHERE " + MONTH_COLOUMN + " = '" + row.getValue(MONTH_COLOUMN) + "';"
@@ -107,7 +107,7 @@ namespace MyMoney.Database
                 base.addRow(row);
 
                 // Add the entry to the SQL database.
-                SQLHandler.getInstance().executeNONQuery(
+                SQLDatabase.getInstance().executeNONQuery(
                     "INSERT INTO " + TABLE_NAME
                     + " VALUES ('" + row.getValue(MONTH_COLOUMN)
                     + "', " + row.getValue(AMOUNT_COLOUMN) + ");");
