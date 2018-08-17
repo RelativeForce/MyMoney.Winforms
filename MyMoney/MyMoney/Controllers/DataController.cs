@@ -155,6 +155,10 @@ namespace MyMoney.Controllers
 
             Row[] results = GetRows(sameMonthCode, BudgetModel.TABLE_NAME);
 
+            if (results.Length == 0) {
+                return 200;
+            }
+
             string currentValueStr = results[0].getValue(BudgetModel.AMOUNT_COLOUMN);
 
             return double.Parse(currentValueStr);
