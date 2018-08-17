@@ -138,7 +138,7 @@ namespace MyMoney.Windows.User_Display
                 string description = toDelete.description.Text;
                 string amount = toDelete.amount.Text;
 
-                // If the view is populated then deleted it from the CashFlow table.
+                // If the view is populated then deleted it from the CashFlowController table.
                 if (!date.Equals("") && !description.Equals("") && !amount.Equals(""))
                 {
 

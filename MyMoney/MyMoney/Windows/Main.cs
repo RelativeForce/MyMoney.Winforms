@@ -106,7 +106,13 @@ namespace MyMoney.Windows
 
             this.Text = Assembly.GetExecutingAssembly().GetName().Name + " [" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "]";
 
-            checkStorageFile();
+
+            if (InitialiseFileStore())
+            {
+                SQL.connect();
+                enableOperationControls();
+            }
+
         }
 
         /// <summary>
@@ -141,51 +147,6 @@ namespace MyMoney.Windows
             }
 
             e.Handled = true;
-        }
-
-        /// <summary>
-        /// Checks if the storage file exists and that it contains 
-        /// the absolute file path of a database file. If so 
-        /// <see cref="DatabaseHandler#FILE_PATH"/> is assigned the 
-        /// stored database path. 
-        /// </summary>
-        private void checkStorageFile()
-        {
-            // If there is no current database file open in program.
-            if (TableManager.FILE_PATH.Equals("undefined"))
-            {
-                // If the storage file does not exist in the local storage.
-                if (!System.IO.File.Exists(TableManager.STORAGE_FILE))
-                {
-                    // Feedback and create the file.
-                    Console.Out.WriteLine("Storage Created");
-                    System.IO.File.Create(TableManager.STORAGE_FILE);
-                }
-                else
-                {
-                    // Feedback and read the contents of the storage file.
-                    Console.Out.WriteLine("Storage Located");
-                    string storageFileText = System.IO.File.ReadAllText(TableManager.STORAGE_FILE);
-
-                    // Check that the file specified in the storage exists.
-                    if (System.IO.File.Exists(storageFileText))
-                    {
-                        // Feedback and set the specified file as the file to be loaded.
-                        Console.Out.WriteLine("Stored File Loaded");
-                        TableManager.FILE_PATH = storageFileText;
-
-                        // Connect to the database file and enable the controls on the main form.
-                        SQL.connect();
-                        enableOperationControls();
-                    }
-                    else
-                    {
-                        // The file is wiped because the contents are invalid.
-                        Console.Out.WriteLine("Stored File Invalid, Wiping Storage File.");
-                        System.IO.File.WriteAllText(TableManager.STORAGE_FILE, "");
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -268,7 +229,7 @@ namespace MyMoney.Windows
                 if (packet.source is AddTransactionWindow)
                 {
 
-                    // Cast the packet date as a Row and add that row to the CashFlow Table.
+                    // Cast the packet date as a Row and add that row to the CashFlowController Table.
                     CashFlow.getInstance().addRow(packet.data as Row);
 
                     viewer.display();

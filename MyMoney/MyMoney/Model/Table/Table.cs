@@ -4,24 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyMoney.Data_Storage
+namespace MyMoney.Model.Table
 {
     /// <summary>
     /// The internal representation of an SQL table. This encapsulates 
     /// the behaviour of storing and retrieving <see cref="Row"/>s while 
     /// also storing the coloumn titles that are used to format those rows.
     /// </summary>
-    public abstract class Table
-    {
-        /// <summary>
-        /// Imports the contents of the table from the database file.
-        /// </summary>
-        public abstract void loadFromSource(DateTime date);
-
-        /// <summary>
-        /// Creates the table in the database file.
-        /// </summary>
-        public abstract void create();
+    public class Table
+    { 
 
         /// <summary>
         /// The list of <see cref="Row"/>s that make up the table.
@@ -319,7 +310,7 @@ namespace MyMoney.Data_Storage
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
-        private Boolean check(Row row)
+        public bool check(Row row)
         {
 
             // This holds all the rows that should be in the table.

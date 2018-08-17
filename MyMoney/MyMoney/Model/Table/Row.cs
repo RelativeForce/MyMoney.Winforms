@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyMoney.Data_Storage
+namespace MyMoney.Model.Table
 {
     /// <summary>
     /// Encapsulates the behaviour of a row in the <see cref="Table"/>.
@@ -77,7 +77,7 @@ namespace MyMoney.Data_Storage
 
             return false;
         }
-
+        
         /// <summary>
         /// Updates the value assigned to a specifed coloumn with a new specifed value.
         /// </summary>
