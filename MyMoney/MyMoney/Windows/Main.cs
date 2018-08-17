@@ -10,95 +10,57 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Reflection;
-// Finance_Handler Imports
-using MyMoney.Data_Storage;
-using MyMoney.Windows.Data_Transfer;
+// MyMoney Imports
 using MyMoney.Windows.User_Display;
-using MyMoney.Database;
+using MyMoney.Controllers;
+using MyMoney.File;
+using MyMoney.Model.Database;
+using MyMoney.Model.Table;
 
 namespace MyMoney.Windows
 {
-    /// <summary>
-    /// The background functionality for the Main form.
-    /// </summary>
-    public partial class Main_Form : Form, Buffered
+
+    public partial class Main_Form : Form, IView
     {
 
-        /// <summary>
-        /// Stores a refernece to the singleton of <see cref="SQLDatabase"/>.
-        /// </summary>
-        private SQLDatabase SQL = SQLDatabase.getInstance();
+        private readonly IDataController controller;
 
-        /// <summary>
-        /// Handles all the behaviours of the graph on this form
-        /// </summary>
+        private readonly FileStoreManager fileStore;
+
         private GraphHandler plotter;
 
-        /// <summary>
-        /// Handles all the behaviours of the transaction view components on the form.
-        /// </summary>
         private TransactionViewer viewer;
 
-        /// <summary>
-        /// Allows data to being transafered between another form and this to cause 
-        /// changes in the components on this form.
-        /// </summary>
-        public System.ComponentModel.BackgroundWorker buffer;
-
-        /// <summary>
-        /// The instance of the <see cref="AddTransactionWindow"/> that is 
-        /// displayed by the main form. Only one can be displayed at a time.
-        /// </summary>
         private AddTransactionWindow addTransactionWindow;
 
-        /// <summary>
-        /// The instance of the <see cref="MonthlyAllowanceChanger"/> that is 
-        /// displayed by the main form. Only one may be active at any given time.
-        /// </summary>
         private MonthlyAllowanceChanger monthlyAllowanceChanger;
 
-        /// <summary>
-        /// Stores the <see cref="DateTime"/> that denoted the month displayed on the main form.
-        /// </summary>
         private DateTime highlightedMonth;
 
-        /// <summary>
-        /// Holds the value of the view field that is currently being modifed by the user.
-        /// </summary>
         private string previousValue = "";
 
-        /// <summary>
-        /// Holds wherther the user successfully updated the transaction. If not 
-        /// the <see cref="previousValue"/> will replace what ever the user changed 
-        /// the filed to when the field is no longer selected.
-        /// </summary>
         private Boolean updated = false;
 
-        /// <summary>
-        /// Handles all the toolTips behaviours on this form.
-        /// </summary>
         private ToolTipHandler toolTipHandler;
 
-        /// <summary>
-        /// Constructs the main form.
-        /// </summary>
-        public Main_Form()
+        public Main_Form(IDataController controller, FileStoreManager fileStore)
         {
+            this.controller = controller;
+            this.fileStore = fileStore;
+
+            controller.AddView(this);
 
             InitializeComponent();
 
-            this.buffer = new System.ComponentModel.BackgroundWorker();
-            this.buffer.DoWork += new System.ComponentModel.DoWorkEventHandler(this.parsePacket);
-
             this.highlightedMonth = DateTime.Today;
-            this.plotter = new GraphHandler(monthPlot);
+            this.plotter = new GraphHandler(monthPlot, controller);
 
             this.viewer = new TransactionViewer(
-                new TransactionView[] { 
-                    new TransactionView(date1, description1, amount1, delete1), 
+                new TransactionView[] {
+                    new TransactionView(date1, description1, amount1, delete1),
                     new TransactionView(date2, description2, amount2, delete2),
                     new TransactionView(date3, description3, amount3, delete3),
-                }, scrollBar, highlightedMonth);
+                }, scrollBar, highlightedMonth, controller);
 
             this.toolTipHandler = new ToolTipHandler();
 
@@ -107,19 +69,15 @@ namespace MyMoney.Windows
             this.Text = Assembly.GetExecutingAssembly().GetName().Name + " [" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "]";
 
 
-            if (InitialiseFileStore())
+            if (fileStore.Read())
             {
-                SQL.connect();
+                controller.Connect();
+                controller.Load();
                 enableOperationControls();
             }
 
         }
 
-        /// <summary>
-        /// Triggered when the user presses a key on the main form.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void keyPressed(object sender, KeyEventArgs e)
         {
 
@@ -149,11 +107,6 @@ namespace MyMoney.Windows
             e.Handled = true;
         }
 
-        /// <summary>
-        /// Occurs when the Main Form is initally loaded.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void loadForm(object sender, EventArgs e)
         {
 
@@ -163,103 +116,29 @@ namespace MyMoney.Windows
 
         }
 
-        /// <summary>
-        /// Triggered when the user uses the <see cref="scrollBar"/> this 
-        /// method causes the <see cref="veiwer"/> to be rerended with 
-        /// <see cref="TransactionView"/>s based on the position of the scroll bar.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void scroll(object sender, EventArgs e)
         {
             // Rerender the viewer.
             viewer.display();
         }
 
-        /// <summary>
-        /// Opens the <see cref="AddTransactionWindow"/>.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void addTransaction(object sender, EventArgs e)
         {
             // If there is now AddTranactionWindow open then open one.
             if (addTransactionWindow == null || addTransactionWindow.IsDisposed)
             {
-                addTransactionWindow = new AddTransactionWindow(this);
+                addTransactionWindow = new AddTransactionWindow(controller);
                 addTransactionWindow.Show();
             }
         }
 
-        /// <summary>
-        /// Occurs when the Main Form is closed.
-        /// </summary>
-        /// <param name="sender">unused.</param>
-        /// <param name="e">Unused.</param>
         private void formClosed(object sender, FormClosedEventArgs e)
         {
-            SQL.terminate();
+            controller.Disconnect();
+
+            controller.RemoveView(this);
         }
 
-        /// <summary>
-        /// Used to revive <see cref="Packet"/>s from other Forms.
-        /// </summary>
-        /// <param name="packet">The data to be transfered.</param>
-        public void recieve(Packet packet)
-        {
-            // Pass the paket to the buffer to allow the thread safe parsing of the Packet.
-            buffer.RunWorkerAsync(packet);
-        }
-
-        /// <summary>
-        /// Parses packets from other forms.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Packet of data</param>
-        private void parsePacket(object sender, DoWorkEventArgs e)
-        {
-            // Cast to Packet.
-            Packet packet = e.Argument as Packet;
-
-            try
-            {
-
-                Console.WriteLine("Data Recieved");
-
-                if (packet.source is AddTransactionWindow)
-                {
-
-                    // Cast the packet date as a Row and add that row to the CashFlowController Table.
-                    CashFlow.getInstance().addRow(packet.data as Row);
-
-                    viewer.display();
-
-                    plotter.draw(highlightedMonth);
-
-                }
-                else if (packet.source is MonthlyAllowanceChanger)
-                {
-
-                    Budget.getInstance().addRow(packet.data as Row);
-
-                    plotter.draw(highlightedMonth);
-
-                }
-                Console.WriteLine("Successful Data Transfer");
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Failed Data Transfer");
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Occurs when a delete button is pressed. Causes a transaction to be deleted.
-        /// </summary>
-        /// <param name="sender">The button that was pressed.</param>
-        /// <param name="e"Unused.></param>
         private void deleteTransaction(object sender, EventArgs e)
         {
             // Confirm that the transaction should be deleted.
@@ -273,35 +152,21 @@ namespace MyMoney.Windows
             }
         }
 
-        /// <summary>
-        /// Occurs when the value in <see cref="highlightMonth"/> is changed and 
-        /// redraws the plaoter and display based on the new date value.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void nextMonth(object sender, EventArgs e)
         {
             highlightedMonth = highlightedMonth.AddMonths(1);
             loadMonth();
         }
 
-        /// <summary>
-        /// Load the month that is currently specifed by the <see cref="highlightedMonth"/>.
-        /// </summary>
         private void loadMonth()
         {
 
-            // Import new month
-            TableManager.getInstance().load(highlightedMonth);
+            controller.SetStartDate(highlightedMonth);
+            controller.Load();
 
             updateView();
         }
 
-        /// <summary>
-        /// Check the months stored in the database to see if the 
-        /// <see cref="rightButton"/> and <see cref="leftButton"/> 
-        /// should be enabled or disable.
-        /// </summary>
         private void updateView()
         {
             // If month currently being displayed is the present month 
@@ -334,11 +199,6 @@ namespace MyMoney.Windows
 
         }
 
-        /// <summary>
-        /// Changes the currently selected month ot the previous month.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void previousMonth(object sender, EventArgs e)
         {
             // Deincrement the month.
@@ -346,32 +206,17 @@ namespace MyMoney.Windows
             loadMonth();
         }
 
-        /// <summary>
-        /// Displays the update transaction tool tip. Occurs when the user hovers over a transaction field.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void displayUpdateTransactionToolTip(object sender, EventArgs e)
         {
             // Display a tool tip to help users understand how to update transactions.
             toolTipHandler.draw("Updating Transactions", "Press ENTER to save your changes.", (sender as RichTextBox));
         }
 
-        /// <summary>
-        /// Saves the focused text box's contents in <see cref="previousValue"/>.
-        /// </summary>
-        /// <param name="sender">Focused Ricg=h text box.</param>
-        /// <param name="e">Unused.</param>
         private void beginUpdate(object sender, EventArgs e)
         {
             previousValue = (sender as RichTextBox).Text;
         }
 
-        /// <summary>
-        /// Checks if the focused text box was updated or not.
-        /// </summary>
-        /// <param name="sender">Focused text box.</param>
-        /// <param name="e">Unused.</param>
         private void endUpdate(object sender, EventArgs e)
         {
             if (!updated)
@@ -384,11 +229,6 @@ namespace MyMoney.Windows
             }
         }
 
-        /// <summary>
-        /// Updates a transaction field. Occurs when a user types in a field.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e">Key presses in a RichTextBox</param>
         private void updateField(object sender, KeyEventArgs e)
         {
             // If the user pressed enter.
@@ -420,46 +260,26 @@ namespace MyMoney.Windows
 
         }
 
-        /// <summary>
-        /// Shows a transaction update failure tool tip.
-        /// </summary>
-        /// <param name="sender">Text box to display the tool tip on.</param>
-        /// <param name="errorMessage">Message to be displayed.</param>
         private void displayFailUpdatedFieldToolTip(RichTextBox sender, string errorMessage)
         {
             toolTipHandler.draw("Failure", errorMessage, sender);
         }
 
-        /// <summary>
-        /// Shows a sucsessful transaction update tool tip. 
-        /// </summary>
-        /// <param name="sender">Text box to display the tool tip on.</param>
         private void displaySuccessUpdatedFieldToolTip(RichTextBox sender)
         {
             toolTipHandler.draw("Success", "Your changes have been saved.", sender);
         }
 
-        /// <summary>
-        /// Triggered by clicking the <see cref="changeMonthlyAllowanceButton"/>. 
-        /// Opens a <see cref="MonthlyAllowanceChanger"/> if one is not currently open.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void changeMonthlyAllowance(object sender, EventArgs e)
         {
             // If there is no current MonthlyAllowanceChanger active then open a new one.
             if (monthlyAllowanceChanger == null || monthlyAllowanceChanger.IsDisposed)
             {
-                this.monthlyAllowanceChanger = new MonthlyAllowanceChanger(this, highlightedMonth);
+                this.monthlyAllowanceChanger = new MonthlyAllowanceChanger(controller, highlightedMonth);
                 this.monthlyAllowanceChanger.Show();
             }
         }
 
-        /// <summary>
-        /// Creates a open file dialog. The user will then select a new database file and it is opened.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void importDBFile(object sender, EventArgs e)
         {
             // Holds a new Open file dialog
@@ -474,31 +294,19 @@ namespace MyMoney.Windows
             dialog.CheckFileExists = true;
             dialog.CheckPathExists = true;
 
-            // If the user clicks ok in the dialog.
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                // IF the file specified in the open file €dialog is 
-                // NOT the same as the current database.
-                if (!TableManager.FILE_PATH.Equals(dialog.FileName))
-                {
-                    // Clear the internal storage.
-                    TableManager.getInstance().clear();
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+            if (FileStoreManager.DB_FILE_PATH.Equals(dialog.FileName)) return;
 
-                    // Assign the specified file as the new database file.
-                    TableManager.FILE_PATH = dialog.FileName;
+            fileStore.ClearFileStore();
 
-                    // Connect to the new database.
-                    SQL.connect();
+            FileStoreManager.DB_FILE_PATH = dialog.FileName;
 
-                    // Load the new database into internal storage.
-                    TableManager.getInstance().load(highlightedMonth);
+            controller.Connect();
+            controller.SetStartDate(highlightedMonth);
+            controller.Load();
 
-                    // Enable the view controls.
-                    enableOperationControls();
+            enableOperationControls();
 
-                }
-
-            }
         }
 
         /// <summary>
@@ -518,39 +326,24 @@ namespace MyMoney.Windows
             dialog.Filter = "sqlite files (*.sqlite)|*.sqlite";
             dialog.DefaultExt = "sqlite";
 
-            // If the user clicks ok on the save file dialog.
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
+            if (dialog.ShowDialog() != DialogResult.OK) return;
 
-                // If the specified file path is different to that in internal storage.
-                if (!TableManager.FILE_PATH.Equals(dialog.FileName))
-                {
-                    // Assign the new file path.
-                    TableManager.FILE_PATH = dialog.FileName;
+            if (FileStoreManager.DB_FILE_PATH.Equals(dialog.FileName)) return;
 
-                    // Clear the internal database.
-                    TableManager.getInstance().clear();
+            FileStoreManager.DB_FILE_PATH = dialog.FileName;
 
-                    // Create the database structure in the new file.
-                    TableManager.getInstance().create();
+            fileStore.ClearFileStore();
 
-                    // Connect to new database.
-                    SQL.connect();
+            controller.Create();
+            controller.Connect();
+            controller.SetStartDate(highlightedMonth);
+            controller.Load();
 
-                    // Load databasde into internal memory.
-                    TableManager.getInstance().load(highlightedMonth);
-
-                    enableOperationControls();
-                }
-
-            }
+            enableOperationControls();
 
 
         }
 
-        /// <summary>
-        /// Disables all the controls associated with viewing transactions.
-        /// </summary>
         private void disableOperationControls()
         {
 
@@ -563,9 +356,6 @@ namespace MyMoney.Windows
 
         }
 
-        /// <summary>
-        /// Enables all the controls associated with viewing transactions.
-        /// </summary>
         private void enableOperationControls()
         {
 
@@ -579,23 +369,12 @@ namespace MyMoney.Windows
 
         }
 
-        /// <summary>
-        /// Opens the about window.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void openAboutWindow(object sender, EventArgs e)
         {
             AboutWindow aboutWindow = new AboutWindow();
             aboutWindow.Show();
         }
 
-        /// <summary>
-        /// Creates a open file dialog. The user will then select a new database file, 
-        /// it is updateed to the current schema and it is opened. 
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void updateDatabaseFile(object sender, EventArgs e)
         {
 
@@ -612,36 +391,37 @@ namespace MyMoney.Windows
             dialog.CheckPathExists = true;
 
             // If the user clicks ok in the dialog.
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                // IF the file specified in the open file €dialog is 
-                // NOT the same as the current database.
-                if (!TableManager.FILE_PATH.Equals(dialog.FileName))
-                {
-                    // Clear the internal storage.
-                    TableManager.getInstance().clear();
+            if (dialog.ShowDialog() != DialogResult.OK) return;
 
-                    // Assign the specified file as the new database file.
-                    TableManager.FILE_PATH = dialog.FileName;
+            // IF the file specified in the open file €dialog is 
+            // NOT the same as the current database.
+            if (FileStoreManager.DB_FILE_PATH.Equals(dialog.FileName)) return;
 
-                    // Connect to the new database.
-                    SQL.connect();
+            FileStoreManager.DB_FILE_PATH = dialog.FileName;
 
-                    // Update the database file.
-                    SQL.updateDB();
+            fileStore.ClearFileStore();
 
-                    // Load the new database into internal storage.
-                    TableManager.getInstance().load(highlightedMonth);
+            controller.Connect();
 
-                    // Enable the view controls.
-                    enableOperationControls();
+            // Update the database file.
+            // controller.updateDB();
 
-                }
+            controller.SetStartDate(highlightedMonth);
+            controller.Load();
 
-            };
+            // Enable the view controls.
+            enableOperationControls();
 
         }
 
+        public void RefreshView()
+        {
+
+            viewer.display();
+
+            plotter.draw(highlightedMonth);
+
+        }
     }
 }
 

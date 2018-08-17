@@ -5,8 +5,9 @@ using System.Text;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MyMoney.Database;
-using MyMoney.Data_Storage;
+using MyMoney.Controllers;
+using MyMoney.Model.Table;
+using MyMoney.Model.Database;
 
 namespace MyMoney.Windows.User_Display
 {
@@ -16,34 +17,23 @@ namespace MyMoney.Windows.User_Display
     /// </summary>
     class GraphHandler
     {
-        /// <summary>
-        /// The chart that this handler will operate on.
-        /// </summary>
-        private Chart chart;
+        
+        private readonly Chart chart;
 
-        /// <summary>
-        /// Constructs a new <see cref="GraphHandler"/>.
-        /// </summary>
-        /// <param name="chart">The chart that this handler should operate on.</param>
-        public GraphHandler(Chart chart)
+        private IDataController controller;
+
+       
+        public GraphHandler(Chart chart, IDataController controller)
         {
             this.chart = chart;
+            this.controller = controller;
         }
 
-        /// <summary>
-        /// Draws the graph using the month specified.
-        /// </summary>
-        /// <param name="month">
-        /// The month of transactions to be displayed on the graph.
-        /// </param>
         public void draw(DateTime month)
         {
             checkInvoke(month);
         }
 
-        /// <summary>
-        /// Draws the graph using the current month.
-        /// </summary>
         public void draw()
         {
 
@@ -53,12 +43,6 @@ namespace MyMoney.Windows.User_Display
             checkInvoke(now);
         }
 
-        /// <summary>
-        /// Checks if the chart reuires invoking before ploting the graph.
-        /// </summary>
-        /// <param name="month">
-        /// The month of transactions to be displayed on the graph.
-        /// </param>
         private void checkInvoke(DateTime month)
         {
 
@@ -78,21 +62,16 @@ namespace MyMoney.Windows.User_Display
 
         }
 
-        /// <summary>
-        /// calculates the points on the graph and adds them to the chart series.
-        /// </summary>
         private void plot(DateTime month)
         {
 
             // Get the long string format of the specified month.
             String monthString = month.ToString("MMMM yyyy");
 
-            int[] xValues;
-            double[] yValues;
 
-            double monthlyAllowance = Budget.getInstance().getBudget((month.Month < 10 ? "0" + month.Month : "" + month.Month) + "" + month.Year);
+            double monthlyAllowance = controller.GetMonthlyAllowance(month);
 
-            double currentTotal = getValues(monthlyAllowance.Equals(Double.NaN) ? 200 : monthlyAllowance, month, out xValues, out yValues);
+            double currentTotal = getValues(monthlyAllowance.Equals(Double.NaN) ? 200 : monthlyAllowance, month, out int[] xValues, out double[] yValues);
 
             // A series to be added to the graph
             Series series = new Series(monthString);
@@ -139,22 +118,24 @@ namespace MyMoney.Windows.User_Display
 
         }
 
-        /// <summary>
-        /// Retrieves the x and y values to be displayed on the graph based on the users monthly 
-        /// allowance and the current date time..
-        /// </summary>
-        /// <param name="monthlyAllowance">The amount of money that the users starts the month with.</param>
-        /// <param name="now">The current date time.</param>
-        /// <param name="xValues">This return variable contains all x values to be displayed on the graph.</param>
-        /// <param name="yValues">This return variable contains all y values to be displayed on the graph.</param>
         private double getValues(double monthlyAllowance, DateTime now, out int[] xValues, out double[] yValues)
         {
             // Store the values in lists as the length on a list is flexible.
             List<int> xValuesList = new List<int>();
             List<double> yValuesList = new List<double>();
 
+            var startOfMonth = new DateTime(now.Year, now.Month, 1);
+            var endOfMonth = new DateTime(now.Year, now.Month, 1).AddMonths(1).AddDays(-1);
+
             // Get all the transactions of the current month
-            Row[] rows = CashFlow.getInstance().getRows(now);
+            Row[] rows = controller.GetRows(row => {
+
+                DateTime rowDateTime = DateTime.Parse(row.getValue(CashFlowModel.DATE_COLOUMN));
+
+                return DateTime.Compare(rowDateTime, startOfMonth) >= 0  && DateTime.Compare(rowDateTime, endOfMonth) <= 0;
+
+            }, CashFlowModel.TABLE_NAME);  
+
 
             // Holds the transaction number that will be displayed on screen.
             int index = 0;
@@ -171,7 +152,7 @@ namespace MyMoney.Windows.User_Display
 
 
                 // Add the current transaction value to the monthly allowance.
-                monthlyAllowance += Double.Parse(row.getValue(CashFlow.AMOUNT_COLOUMN));
+                monthlyAllowance += double.Parse(row.getValue(CashFlowModel.AMOUNT_COLOUMN));
 
                 // Add the new allowance to the list of y values and the index as the 
                 // transaction number in the x values.

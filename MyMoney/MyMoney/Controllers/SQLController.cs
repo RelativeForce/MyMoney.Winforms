@@ -10,16 +10,16 @@ namespace MyMoney.Controllers
     public class SQLController : ISQLController
     {
 
-        private readonly string filePath;
+        private string filePath;
 
         private SQLiteConnection DBConnection;
 
-        private SQLController(string filePath)
+        public SQLController()
         {
-            this.filePath = filePath;
+            this.filePath = "";
         }
 
-        public void Connect()
+        public void Connect(string filePath)
         {
 
             try
@@ -28,7 +28,7 @@ namespace MyMoney.Controllers
                 DBConnection = new SQLiteConnection(@"Data Source=" + filePath + ";Version=3;");
                 DBConnection.Open();
 
-                // If this line is reached then the connection was successfully established.
+                this.filePath = filePath;
                 Console.Out.WriteLine("Connection Establised");
 
             }

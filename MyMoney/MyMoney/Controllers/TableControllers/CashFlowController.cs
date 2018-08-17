@@ -12,20 +12,11 @@ namespace MyMoney.Controllers.TableControllers
     public class CashFlowController : ITableController
     {
 
-        private DateTime StartDate
-        {
-            set { StartDate = value; }
-            get { return StartDate; }
-        }
-
         private Table rawTable;
 
         public CashFlowController()
-        {
-
+        { 
             rawTable = new Table(CashFlowModel.Coloumns());
-
-            StartDate = DateTime.Now;
         }
 
         public string GetPopulateQuery()
@@ -33,11 +24,11 @@ namespace MyMoney.Controllers.TableControllers
 
             //TODO: Add the abillity for the repeat transactions to be added to the table even if the orignial transaction occured before the current month.
 
-            DateTime endDate = StartDate.AddMonths(1);
+            DateTime endDate = CashFlowModel.StartDate.AddMonths(1);
 
             string endMonthString = endDate.ToShortDateString();
 
-            string startDateString = StartDate.ToShortDateString();
+            string startDateString = CashFlowModel.StartDate.ToShortDateString();
 
             // Puts the date in the yyyy-mm-dd
             string startMonth = startDateString[6] + "" + startDateString[7] + "" + startDateString[8] + "" + startDateString[9]
@@ -282,6 +273,9 @@ namespace MyMoney.Controllers.TableControllers
                  + "', " + amount + ")";
         }
 
-
+        public void Add(Row row)
+        {
+            rawTable.addRow(row);
+        }
     }
 }

@@ -14,15 +14,17 @@ namespace MyMoney.Controllers.TableControllers
 
         string GetPopulateQuery();
 
+        string GetDeleteQuery(Row row);
+
         bool IsValidRow(Row row);
 
         void Clear();
 
         string GetTableName();
 
-        string GetDeleteQuery(Row row);
-
         Row[] GetRows(Predicate<Row> check);
-        void Add(Row newRow);
+
+        void Add(Row row);
+
     }
 }

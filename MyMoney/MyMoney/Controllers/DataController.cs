@@ -4,27 +4,25 @@ using MyMoney.Controllers.TableControllers;
 using MyMoney.File;
 using MyMoney.Model.Database;
 using MyMoney.Model.Table;
+using MyMoney.Windows;
 
 namespace MyMoney.Controllers
 {
 
     public class DataController : IDataController
     {
+        private readonly HashSet<IView> views;
 
         private readonly List<ITableController> tables;
 
         private readonly ISQLController sql;
 
-        private DataController(ISQLController sql) {
+        public DataController(ISQLController sql, List<ITableController> tables) {
 
             this.sql = sql;
-
-            tables = new List<ITableController>
-            {
-                new BudgetController(),
-                new CashFlowController()
-            };
-
+            this.tables = tables;
+            this.views = new HashSet<IView>();
+                
         }
 
         public void Create()
@@ -105,9 +103,61 @@ namespace MyMoney.Controllers
 
         }
 
+        public void Remove(Row row, string tableName) {
+
+            ITableController table = GetTable(tableName);
+
+            if (table == null) throw new ArgumentException("Invalid table name.");
+
+            string deleteQuery = table.GetDeleteQuery(row);
+
+            sql.Execute(deleteQuery);
+
+        }
+
         private ITableController GetTable(string tableName) {
             return tables.Find(table => table.GetTableName().Equals(tableName));
         }
-    }
 
+        public void Connect()
+        {
+            sql.Connect(FileStoreManager.DB_FILE_PATH);
+        }
+
+        public void Disconnect()
+        {
+            sql.Disconnect();
+        }
+
+        public void SetStartDate(DateTime startDate) {
+            CashFlowModel.StartDate = startDate;
+        }
+
+        public void AddView(IView view)
+        {
+            views.Add(view);
+        }
+
+        public void RemoveView(IView view)
+        {
+            views.Remove(view);
+        }
+
+        public void RefreshViews() {
+            foreach (IView view in views) view.RefreshView();
+        }
+
+        public double GetMonthlyAllowance(DateTime date)
+        {
+            string monthCode = (date.Month < 10 ? "0" + date.Month : "" + date.Month) + "" + date.Year;
+
+            bool sameMonthCode(Row row) => monthCode.Equals(row.getValue(BudgetModel.MONTH_COLOUMN));
+
+            Row[] results = GetRows(sameMonthCode, BudgetModel.TABLE_NAME);
+
+            string currentValueStr = results[0].getValue(BudgetModel.AMOUNT_COLOUMN);
+
+            return double.Parse(currentValueStr);
+        }
+    }
  }

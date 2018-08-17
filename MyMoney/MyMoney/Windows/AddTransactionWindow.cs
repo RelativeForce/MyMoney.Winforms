@@ -1,84 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
-using MyMoney.Windows.Data_Transfer;
-using MyMoney.Database;
-using MyMoney.Data_Storage;
 using MyMoney.Windows.User_Display;
+using MyMoney.Controllers;
+using MyMoney.Model.Database;
+using MyMoney.Model.Table;
 
 namespace MyMoney.Windows
 {
-    /// <summary>
-    /// This window is a form that allows the user to input the deatils of a new transtaction.
-    /// </summary>
-    public partial class AddTransactionWindow : Form, Buffered
+
+    public partial class AddTransactionWindow : Form, IView
     {
         private bool moneyOut;
 
-        /// <summary>
-        /// <see cref="Buffered"/> destination of the <see cref="Packet"/>s from this window. This cannot be <code>null</code>. 
-        /// </summary>
-        private Buffered dataDestination;
+        private readonly IDataController controller;
 
         private ToolTipHandler toolTipHandler = new ToolTipHandler();
-
-        /// <summary>
-        /// Constructs a new <see cref="AddTransactionWindow"/>
-        /// </summary>
-        /// <param name="dataDestination">
-        /// <see cref="Buffered"/> destination of the <see cref="Packet"/>s from this window. This cannot be <code>null</code>.
-        /// </param>
-        public AddTransactionWindow(Buffered dataDestination)
+ 
+        public AddTransactionWindow(IDataController controller)
         {
-            // Check argumants
-            if (dataDestination == null)
-            {
-                throw new NullReferenceException("Must be a valid Buffered window.");
-            }
+            this.controller = controller;
+
+            controller.AddView(this);
 
             this.moneyOut = true;
 
-            // Initalise fields and components
-            this.dataDestination = dataDestination;
             InitializeComponent();
         }
 
-        /// <summary>
-        /// This is unused as this window is always a child of <see cref="Main_Form"/>
-        /// </summary>
-        /// <param name="data"></param>
-        public void recieve(Packet data)
-        {
-            // Do nothing as this is a child of the Main Window
-        }
-
-        /// <summary>
-        /// Executes when the window opens, sets the value of <see cref="date"/> to the current time.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void AddTransactionWindow_Load(object sender, EventArgs e)
         {
             // Set the date to today's date.
             date.Value = System.DateTime.Now;
 
             date.MaxDate = System.DateTime.Today;
+
         }
 
-        /// <summary>
-        /// Checks the validity of all the information inputted by the user into the window 
-        /// and if it is valid that it is sent back to <see cref="Main_Form"/> to be processed. 
-        /// Otherwise a alert is displayed on the window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void submit_Click(object sender, EventArgs e)
         {
 
@@ -101,7 +58,7 @@ namespace MyMoney.Windows
                 {
                     toolTipHandler.draw("Error", "Please input a description.", descriptionTextBox);
                 }
-                else if (descriptionTextBox.Text.Length > CashFlow.DESCRIPTION_LENGTH)
+                else if (descriptionTextBox.Text.Length > CashFlowModel.DESCRIPTION_LENGTH)
                 {
                     toolTipHandler.draw("Error", "The description is too long. Please shorten it.", descriptionTextBox);
                 }
@@ -133,46 +90,29 @@ namespace MyMoney.Windows
 
         }
 
-        /// <summary>
-        /// Parse fields into data that can be sent to <see cref="Main_Form"/>.
-        /// </summary>
         private void transferData()
         {
 
-            // Create a new table row to hold the data
-            Row newRow = new Row();
-
-            // Add the date to the row
-            newRow.addColoumn(CashFlow.DATE_COLOUMN, date.Value.ToShortDateString());
-
-            // Add the description to the row
-            newRow.addColoumn(CashFlow.DESCRIPTION_COLOUMN, cleanDescription());
-
-            double amount = Double.Parse(amountTextBox.Text);
+            double amount = double.Parse(amountTextBox.Text);
 
             if (moneyOut)
             {
                 amount *= -1;
             }
 
-            // Add the amount to the row
-            newRow.addColoumn(CashFlow.AMOUNT_COLOUMN, amount.ToString());
+            Row newRow = new Row();
 
-            //Add the transaction id to the row
-            newRow.addColoumn(CashFlow.TRANSACTION_ID_COLOUMN, "" + CashFlow.getInstance().getAvalaibleTransactionID());
+            newRow.addColoumn(CashFlowModel.DATE_COLOUMN, date.Value.ToShortDateString());
+            newRow.addColoumn(CashFlowModel.DESCRIPTION_COLOUMN, cleanDescription());
+            newRow.addColoumn(CashFlowModel.AMOUNT_COLOUMN, amount.ToString());
+            newRow.addColoumn(CashFlowModel.TRANSACTION_ID_COLOUMN, "" + controller.GetAvalaibleTransactionID());
 
-            // Create the packet to be transfered to the new window.
-            Packet data = new Packet(this, dataDestination, newRow);
+            controller.Add(newRow, CashFlowModel.TABLE_NAME);
 
-            // Pass the packet to the windows buffer
-            dataDestination.recieve(data);
+            controller.RefreshViews();
 
         }
 
-        /// <summary>
-        /// Sanitises the Description field to be used in the SQL database.
-        /// </summary>
-        /// <returns>Sanaties description.</returns>
         private string cleanDescription()
         {
 
@@ -185,6 +125,7 @@ namespace MyMoney.Windows
 
         private void AddTransactionWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
+            controller.RemoveView(this);
             this.Dispose();
         }
 
@@ -215,6 +156,11 @@ namespace MyMoney.Windows
                 toggleButton.Text = ">";
                 moneyOut = true;
             }
+        }
+
+        public void RefreshView()
+        {
+            // Do Nothing
         }
     }
 }

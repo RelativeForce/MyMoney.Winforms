@@ -1,23 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using MyMoney.Controllers;
+using MyMoney.Controllers.TableControllers;
+using MyMoney.File;
 using MyMoney.Windows;
 
 namespace MyMoney
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
+
+            ISQLController sql = new SQLController();
+
+            List<ITableController> tables = new List<ITableController>
+            {
+                new BudgetController(),
+                new CashFlowController()
+            };
+
+            IDataController controller = new DataController(sql, tables);
+
+            FileStoreManager fileStore = new FileStoreManager();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main_Form());
+            Application.Run(new Main_Form(controller, fileStore));
         }
     }
 }

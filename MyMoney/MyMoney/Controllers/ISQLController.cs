@@ -8,7 +8,7 @@ namespace MyMoney.Controllers
 
         void Execute(string SQL);
 
-        void Connect();
+        void Connect(string filePath);
 
         int GetValueInt(string sql, string coloumnName);
 

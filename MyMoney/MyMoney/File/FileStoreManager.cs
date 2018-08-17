@@ -47,13 +47,19 @@ namespace MyMoney.File
                 return true;
             }
 
-            // The file is wiped because the contents are invalid.
-            Console.Out.WriteLine("Stored File Invalid, Wiping Storage File.");
-            System.IO.File.WriteAllText(STORAGE_FILE, "");
+            ClearFileStore();
 
             return false;
 
 
+
+        }
+
+        public void ClearFileStore() {
+
+            // The file is wiped because the contents are invalid.
+            Console.Out.WriteLine("Stored File Invalid, Wiping Storage File.");
+            System.IO.File.WriteAllText(STORAGE_FILE, "");
 
         }
 

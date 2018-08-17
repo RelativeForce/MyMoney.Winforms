@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace MyMoney.Model.Database
 {
     public class CashFlowModel
@@ -14,6 +15,8 @@ namespace MyMoney.Model.Database
         public const string TABLE_NAME = "CashFlow";
 
         public const int DESCRIPTION_LENGTH = 50;
+
+        public static DateTime StartDate = DateTime.Now;
 
         public static string[] Coloumns() {
             return new string[] {

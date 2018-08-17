@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MyMoney.Model.Database;
+using MyMoney.Model.Table;
 using System.Windows.Forms;
-using MyMoney.Data_Storage;
-using MyMoney.Database;
 
 namespace MyMoney.Windows.User_Display
 {
@@ -85,7 +80,7 @@ namespace MyMoney.Windows.User_Display
             {
 
                 // Stores the date of the transaction temporarily so that it may be check to be the correct length.
-                string date = row.getValue(CashFlow.DATE_COLOUMN);
+                string date = row.getValue(CashFlowModel.DATE_COLOUMN);
                 if (date.Length > 10)
                 {
                     date = date.Remove(10);
@@ -96,8 +91,8 @@ namespace MyMoney.Windows.User_Display
 
                 // Update all the values in the text boxes to the ones specified in the paramter row.
                 updateBox(this.date, date);
-                updateBox(this.description, row.getValue(CashFlow.DESCRIPTION_COLOUMN));
-                updateBox(this.amount, row.getValue(CashFlow.AMOUNT_COLOUMN));
+                updateBox(this.description, row.getValue(CashFlowModel.DESCRIPTION_COLOUMN));
+                updateBox(this.amount, row.getValue(CashFlowModel.AMOUNT_COLOUMN));
             }
             else
             {

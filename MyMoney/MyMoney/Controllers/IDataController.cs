@@ -1,9 +1,10 @@
 ﻿using MyMoney.Model.Table;
 using System;
+using MyMoney.Windows;
 
 namespace MyMoney.Controllers
 {
-    interface IDataController
+    public interface IDataController
     {
 
         void Create();
@@ -22,6 +23,20 @@ namespace MyMoney.Controllers
 
         void Update(Row row, string tableName, string updatedCol);
 
+        void Connect();
 
+        void Disconnect();
+
+        void SetStartDate(DateTime startDate);
+
+        void AddView(IView view);
+
+        void RemoveView(IView view);
+
+        void RefreshViews();
+
+        void Remove(Row row, string tableName);
+
+        double GetMonthlyAllowance(DateTime date);
     }
 }

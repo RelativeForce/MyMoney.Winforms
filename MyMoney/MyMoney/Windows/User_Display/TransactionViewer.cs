@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MyMoney.Controllers;
+using MyMoney.Model.Database;
+using MyMoney.Model.Table;
+using System;
 using System.Windows.Forms;
-using MyMoney.Database;
-using MyMoney.Data_Storage;
 
 namespace MyMoney.Windows.User_Display
 {
@@ -17,32 +14,21 @@ namespace MyMoney.Windows.User_Display
     /// </summary>
     public class TransactionViewer
     {
-        /// <summary>
-        /// The views that are present on screen.
-        /// </summary>
+
         private TransactionView[] views;
 
-        /// <summary>
-        /// The date time picker that denotes which months transaction
-        /// should be displayed in the viewer.
-        /// </summary>
         private DateTime DTP;
 
         private ScrollBar scrollBar;
 
-        /// <summary>
-        /// Constructs a new <see cref="TransactionViewer"/>.
-        /// </summary>
-        /// <param name="views">The views that are present on screen.</param>
-        /// <param name="upButton">The button that navigates up the list of transactions.</param>
-        /// <param name="downButton">The button that navigates down the list of transactions.</param>
-        /// <param name="DTP">The date time picker that denotes which months transaction
-        /// should be displayed in the viewer.</param>
-        public TransactionViewer(TransactionView[] views, ScrollBar scrollBar, DateTime DTP)
+        private IDataController controller;
+
+        public TransactionViewer(TransactionView[] views, ScrollBar scrollBar, DateTime DTP, IDataController controller)
         {
             this.views = views;
             this.DTP = DTP;
             this.scrollBar = scrollBar;
+            this.controller = controller;
         }
 
         public void display(DateTime month)
@@ -64,8 +50,18 @@ namespace MyMoney.Windows.User_Display
             // Holds the number of views 
             int numberOfViews = views.Length;
 
-            // Holds the transactions of the month specified by the date time picker.
-            Row[] cashFlowRows = CashFlow.getInstance().getRows(DTP);
+            var startOfMonth = new DateTime(DTP.Year, DTP.Month, 1);
+            var endOfMonth = new DateTime(DTP.Year, DTP.Month, 1).AddMonths(1).AddDays(-1);
+
+            // Get all the transactions of the current month
+            Row[] cashFlowRows = controller.GetRows(row => {
+
+                DateTime rowDateTime = DateTime.Parse(row.getValue(CashFlowModel.DATE_COLOUMN));
+
+                return DateTime.Compare(rowDateTime, startOfMonth) >= 0 && DateTime.Compare(rowDateTime, endOfMonth) <= 0;
+
+            }, CashFlowModel.TABLE_NAME);
+
 
             // Holds the number of transations for the month specified by the date time picker.
             int numberOfTransactions = cashFlowRows.Length;
@@ -142,7 +138,7 @@ namespace MyMoney.Windows.User_Display
                 if (!date.Equals("") && !description.Equals("") && !amount.Equals(""))
                 {
 
-                    CashFlow.getInstance().deleteFrom(int.Parse(toDelete.row.getValue(CashFlow.TRANSACTION_ID_COLOUMN)));
+                    controller.Remove(toDelete.row, CashFlowModel.TABLE_NAME);
 
                     // As a transaction is being removed move the viewer up the list of transactions.
                     if (scrollBar.Value > 0) scrollBar.Value--;
@@ -168,26 +164,30 @@ namespace MyMoney.Windows.User_Display
             {
                 try
                 {
-                    int id = int.Parse(view.row.getValue(CashFlow.TRANSACTION_ID_COLOUMN));
+                    int id = int.Parse(view.row.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN));
 
                     if (box.Equals(view.date))
                     {
-                        // Parse box as date
-                        CashFlow.getInstance().updateRow(id, CashFlow.DATE_COLOUMN, box.Text);
+
+                        view.row.updateColoumn(CashFlowModel.DATE_COLOUMN, box.Text);
+                        controller.Update(view.row, CashFlowModel.TABLE_NAME, CashFlowModel.DATE_COLOUMN);
+                        
                         result = "";
 
                     }
                     else if (box.Equals(view.description))
                     {
                         // Parse box as description
-                        CashFlow.getInstance().updateRow(id, CashFlow.DESCRIPTION_COLOUMN, box.Text);
+                        view.row.updateColoumn(CashFlowModel.DESCRIPTION_COLOUMN, box.Text);
+                        controller.Update(view.row, CashFlowModel.TABLE_NAME, CashFlowModel.DESCRIPTION_COLOUMN);
                         result = "";
 
                     }
                     else if (box.Equals(view.amount))
                     {
                         // Parse box as amount
-                        CashFlow.getInstance().updateRow(id, CashFlow.AMOUNT_COLOUMN, box.Text);
+                        view.row.updateColoumn(CashFlowModel.AMOUNT_COLOUMN, box.Text);
+                        controller.Update(view.row, CashFlowModel.TABLE_NAME, CashFlowModel.AMOUNT_COLOUMN);
                         result = "";
                     }
 

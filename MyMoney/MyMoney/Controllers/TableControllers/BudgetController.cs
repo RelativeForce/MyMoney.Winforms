@@ -91,5 +91,10 @@ namespace MyMoney.Controllers.TableControllers
             return "DELETE FROM " + BudgetModel.TABLE_NAME + " WHERE " + BudgetModel.MONTH_COLOUMN + " = " + row.getValue(BudgetModel.MONTH_COLOUMN);
 
         }
+
+        public void Add(Row row)
+        {
+            rawTable.addRow(row);
+        }
     }
 }
