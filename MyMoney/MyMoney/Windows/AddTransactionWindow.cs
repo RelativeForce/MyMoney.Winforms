@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using MyMoney.Windows.User_Display;
 using MyMoney.Controllers;
 using MyMoney.Model.Database;
 using MyMoney.Model.Table;
+using MyMoney.Windows.Components;
 
 namespace MyMoney.Windows
 {
