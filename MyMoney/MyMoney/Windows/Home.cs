@@ -76,7 +76,18 @@ namespace MyMoney.Windows
 
         }
 
+        public void RefreshView()
+        {
+
+            viewer.display();
+
+            plotter.draw(highlightedMonth);
+
+        }
+
         #region form_event_handlers
+
+        #region general
 
         private void KeyPressed(object sender, KeyEventArgs e)
         {
@@ -116,28 +127,22 @@ namespace MyMoney.Windows
 
         }
 
-        private void ScrollTransactions(object sender, EventArgs e)
-        {
-            // Rerender the viewer.
-            viewer.display();
-        }
-
-        private void AddTransaction(object sender, EventArgs e)
-        {
-            // If there is now AddTranactionWindow open then open one.
-            if (addTransactionWindow == null || addTransactionWindow.IsDisposed)
-            {
-                addTransactionWindow = new AddTransactionWindow(controller);
-                addTransactionWindow.Show();
-            }
-        }
-
         private void MainClosed(object sender, FormClosedEventArgs e)
         {
             controller.Disconnect();
 
             controller.RemoveView(this);
 
+        }
+
+        #endregion general
+
+        #region transactions
+
+        private void ScrollTransactions(object sender, EventArgs e)
+        {
+            // Rerender the viewer.
+            viewer.display();
         }
 
         private void DeleteTransaction(object sender, EventArgs e)
@@ -153,43 +158,13 @@ namespace MyMoney.Windows
             }
         }
 
-        private void NextMonth(object sender, EventArgs e)
-        {
-            highlightedMonth = highlightedMonth.AddMonths(1);
-            LoadMonth();
-        }
-
-        private void PreviousMonth(object sender, EventArgs e)
-        {
-            // Deincrement the month.
-            highlightedMonth = highlightedMonth.AddMonths(-1);
-            LoadMonth();
-        }
-
         private void DisplayUpdateTransactionToolTip(object sender, EventArgs e)
         {
             // Display a tool tip to help users understand how to update transactions.
             toolTipHandler.draw("Updating Transactions", "Press ENTER to save your changes.", (sender as RichTextBox));
         }
 
-        private void BeginUpdate(object sender, EventArgs e)
-        {
-            previousValue = (sender as RichTextBox).Text;
-        }
-
-        private void EndUpdate(object sender, EventArgs e)
-        {
-            if (!updated)
-            {
-                (sender as RichTextBox).Text = previousValue;
-            }
-            else
-            {
-                updated = false;
-            }
-        }
-
-        private void UpdateField(object sender, KeyEventArgs e)
+        private void ChangeTransactionField(object sender, KeyEventArgs e)
         {
             // If the user pressed enter.
             if (e.KeyCode == Keys.Enter)
@@ -220,15 +195,23 @@ namespace MyMoney.Windows
 
         }
 
-        private void ChangeMonthlyAllowance(object sender, EventArgs e)
+        private void CachePreviousValue(object sender, EventArgs e)
         {
-            // If there is no current MonthlyAllowanceChanger active then open a new one.
-            if (monthlyAllowanceChanger == null || monthlyAllowanceChanger.IsDisposed)
+            previousValue = (sender as RichTextBox).Text;
+        }
+
+        private void RevertToPreviousValue(object sender, EventArgs e)
+        {
+            if (!updated)
             {
-                this.monthlyAllowanceChanger = new MonthlyAllowanceChanger(controller, highlightedMonth);
-                this.monthlyAllowanceChanger.Show();
+                (sender as RichTextBox).Text = previousValue;
+                previousValue = "";
             }
         }
+
+        #endregion transactions
+
+        #region db_file
 
         private void ImportDBFile(object sender, EventArgs e)
         {
@@ -290,13 +273,7 @@ namespace MyMoney.Windows
 
         }
 
-        private void OpenAboutWindow(object sender, EventArgs e)
-        {
-            AboutWindow aboutWindow = new AboutWindow();
-            aboutWindow.Show();
-        }
-
-        private void UpdateDatabaseFile(object sender, EventArgs e)
+        private void UpdateDBFile(object sender, EventArgs e)
         {
 
             // Holds a new Open file dialog
@@ -336,7 +313,85 @@ namespace MyMoney.Windows
 
         }
 
+        #endregion db_file
+
+        #region open_window
+
+        private void AddTransaction(object sender, EventArgs e)
+        {
+            // If there is now AddTranactionWindow open then open one.
+            if (addTransactionWindow == null || addTransactionWindow.IsDisposed)
+            {
+                addTransactionWindow = new AddTransactionWindow(controller);
+                addTransactionWindow.Show();
+            }
+        }
+
+        private void ChangeMonthlyAllowance(object sender, EventArgs e)
+        {
+            // If there is no current MonthlyAllowanceChanger active then open a new one.
+            if (monthlyAllowanceChanger == null || monthlyAllowanceChanger.IsDisposed)
+            {
+                this.monthlyAllowanceChanger = new MonthlyAllowanceChanger(controller, highlightedMonth);
+                this.monthlyAllowanceChanger.Show();
+            }
+        }
+
+        private void OpenAboutWindow(object sender, EventArgs e)
+        {
+            AboutWindow aboutWindow = new AboutWindow();
+            aboutWindow.Show();
+        }
+
+        #endregion open_window
+
+        #region change_month
+
+        private void NextMonth(object sender, EventArgs e)
+        {
+            highlightedMonth = highlightedMonth.AddMonths(1);
+            LoadMonth();
+        }
+
+        private void PreviousMonth(object sender, EventArgs e)
+        {
+            // Deincrement the month.
+            highlightedMonth = highlightedMonth.AddMonths(-1);
+            LoadMonth();
+        }
+
+        #endregion chnage_month
+
         #endregion form_event_handlers
+
+        #region operation_controls
+
+        private void DisableOperationControls()
+        {
+
+            viewer.disable();
+            addTransactionButton.Enabled = false;
+            changeMonthlyAllowanceButtton.Enabled = false;
+            rightButton.Enabled = false;
+            leftButton.Enabled = false;
+            scrollBar.Enabled = false;
+
+        }
+
+        private void EnableOperationControls()
+        {
+
+            viewer.enable();
+            viewer.display();
+            plotter.draw();
+            changeMonthlyAllowanceButtton.Enabled = true;
+            addTransactionButton.Enabled = true;
+            leftButton.Enabled = true;
+            scrollBar.Enabled = true; ;
+
+        }
+
+        #endregion operation_controls
 
         private void LoadMonth()
         {
@@ -389,39 +444,6 @@ namespace MyMoney.Windows
             toolTipHandler.draw("Success", "Your changes have been saved.", sender);
         }
 
-        private void DisableOperationControls()
-        {
-
-            viewer.disable();
-            addTransactionButton.Enabled = false;
-            changeMonthlyAllowanceButtton.Enabled = false;
-            rightButton.Enabled = false;
-            leftButton.Enabled = false;
-            scrollBar.Enabled = false;
-
-        }
-
-        private void EnableOperationControls()
-        {
-
-            viewer.enable();
-            viewer.display();
-            plotter.draw();
-            changeMonthlyAllowanceButtton.Enabled = true;
-            addTransactionButton.Enabled = true;
-            leftButton.Enabled = true;
-            scrollBar.Enabled = true; ;
-
-        }
-
-        public void RefreshView()
-        {
-
-            viewer.display();
-
-            plotter.draw(highlightedMonth);
-
-        }
     }
 }
 
