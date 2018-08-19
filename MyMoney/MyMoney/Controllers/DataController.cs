@@ -122,6 +122,7 @@ namespace MyMoney.Controllers
         public void Connect()
         {
             sql.Connect(FileStoreManager.DB_FILE_PATH);
+            Console.WriteLine("Connected to - " + FileStoreManager.DB_FILE_PATH);
         }
 
         public void Disconnect()

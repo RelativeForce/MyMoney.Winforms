@@ -58,8 +58,15 @@ namespace MyMoney.File
         public void ClearFileStore() {
 
             // The file is wiped because the contents are invalid.
-            Console.Out.WriteLine("Stored File Invalid, Wiping Storage File.");
+            Console.Out.WriteLine("Clearing Storage File.");
             System.IO.File.WriteAllText(STORAGE_FILE, "");
+
+        }
+
+        public void Store() {
+
+            Console.Out.WriteLine("Saving " + DB_FILE_PATH);
+            System.IO.File.WriteAllText(STORAGE_FILE, DB_FILE_PATH);
 
         }
 

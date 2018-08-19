@@ -297,9 +297,10 @@ namespace MyMoney.Windows
             if (dialog.ShowDialog() != DialogResult.OK) return;
             if (FileStoreManager.DB_FILE_PATH.Equals(dialog.FileName)) return;
 
-            fileStore.ClearFileStore();
-
             FileStoreManager.DB_FILE_PATH = dialog.FileName;
+
+            fileStore.ClearFileStore();
+            fileStore.Store();
 
             controller.Connect();
             controller.SetStartDate(highlightedMonth);
@@ -309,11 +310,6 @@ namespace MyMoney.Windows
 
         }
 
-        /// <summary>
-        /// Creates a save file dialog. The user will choose the name and location of the database file.
-        /// </summary>
-        /// <param name="sender">Unused.</param>
-        /// <param name="e">Unused.</param>
         private void createDBFile(object sender, EventArgs e)
         {
 
@@ -331,8 +327,8 @@ namespace MyMoney.Windows
             if (FileStoreManager.DB_FILE_PATH.Equals(dialog.FileName)) return;
 
             FileStoreManager.DB_FILE_PATH = dialog.FileName;
-
             fileStore.ClearFileStore();
+            fileStore.Store();
 
             controller.Create();
             controller.Connect();
@@ -400,6 +396,7 @@ namespace MyMoney.Windows
             FileStoreManager.DB_FILE_PATH = dialog.FileName;
 
             fileStore.ClearFileStore();
+            fileStore.Store();
 
             controller.Connect();
 
