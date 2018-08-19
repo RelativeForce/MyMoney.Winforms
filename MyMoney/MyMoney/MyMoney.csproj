@@ -101,11 +101,11 @@
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Windows\IView.cs" />
     <Compile Include="Windows\Components\GraphHandler.cs" />
-    <Compile Include="Windows\Main.cs">
+    <Compile Include="Windows\Home.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
+    <Compile Include="Windows\Home.Designer.cs">
+      <DependentUpon>Home.cs</DependentUpon>
     </Compile>
     <Compile Include="Windows\Components\ToolTipHandler.cs" />
     <Compile Include="Windows\Components\TransactionView.cs" />
@@ -126,8 +126,8 @@
     <EmbeddedResource Include="Windows\AddTransactionWindow.resx">
       <DependentUpon>AddTransactionWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Windows\Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\Home.resx">
+      <DependentUpon>Home.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\MonthlyAllowanceChanger.resx">
       <DependentUpon>MonthlyAllowanceChanger.cs</DependentUpon>

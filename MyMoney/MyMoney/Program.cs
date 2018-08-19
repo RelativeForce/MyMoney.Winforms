@@ -28,7 +28,7 @@ namespace MyMoney
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main_Form(controller, fileStore));
+            Application.Run(new Home(controller, fileStore));
         }
     }
 }
