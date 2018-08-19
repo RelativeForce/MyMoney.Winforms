@@ -4,14 +4,9 @@ using MyMoney.Model.Table;
 using System;
 using System.Windows.Forms;
 
-namespace MyMoney.Windows.User_Display
+namespace MyMoney.Windows.Components
 {
-    /// <summary>
-    /// Encapsulates the behaviours of viewing transactions on the 
-    /// <see cref="Main_Form"/>. Each transaction on the <see cref="Main_Form"/> 
-    /// is displayed using a <see cref="TransactionView"/>, these store referneces 
-    /// to the control objects that display the contents of the transaction to the user.
-    /// </summary>
+
     public class TransactionViewer
     {
 
@@ -40,10 +35,6 @@ namespace MyMoney.Windows.User_Display
 
         }
 
-        /// <summary>
-        /// Updates the viewer with the transactions based on the 
-        /// index and the month selected in the date time picker.
-        /// </summary>
         public void display()
         {
 
@@ -106,10 +97,6 @@ namespace MyMoney.Windows.User_Display
 
         }
 
-        /// <summary>
-        /// Removes a transaction specified by the button that is assigned to a view.
-        /// </summary>
-        /// <param name="sender">The delete button in a view.</param>
         public void deleteTransaction(Button sender)
         {
             // The transaction the contains the transaction to be removed.
@@ -148,11 +135,6 @@ namespace MyMoney.Windows.User_Display
             }
         }
 
-        /// <summary>
-        /// Updates a transaction field value based on a specified rich text box.
-        /// </summary>
-        /// <param name="box">The rich text box with the updated value inside.</param>
-        /// <returns></returns>
         public string updateTransaction(RichTextBox box)
         {
             // If the parameter text box is not a member of any of the 
@@ -201,11 +183,6 @@ namespace MyMoney.Windows.User_Display
             return result;
         }
 
-        /// <summary>
-        /// Updates the enables state of a button. This is a thread safe way to modify the state of a button.
-        /// </summary>
-        /// <param name="button">Button to be modified.</param>
-        /// <param name="state">New state of the button.</param>
         private void enableButton(Button button, Boolean state)
         {
 
@@ -223,10 +200,6 @@ namespace MyMoney.Windows.User_Display
 
         }
 
-        /// <summary>
-        /// Changes the value of the scroll bar.
-        /// </summary>
-        /// <param name="newValue">New value of the scroll bar.</param>
         private void scollBar_changeValue(int newValue) {
 
             // Check if the scroll bar reqires invoke.
@@ -246,10 +219,6 @@ namespace MyMoney.Windows.User_Display
         
         }
 
-        /// <summary>
-        /// Change the max value of the scroll bar.
-        /// </summary>
-        /// <param name="newValue">New max value of the scroll bar.</param>
         private void scrollBar_changeMaxValue(int newValue)
         {
 
@@ -266,9 +235,6 @@ namespace MyMoney.Windows.User_Display
             }
         }
 
-        /// <summary>
-        /// Enables all the veiws in the viewer.
-        /// </summary>
         public void enable()
         {
 
@@ -279,9 +245,6 @@ namespace MyMoney.Windows.User_Display
 
         }
 
-        /// <summary>
-        /// Disables all the views in the viewer.
-        /// </summary>
         public void disable()
         {
 

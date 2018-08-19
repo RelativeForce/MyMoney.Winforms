@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace MyMoney.Windows.User_Display
+namespace MyMoney.Windows.Components
 {
     /// <summary>
     /// Encapsultes all the behaviours of a toolTip. This hadler only 

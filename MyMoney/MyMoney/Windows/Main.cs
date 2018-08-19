@@ -1,21 +1,11 @@
 ﻿// Framework Imports
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using System.Reflection;
 // MyMoney Imports
-using MyMoney.Windows.User_Display;
+using MyMoney.Windows.Components;
 using MyMoney.Controllers;
 using MyMoney.File;
-using MyMoney.Model.Database;
-using MyMoney.Model.Table;
 
 namespace MyMoney.Windows
 {

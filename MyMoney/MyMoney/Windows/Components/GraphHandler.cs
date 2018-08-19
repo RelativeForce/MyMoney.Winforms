@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms.DataVisualization.Charting;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MyMoney.Controllers;
 using MyMoney.Model.Table;
 using MyMoney.Model.Database;
 
-namespace MyMoney.Windows.User_Display
+namespace MyMoney.Windows.Components
 {
     /// <summary>
     /// Encapsulates the behaviour of a line chart on a form. The chart on which this handler 
