@@ -99,6 +99,8 @@
       <DependentUpon>AddTransactionWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Controllers\DataController.cs" />
+    <Compile Include="Windows\Components\DBFileDialogs\DBCreateFileDialog.cs" />
+    <Compile Include="Windows\Components\DBFileDialogs\DBLoadFileDialog.cs" />
     <Compile Include="Windows\IView.cs" />
     <Compile Include="Windows\Components\GraphHandler.cs" />
     <Compile Include="Windows\Home.cs">

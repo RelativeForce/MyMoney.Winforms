@@ -1,11 +1,10 @@
-﻿// Framework Imports
-using System;
+﻿using System;
 using System.Windows.Forms;
 using System.Reflection;
-// MyMoney Imports
 using MyMoney.Windows.Components;
 using MyMoney.Controllers;
 using MyMoney.File;
+using MyMoney.Windows.Components.DBFileDialogs;
 
 namespace MyMoney.Windows
 {
@@ -215,61 +214,49 @@ namespace MyMoney.Windows
 
         private void ImportDBFile(object sender, EventArgs e)
         {
-            // Holds a new Open file dialog
-            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
 
-            // Assign the attributes of the dialog.
-            dialog.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); ;
-            dialog.Multiselect = false;
-            dialog.Title = "Import Database File";
-            dialog.DefaultExt = "sqlite";
-            dialog.Filter = "sqlite files (*.sqlite)|*.sqlite";
-            dialog.CheckFileExists = true;
-            dialog.CheckPathExists = true;
+            DBLoadFileDialog dialog = new DBLoadFileDialog(fileName => {
 
-            if (dialog.ShowDialog() != DialogResult.OK) return;
-            if (FileStoreManager.DB_FILE_PATH.Equals(dialog.FileName)) return;
+                if (FileStoreManager.DB_FILE_PATH.Equals(fileName)) return;
 
-            FileStoreManager.DB_FILE_PATH = dialog.FileName;
+                FileStoreManager.DB_FILE_PATH = fileName;
 
-            fileStore.ClearFileStore();
-            fileStore.Store();
+                fileStore.ClearFileStore();
+                fileStore.Store();
 
-            controller.Connect();
-            controller.SetStartDate(highlightedMonth);
-            controller.Load();
+                controller.Connect();
+                controller.SetStartDate(highlightedMonth);
+                controller.Load();
 
-            EnableOperationControls();
+                EnableOperationControls();
+
+            });
+
+            dialog.Show();
 
         }
 
         private void CreateDBFile(object sender, EventArgs e)
         {
 
-            // Holds save file dialog.
-            System.Windows.Forms.SaveFileDialog dialog = new System.Windows.Forms.SaveFileDialog();
+            DBCreateFileDialog dialog = new DBCreateFileDialog(fileName => {
 
-            // Set the attributes of the save file dialog.
-            dialog.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            dialog.Title = "Choice where to save the new Database File";
-            dialog.Filter = "sqlite files (*.sqlite)|*.sqlite";
-            dialog.DefaultExt = "sqlite";
+                if (FileStoreManager.DB_FILE_PATH.Equals(fileName)) return;
 
-            if (dialog.ShowDialog() != DialogResult.OK) return;
+                FileStoreManager.DB_FILE_PATH = fileName;
+                fileStore.ClearFileStore();
+                fileStore.Store();
 
-            if (FileStoreManager.DB_FILE_PATH.Equals(dialog.FileName)) return;
+                controller.Create();
+                controller.Connect();
+                controller.SetStartDate(highlightedMonth);
+                controller.Load();
 
-            FileStoreManager.DB_FILE_PATH = dialog.FileName;
-            fileStore.ClearFileStore();
-            fileStore.Store();
+                EnableOperationControls();
 
-            controller.Create();
-            controller.Connect();
-            controller.SetStartDate(highlightedMonth);
-            controller.Load();
+            });
 
-            EnableOperationControls();
-
+            dialog.Show();
 
         }
 
