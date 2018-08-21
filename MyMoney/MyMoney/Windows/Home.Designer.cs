@@ -116,7 +116,7 @@
             this.amount3.TabIndex = 32;
             this.amount3.Text = "";
             this.amount3.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.amount3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.amount3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.amount3.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.amount3.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
@@ -128,7 +128,7 @@
             this.description3.TabIndex = 31;
             this.description3.Text = "";
             this.description3.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.description3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.description3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.description3.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.description3.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
@@ -140,7 +140,7 @@
             this.date3.TabIndex = 30;
             this.date3.Text = "";
             this.date3.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.date3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.date3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.date3.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.date3.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
@@ -161,7 +161,7 @@
             this.amount2.TabIndex = 28;
             this.amount2.Text = "";
             this.amount2.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.amount2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.amount2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.amount2.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.amount2.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
@@ -173,7 +173,7 @@
             this.amount1.TabIndex = 27;
             this.amount1.Text = "";
             this.amount1.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.amount1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.amount1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.amount1.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.amount1.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
@@ -185,7 +185,7 @@
             this.description2.TabIndex = 26;
             this.description2.Text = "";
             this.description2.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.description2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.description2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.description2.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.description2.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
@@ -197,7 +197,7 @@
             this.description1.TabIndex = 25;
             this.description1.Text = "";
             this.description1.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.description1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.description1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.description1.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.description1.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
@@ -209,7 +209,7 @@
             this.date2.TabIndex = 24;
             this.date2.Text = "";
             this.date2.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.date2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.date2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.date2.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.date2.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
@@ -221,7 +221,7 @@
             this.date1.TabIndex = 23;
             this.date1.Text = "";
             this.date1.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.date1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousVlaue);
+            this.date1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
             this.date1.Leave += new System.EventHandler(this.RevertToPreviousValue);
             this.date1.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
             // 
