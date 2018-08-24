@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyMoney.Model.Table
 {
@@ -57,8 +55,8 @@ namespace MyMoney.Model.Table
             checkTableColoumnTitles(coloumnTitles);
 
             // If no exception is thrown then initalise the table.
-            this.coloumns = coloumnTitles;
-            this.rawTable = new List<Row>();
+            coloumns = coloumnTitles;
+            rawTable = new List<Row>();
 
         }
 
@@ -73,13 +71,14 @@ namespace MyMoney.Model.Table
             {
                 throw new ArgumentNullException("No coloumn titles specified. 'coloumnTitles' is null.");
             }
-            else if (coloumnTitles.Length == 0)
-            {
-                throw new ArgumentException("No coloumn titles specified.");
-            }
 
-            // Check if any titles are empty strings or they are not unique
-            List<string> coloumnTitlesList = coloumnTitles.ToList<string>();
+           if (coloumnTitles.Length == 0)
+           {
+              throw new ArgumentException("No coloumn titles specified.");
+           }
+
+           // Check if any titles are empty strings or they are not unique
+            List<string> coloumnTitlesList = coloumnTitles.ToList();
 
             // Loop thorugh all of the titles in the title lst and if any are 
             // duplicates or empty strings throw an argument exception.
@@ -97,10 +96,11 @@ namespace MyMoney.Model.Table
                 {
                     throw new ArgumentException("Coloumn Titles must not be empty.");
                 }
-                else if (coloumnTitlesList.Contains(title))
-                {
-                    throw new ArgumentException("Coloumn Titles must be unique.");
-                }
+
+               if (coloumnTitlesList.Contains(title))
+               {
+                  throw new ArgumentException("Coloumn Titles must be unique.");
+               }
             }
 
         }
@@ -116,16 +116,17 @@ namespace MyMoney.Model.Table
             foreach (Row row in rows)
             {
 
-                if (row == null)
+               if (row == null)
                 {
                     throw new ArgumentNullException("Row cannot be null.");
                 }
                 // If a row is invalid throw an exception.
-                else if (!check(row))
-                {
 
-                    throw new RowException("Invalid row");
-                }
+               if (!check(row))
+               {
+
+                  throw new RowException("Invalid row");
+               }
 
             }
 
@@ -142,11 +143,11 @@ namespace MyMoney.Model.Table
             checkTableColoumnTitles(coloumnTitles);
 
             // If no exception is thrown then initalise the table.
-            this.coloumns = coloumnTitles;
+            coloumns = coloumnTitles;
 
             checkBaseRows(rows);
 
-            this.rawTable = new List<Row>(rows);
+            rawTable = new List<Row>(rows);
 
         }
 
@@ -168,7 +169,7 @@ namespace MyMoney.Model.Table
             */
             if (!check(row))
             {
-                throw new RowException("Invalid Row: " + row.ToString());
+                throw new RowException("Invalid Row: " + row);
             }
 
             if (index < 0 || index > rawTable.Count)
@@ -225,7 +226,7 @@ namespace MyMoney.Model.Table
             */
             if (!check(row))
             {
-                throw new RowException("Invalid Row: " + row.ToString());
+                throw new RowException("Invalid Row: " + row);
             }
 
             rawTable.Add(row);
@@ -297,7 +298,7 @@ namespace MyMoney.Model.Table
             // Lists all the rows in the table each on a new line
             foreach (Row row in rawTable)
             {
-                output += row.ToString() + "\n";
+                output += row + "\n";
             }
 
             return output;
@@ -314,7 +315,7 @@ namespace MyMoney.Model.Table
         {
 
             // This holds all the rows that should be in the table.
-            List<string> coloumnChecklist = this.coloumns.ToList<string>();
+            List<string> coloumnChecklist = coloumns.ToList();
 
             // Iterate through all the row titles in the row
             foreach (string coloumn in row.getColoumns())

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyMoney.Model.Database
+﻿namespace MyMoney.Model.Database
 {
     public class BudgetModel
     {
@@ -16,7 +10,7 @@ namespace MyMoney.Model.Database
 
         public static string[] Coloumns()
         {
-            return new string[] { MONTH_COLOUMN, AMOUNT_COLOUMN };
+            return new[] { MONTH_COLOUMN, AMOUNT_COLOUMN };
         }
 
     }

@@ -14,7 +14,7 @@ namespace MyMoney.Windows.Components.DBFileDialogs
             this.onFileCreate = onFileCreate;
 
             dialog = new SaveFileDialog();
-            dialog.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             dialog.Title = "Choice where to save the new Database File";
             dialog.Filter = "sqlite files (*.sqlite)|*.sqlite";
             dialog.DefaultExt = "sqlite";

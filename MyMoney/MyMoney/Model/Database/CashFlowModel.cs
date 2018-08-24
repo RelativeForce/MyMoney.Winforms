@@ -19,7 +19,7 @@ namespace MyMoney.Model.Database
         public static DateTime StartDate = DateTime.Now;
 
         public static string[] Coloumns() {
-            return new string[] {
+            return new[] {
                 DESCRIPTION_COLOUMN,
                 TRANSACTION_ID_COLOUMN,
                 AMOUNT_COLOUMN,

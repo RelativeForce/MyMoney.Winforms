@@ -1,8 +1,8 @@
-﻿using MyMoney.Controllers;
+﻿using System;
+using System.Windows.Forms;
+using MyMoney.Controllers;
 using MyMoney.Model.Database;
 using MyMoney.Model.Table;
-using System;
-using System.Windows.Forms;
 
 namespace MyMoney.Windows.Components
 {
@@ -188,7 +188,7 @@ namespace MyMoney.Windows.Components
 
             if (button.InvokeRequired)
             {
-                button.BeginInvoke((MethodInvoker)delegate()
+                button.BeginInvoke((MethodInvoker)delegate
                 {
                     button.Enabled = state;
                 });
@@ -205,7 +205,7 @@ namespace MyMoney.Windows.Components
             // Check if the scroll bar reqires invoke.
             if (scrollBar.InvokeRequired)
             {
-                scrollBar.BeginInvoke((MethodInvoker)delegate()
+                scrollBar.BeginInvoke((MethodInvoker)delegate
                 {
                     // Assign new value.
                     scrollBar.Value = newValue;
@@ -224,7 +224,7 @@ namespace MyMoney.Windows.Components
 
             if (scrollBar.InvokeRequired)
             {
-                scrollBar.BeginInvoke((MethodInvoker)delegate()
+                scrollBar.BeginInvoke((MethodInvoker)delegate
                 {
                     scrollBar.Maximum = newValue;
                 });

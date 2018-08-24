@@ -1,6 +1,6 @@
-﻿using MyMoney.Model.Database;
+﻿using System.Windows.Forms;
+using MyMoney.Model.Database;
 using MyMoney.Model.Table;
-using System.Windows.Forms;
 
 namespace MyMoney.Windows.Components
 {
@@ -24,7 +24,7 @@ namespace MyMoney.Windows.Components
             this.date = date;
             this.description = description;
             this.amount = amount;
-            this.row = null;
+            row = null;
 
         }
 
@@ -45,22 +45,22 @@ namespace MyMoney.Windows.Components
                 }
 
                 // Set the delete button as enabled
-                updateButton(this.delete, true);
+                updateButton(delete, true);
 
                 // Update all the values in the text boxes to the ones specified in the paramter row.
                 updateBox(this.date, date);
-                updateBox(this.description, row.getValue(CashFlowModel.DESCRIPTION_COLOUMN));
-                updateBox(this.amount, row.getValue(CashFlowModel.AMOUNT_COLOUMN));
+                updateBox(description, row.getValue(CashFlowModel.DESCRIPTION_COLOUMN));
+                updateBox(amount, row.getValue(CashFlowModel.AMOUNT_COLOUMN));
             }
             else
             {
                 // Set the delete button as disabled
-                updateButton(this.delete, false);
+                updateButton(delete, false);
 
                 // Set all the boxes as empty and disabled
-                updateBox(this.date, "");
-                updateBox(this.description, "");
-                updateBox(this.amount, "");
+                updateBox(date, "");
+                updateBox(description, "");
+                updateBox(amount, "");
 
 
             }
@@ -70,7 +70,7 @@ namespace MyMoney.Windows.Components
         {
             if (button.InvokeRequired)
             {
-                button.BeginInvoke((MethodInvoker)delegate()
+                button.BeginInvoke((MethodInvoker)delegate
                 {
                     button.Enabled = enabled;
                 });
@@ -86,7 +86,7 @@ namespace MyMoney.Windows.Components
 
             if (box.InvokeRequired)
             {
-                box.BeginInvoke((MethodInvoker)delegate()
+                box.BeginInvoke((MethodInvoker)delegate
                 {
                     box.Text = item;
 

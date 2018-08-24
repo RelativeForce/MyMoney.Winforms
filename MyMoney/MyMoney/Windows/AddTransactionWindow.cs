@@ -22,7 +22,7 @@ namespace MyMoney.Windows
 
             controller.AddView(this);
 
-            this.moneyOut = true;
+            moneyOut = true;
 
             InitializeComponent();
         }
@@ -30,9 +30,9 @@ namespace MyMoney.Windows
         private void AddTransactionWindow_Load(object sender, EventArgs e)
         {
             // Set the date to today's date.
-            date.Value = System.DateTime.Now;
+            date.Value = DateTime.Now;
 
-            date.MaxDate = System.DateTime.Today;
+            date.MaxDate = DateTime.Today;
 
         }
 
@@ -84,7 +84,7 @@ namespace MyMoney.Windows
                 Console.WriteLine("Data Sent");
 
                 // Close this window
-                this.Close();
+                Close();
 
             }
 
@@ -126,7 +126,7 @@ namespace MyMoney.Windows
         private void AddTransactionWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             controller.RemoveView(this);
-            this.Dispose();
+            Dispose();
         }
 
         private void showToggleToolTip(object sender, EventArgs e)

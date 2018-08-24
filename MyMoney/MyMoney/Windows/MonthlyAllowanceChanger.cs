@@ -21,11 +21,11 @@ namespace MyMoney.Windows
 
             InitializeComponent();
 
-            this.toolTipHandler = new ToolTipHandler();
+            toolTipHandler = new ToolTipHandler();
 
             month.Value = date;
 
-            month.MaxDate = System.DateTime.Today;
+            month.MaxDate = DateTime.Today;
 
             updateBudget(date);
 
@@ -91,7 +91,7 @@ namespace MyMoney.Windows
 
                 controller.RefreshViews();
                 
-                this.Dispose();
+                Dispose();
 
 
             }
@@ -109,7 +109,7 @@ namespace MyMoney.Windows
 
         private void cancel_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            Dispose();
         }
 
         private void updateBudget(DateTime date)
@@ -145,7 +145,7 @@ namespace MyMoney.Windows
         {
             controller.RemoveView(this);
 
-            this.Dispose();
+            Dispose();
         }
 
         /// <summary>

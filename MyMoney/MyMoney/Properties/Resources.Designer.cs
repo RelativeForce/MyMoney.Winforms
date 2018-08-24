@@ -59,5 +59,23 @@ namespace MyMoney.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this transaction?.
+        /// </summary>
+        internal static string DeleteTransactionWarningBody {
+            get {
+                return ResourceManager.GetString("DeleteTransactionWarningBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Transatcion?.
+        /// </summary>
+        internal static string DeleteTransactionWarningTitle {
+            get {
+                return ResourceManager.GetString("DeleteTransactionWarningTitle", resourceCulture);
+            }
+        }
     }
 }

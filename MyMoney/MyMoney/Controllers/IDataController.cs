@@ -1,5 +1,5 @@
-﻿using MyMoney.Model.Table;
-using System;
+﻿using System;
+using MyMoney.Model.Table;
 using MyMoney.Windows;
 
 namespace MyMoney.Controllers

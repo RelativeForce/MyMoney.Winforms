@@ -16,7 +16,7 @@ namespace MyMoney.Controllers
 
         public SQLController()
         {
-            this.filePath = "";
+            filePath = "";
         }
 
         public void Connect(string filePath)
@@ -37,7 +37,7 @@ namespace MyMoney.Controllers
                 // If this fails exit the program.
                 Console.Out.WriteLine("Database Failure");
                 Console.WriteLine(ex);
-                System.Environment.Exit(1);
+                Environment.Exit(1);
 
             }
         }

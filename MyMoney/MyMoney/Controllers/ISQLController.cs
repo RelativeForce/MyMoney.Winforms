@@ -1,5 +1,5 @@
-﻿using MyMoney.Controllers.TableControllers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MyMoney.Controllers.TableControllers;
 
 namespace MyMoney.Controllers
 {

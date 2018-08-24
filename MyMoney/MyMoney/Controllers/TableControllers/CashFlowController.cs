@@ -1,10 +1,8 @@
-﻿using MyMoney.File;
-using MyMoney.Model.Table;
-using MyMoney.Model.Database;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
+using MyMoney.Model.Database;
+using MyMoney.Model.Table;
 
 namespace MyMoney.Controllers.TableControllers
 {

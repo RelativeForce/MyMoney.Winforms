@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using MyMoney.Controllers;
-using MyMoney.Model.Table;
 using MyMoney.Model.Database;
+using MyMoney.Model.Table;
 
 namespace MyMoney.Windows.Components
 {
@@ -36,7 +37,7 @@ namespace MyMoney.Windows.Components
         {
 
             // Get the current date time.
-            DateTime now = System.DateTime.Now;
+            DateTime now = DateTime.Now;
 
             checkInvoke(now);
         }
@@ -47,7 +48,7 @@ namespace MyMoney.Windows.Components
             // Check if the chart requires invoking. This causes the action to be thread safe.
             if (chart.InvokeRequired)
             {
-                chart.BeginInvoke((MethodInvoker)delegate()
+                chart.BeginInvoke((MethodInvoker)delegate
                 {
                     plot(month);
                 });
@@ -89,7 +90,7 @@ namespace MyMoney.Windows.Components
 
             // Set Title details
             Title title = new Title(monthString + " - Total: " + currentTotal);
-            title.Alignment = System.Drawing.ContentAlignment.TopCenter;
+            title.Alignment = ContentAlignment.TopCenter;
 
             // A chart area that shows the axis labels.
             ChartArea chartArea = new ChartArea(monthString);

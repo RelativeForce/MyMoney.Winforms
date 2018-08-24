@@ -1,7 +1,7 @@
-﻿using MyMoney.Model.Database;
-using MyMoney.Model.Table;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MyMoney.Model.Database;
+using MyMoney.Model.Table;
 
 namespace MyMoney.Controllers.TableControllers
 {
@@ -11,7 +11,7 @@ namespace MyMoney.Controllers.TableControllers
 
         public BudgetController()
         {
-            this.rawTable = new Table(BudgetModel.Coloumns());
+            rawTable = new Table(BudgetModel.Coloumns());
         }
 
         public string GetCreationQuery()

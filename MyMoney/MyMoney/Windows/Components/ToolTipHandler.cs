@@ -33,10 +33,10 @@ namespace MyMoney.Windows.Components
         /// </summary>
         public ToolTipHandler()
         {
-            this.toolTip = new ToolTip(); ;
-            this.control = null;
-            this.title = "";
-            this.message = "";
+            toolTip = new ToolTip(); ;
+            control = null;
+            title = "";
+            message = "";
         }
 
         /// <summary>
@@ -53,10 +53,10 @@ namespace MyMoney.Windows.Components
             bool sameControl = newControl.Equals(control);
 
             // Holds whether the new title of the tool tip is the same as the current one.
-            bool sameTitle = this.title.Equals(newTitle);
+            bool sameTitle = title.Equals(newTitle);
 
             // Holds whether the new title of the tool tip is the same as the current one.
-            bool sameMessage = this.message.Equals(newMessage);
+            bool sameMessage = message.Equals(newMessage);
 
             // If the control, title and message aren't the same.
             if (!(sameControl && sameTitle && sameMessage))
@@ -69,10 +69,10 @@ namespace MyMoney.Windows.Components
                 newToolTip.ToolTipTitle = newTitle;
 
                 // Re-assign the fields to their new counterparts
-                this.toolTip = newToolTip;
-                this.control = newControl;
-                this.title = newTitle;
-                this.message = newMessage;
+                toolTip = newToolTip;
+                control = newControl;
+                title = newTitle;
+                message = newMessage;
 
                 // Show the tool tip
                 toolTip.Show(newMessage, control);

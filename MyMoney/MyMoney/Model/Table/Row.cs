@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyMoney.Model.Table
 {
@@ -38,7 +36,7 @@ namespace MyMoney.Model.Table
         /// <returns><code>string[]</code></returns>
         public string[] getColoumns()
         {
-            return rawRow.Keys.ToArray<string>();
+            return rawRow.Keys.ToArray();
         }
 
         /// <summary>
@@ -133,10 +131,10 @@ namespace MyMoney.Model.Table
         private Boolean checkColoumValues(Row row)
         {
             // Iterate through each column in this row.
-            foreach (string coloumn in this.rawRow.Keys)
+            foreach (string coloumn in rawRow.Keys)
             {
                 // If the value assigned to the coloumn in both rows are the same.
-                if (!this.rawRow[coloumn].Equals(row.rawRow[coloumn]))
+                if (!rawRow[coloumn].Equals(row.rawRow[coloumn]))
                 {
                     return false;
                 }
@@ -153,7 +151,7 @@ namespace MyMoney.Model.Table
         {
 
             // This holds all the rows that should be in the table.
-            List<string> coloumnChecklist = this.rawRow.Keys.ToList<string>();
+            List<string> coloumnChecklist = rawRow.Keys.ToList();
 
             // Iterate through all the row titles in the row
             foreach (string column in row.rawRow.Keys)

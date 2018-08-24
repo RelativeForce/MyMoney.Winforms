@@ -1,11 +1,15 @@
-﻿namespace MyMoney.Windows
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+
+namespace MyMoney.Windows
 {
-    partial class Home
+   sealed partial class Home
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -425,35 +429,35 @@
 
         #endregion
 
-        private System.Windows.Forms.Label errorOutput;
-        private System.Windows.Forms.GroupBox transactionsBox;
-        private System.Windows.Forms.DataVisualization.Charting.Chart monthPlot;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button changeMonthlyAllowanceButtton;
-        private System.Windows.Forms.Button addTransactionButton;
-        private System.Windows.Forms.Button delete1;
-        private System.Windows.Forms.Button delete2;
-        private System.Windows.Forms.RichTextBox amount2;
-        private System.Windows.Forms.RichTextBox amount1;
-        private System.Windows.Forms.RichTextBox description2;
-        private System.Windows.Forms.RichTextBox description1;
-        private System.Windows.Forms.RichTextBox date2;
-        private System.Windows.Forms.RichTextBox date1;
-        private System.Windows.Forms.MenuStrip FileOptionMenu;
-        private System.Windows.Forms.ToolStripMenuItem FileOptionsBox;
-        private System.Windows.Forms.ToolStripMenuItem importButton;
-        private System.Windows.Forms.ToolStripMenuItem createButton;
-        private System.Windows.Forms.Button rightButton;
-        private System.Windows.Forms.Button leftButton;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.Button delete3;
-        private System.Windows.Forms.RichTextBox amount3;
-        private System.Windows.Forms.RichTextBox description3;
-        private System.Windows.Forms.RichTextBox date3;
-        private System.Windows.Forms.VScrollBar scrollBar;
-        private System.Windows.Forms.ToolStripMenuItem updateDBSchemaToolStripMenuItem;
+        private Label errorOutput;
+        private GroupBox transactionsBox;
+        private Chart monthPlot;
+        private Label label1;
+        private Label label3;
+        private Label label2;
+        private Button changeMonthlyAllowanceButtton;
+        private Button addTransactionButton;
+        private Button delete1;
+        private Button delete2;
+        private RichTextBox amount2;
+        private RichTextBox amount1;
+        private RichTextBox description2;
+        private RichTextBox description1;
+        private RichTextBox date2;
+        private RichTextBox date1;
+        private MenuStrip FileOptionMenu;
+        private ToolStripMenuItem FileOptionsBox;
+        private ToolStripMenuItem importButton;
+        private ToolStripMenuItem createButton;
+        private Button rightButton;
+        private Button leftButton;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private Button delete3;
+        private RichTextBox amount3;
+        private RichTextBox description3;
+        private RichTextBox date3;
+        private VScrollBar scrollBar;
+        private ToolStripMenuItem updateDBSchemaToolStripMenuItem;
     }
 }
 

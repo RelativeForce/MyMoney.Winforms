@@ -21,7 +21,7 @@ namespace MyMoney.Controllers
 
             this.sql = sql;
             this.tables = tables;
-            this.views = new HashSet<IView>();
+            views = new HashSet<IView>();
                 
         }
 

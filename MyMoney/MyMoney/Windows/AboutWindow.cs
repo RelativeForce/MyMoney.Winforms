@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyMoney.Windows
@@ -14,10 +10,10 @@ namespace MyMoney.Windows
         public AboutWindow()
         {
             InitializeComponent();
-            this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = "Version: " + AssemblyVersion;
-            this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            labelProductName.Text = AssemblyProduct;
+            labelVersion.Text = "Version: " + AssemblyVersion;
+            labelCompanyName.Text = AssemblyCompany;
+            textBoxDescription.Text = AssemblyDescription;
         }
 
         #region Assembly Attribute Accessors
@@ -35,7 +31,7 @@ namespace MyMoney.Windows
                         return titleAttribute.Title;
                     }
                 }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
             }
         }
 
@@ -102,7 +98,7 @@ namespace MyMoney.Windows
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            Dispose();
         }
 
         private void AboutWindow_Load(object sender, EventArgs e)

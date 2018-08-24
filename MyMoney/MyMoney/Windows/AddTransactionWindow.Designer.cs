@@ -1,11 +1,14 @@
-﻿namespace MyMoney.Windows
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace MyMoney.Windows
 {
     partial class AddTransactionWindow
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -160,15 +163,15 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox descriptionTextBox;
-        private System.Windows.Forms.TextBox amountTextBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button submit;
-        private System.Windows.Forms.DateTimePicker date;
-        private System.Windows.Forms.Button toggleButton;
-        private System.Windows.Forms.Label outLabel;
-        private System.Windows.Forms.Label label4;
+        private RichTextBox descriptionTextBox;
+        private TextBox amountTextBox;
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Button submit;
+        private DateTimePicker date;
+        private Button toggleButton;
+        private Label outLabel;
+        private Label label4;
     }
 }

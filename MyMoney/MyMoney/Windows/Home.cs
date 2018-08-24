@@ -1,86 +1,85 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Reflection;
-using MyMoney.Windows.Components;
+using System.Windows.Forms;
 using MyMoney.Controllers;
 using MyMoney.File;
+using MyMoney.Properties;
+using MyMoney.Windows.Components;
 using MyMoney.Windows.Components.DBFileDialogs;
 
 namespace MyMoney.Windows
 {
 
-    public partial class Home : Form, IView
+    public sealed partial class Home : Form, IView
     {
 
         #region components
 
-        private GraphHandler plotter;
+        private readonly GraphHandler _plotter;
 
-        private TransactionViewer viewer;
+        private readonly TransactionViewer _viewer;
 
-        private AddTransactionWindow addTransactionWindow;
+        private AddTransactionWindow _addTransactionWindow;
 
-        private MonthlyAllowanceChanger monthlyAllowanceChanger;
+        private MonthlyAllowanceChanger _monthlyAllowanceChanger;
 
-        private ToolTipHandler toolTipHandler;
+        private readonly ToolTipHandler _toolTipHandler;
 
         #endregion components
 
         #region fields
 
-        private readonly IDataController controller;
+        private readonly IDataController _controller;
 
-        private readonly FileStoreManager fileStore;
+        private readonly FileStoreManager _fileStore;
 
-        private DateTime highlightedMonth;
+        private DateTime _highlightedMonth;
 
-        private string previousValue = "";
+        private string _previousValue = "";
 
-        private bool updated = false;
+        private bool _updated;
 
         #endregion fields
 
         public Home(IDataController controller, FileStoreManager fileStore)
         {
-            this.controller = controller;
-            this.fileStore = fileStore;
+            _controller = controller;
+            _fileStore = fileStore;
 
-            controller.AddView(this);
+            _controller.AddView(this);
 
             InitializeComponent();
 
-            this.highlightedMonth = DateTime.Today;
-            this.plotter = new GraphHandler(monthPlot, controller);
+            _highlightedMonth = DateTime.Today;
+            _plotter = new GraphHandler(monthPlot, controller);
 
-            this.viewer = new TransactionViewer(
-                new TransactionView[] {
+            _viewer = new TransactionViewer(
+                new[] {
                     new TransactionView(date1, description1, amount1, delete1),
                     new TransactionView(date2, description2, amount2, delete2),
-                    new TransactionView(date3, description3, amount3, delete3),
-                }, scrollBar, highlightedMonth, controller);
+                    new TransactionView(date3, description3, amount3, delete3)
+                }, scrollBar, _highlightedMonth, controller);
 
-            this.toolTipHandler = new ToolTipHandler();
+            _toolTipHandler = new ToolTipHandler();
 
             DisableOperationControls();
 
-            this.Text = Assembly.GetExecutingAssembly().GetName().Name + " [" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "]";
+            Text = Assembly.GetExecutingAssembly().GetName().Name + " [" + Assembly.GetExecutingAssembly().GetName().Version + "]";
 
+            if (!fileStore.Read()) return;
 
-            if (fileStore.Read())
-            {
-                controller.Connect();
-                controller.Load();
-                EnableOperationControls();
-            }
+            controller.Connect();
+            controller.Load();
+            EnableOperationControls();
 
         }
 
         public void RefreshView()
         {
 
-            viewer.display();
+            _viewer.display();
 
-            plotter.draw(highlightedMonth);
+            _plotter.draw(_highlightedMonth);
 
         }
 
@@ -105,13 +104,13 @@ namespace MyMoney.Windows
             {
                 // Scroll down the list of Transactions.
                 scrollBar.Value++;
-                viewer.display();
+                _viewer.display();
             }
             else if (e.KeyCode == Keys.Up && scrollBar.Enabled && scrollBar.Value > 0)
             {
                 // Scroll up the list of Transactions.
                 scrollBar.Value--;
-                viewer.display();
+                _viewer.display();
             }
 
             e.Handled = true;
@@ -120,17 +119,17 @@ namespace MyMoney.Windows
         private void LoadForm(object sender, EventArgs e)
         {
 
-            viewer.display();
+            _viewer.display();
 
-            plotter.draw();
+            _plotter.draw();
 
         }
 
         private void MainClosed(object sender, FormClosedEventArgs e)
         {
-            controller.Disconnect();
+            _controller.Disconnect();
 
-            controller.RemoveView(this);
+            _controller.RemoveView(this);
 
         }
 
@@ -141,71 +140,72 @@ namespace MyMoney.Windows
         private void ScrollTransactions(object sender, EventArgs e)
         {
             // Rerender the viewer.
-            viewer.display();
+            _viewer.display();
         }
 
         private void DeleteTransaction(object sender, EventArgs e)
         {
             // Confirm that the transaction should be deleted.
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to delete this transaction?", "Delete Transatcion?", MessageBoxButtons.YesNo);
+            var dialogResult = MessageBox.Show(Resources.DeleteTransactionWarningBody, Resources.DeleteTransactionWarningTitle, MessageBoxButtons.YesNo);
 
             // If the dialog returns yes then delete the transaction.
-            if (dialogResult == DialogResult.Yes)
-            {
-                viewer.deleteTransaction(sender as Button);
-                plotter.draw();
-            }
+            if (dialogResult != DialogResult.Yes) return;
+
+            _viewer.deleteTransaction(sender as Button);
+            _plotter.draw();
         }
 
         private void DisplayUpdateTransactionToolTip(object sender, EventArgs e)
         {
             // Display a tool tip to help users understand how to update transactions.
-            toolTipHandler.draw("Updating Transactions", "Press ENTER to save your changes.", (sender as RichTextBox));
+            _toolTipHandler.draw("Updating Transactions", "Press ENTER to save your changes.", (sender as RichTextBox));
         }
 
         private void ChangeTransactionField(object sender, KeyEventArgs e)
         {
+
             // If the user pressed enter.
-            if (e.KeyCode == Keys.Enter)
-            {
-                // If the user has changed the contents of the text box.
-                if (!(sender as RichTextBox).Text.Equals(previousValue))
-                {
-                    // Attempt to update the transaction and store the result.
-                    string result = viewer.updateTransaction(sender as RichTextBox);
+           if (e.KeyCode != Keys.Enter) return;
 
-                    // If the result is an empty string then the update was successful.
-                    if (result.Equals(""))
-                    {
-                        updated = true;
-                        previousValue = (sender as RichTextBox).Text;
+           // Define the ENTER as handled so a new line is not created in the text box.
+           e.Handled = true;
 
-                        DisplaySuccessUpdatedFieldToolTip(sender as RichTextBox);
-                    }
-                    else
-                    {
-                        DisplayFailUpdatedFieldToolTip(sender as RichTextBox, result);
-                    }
+           var textBox = (RichTextBox) sender;
 
-                }
-                // Define the ENTER as handled so a new line is not created in the text box.
-                e.Handled = true;
-            }
+           // If the user has changed the contents of the text box.
+           if (textBox.Text.Equals(_previousValue)) return;
+
+           // Attempt to update the transaction and store the result.
+           var result = _viewer.updateTransaction(textBox);
+
+           // If the result is an empty string then the update was successful.
+           if (result.Equals(""))
+           {
+              _updated = true;
+              _previousValue = textBox.Text;
+
+              DisplaySuccessUpdatedFieldToolTip(textBox);
+           }
+           else
+           {
+              DisplayFailUpdatedFieldToolTip(textBox, result);
+           }
+
+
 
         }
 
         private void CachePreviousValue(object sender, EventArgs e)
         {
-            previousValue = (sender as RichTextBox).Text;
+            _previousValue = (sender as RichTextBox)?.Text;
         }
 
         private void RevertToPreviousValue(object sender, EventArgs e)
         {
-            if (!updated)
-            {
-                (sender as RichTextBox).Text = previousValue;
-                previousValue = "";
-            }
+           if (_updated) return;
+
+           ((RichTextBox) sender).Text = _previousValue;
+           _previousValue = "";
         }
 
         #endregion transactions
@@ -221,12 +221,12 @@ namespace MyMoney.Windows
 
                 FileStoreManager.DB_FILE_PATH = fileName;
 
-                fileStore.ClearFileStore();
-                fileStore.Store();
+                _fileStore.ClearFileStore();
+                _fileStore.Store();
 
-                controller.Connect();
-                controller.SetStartDate(highlightedMonth);
-                controller.Load();
+                _controller.Connect();
+                _controller.SetStartDate(_highlightedMonth);
+                _controller.Load();
 
                 EnableOperationControls();
 
@@ -244,13 +244,13 @@ namespace MyMoney.Windows
                 if (FileStoreManager.DB_FILE_PATH.Equals(fileName)) return;
 
                 FileStoreManager.DB_FILE_PATH = fileName;
-                fileStore.ClearFileStore();
-                fileStore.Store();
+                _fileStore.ClearFileStore();
+                _fileStore.Store();
 
-                controller.Create();
-                controller.Connect();
-                controller.SetStartDate(highlightedMonth);
-                controller.Load();
+                _controller.Create();
+                _controller.Connect();
+                _controller.SetStartDate(_highlightedMonth);
+                _controller.Load();
 
                 EnableOperationControls();
 
@@ -264,10 +264,10 @@ namespace MyMoney.Windows
         {
 
             // Holds a new Open file dialog
-            System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
+            OpenFileDialog dialog = new OpenFileDialog();
 
             // Assign the attributes of the dialog.
-            dialog.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); ;
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); ;
             dialog.Multiselect = false;
             dialog.Title = "Import Database File";
             dialog.DefaultExt = "sqlite";
@@ -284,16 +284,16 @@ namespace MyMoney.Windows
 
             FileStoreManager.DB_FILE_PATH = dialog.FileName;
 
-            fileStore.ClearFileStore();
-            fileStore.Store();
+            _fileStore.ClearFileStore();
+            _fileStore.Store();
 
-            controller.Connect();
+            _controller.Connect();
 
             // Update the database file.
             // controller.updateDB();
 
-            controller.SetStartDate(highlightedMonth);
-            controller.Load();
+            _controller.SetStartDate(_highlightedMonth);
+            _controller.Load();
 
             // Enable the view controls.
             EnableOperationControls();
@@ -307,20 +307,20 @@ namespace MyMoney.Windows
         private void AddTransaction(object sender, EventArgs e)
         {
             // If there is now AddTranactionWindow open then open one.
-            if (addTransactionWindow == null || addTransactionWindow.IsDisposed)
+            if (_addTransactionWindow == null || _addTransactionWindow.IsDisposed)
             {
-                addTransactionWindow = new AddTransactionWindow(controller);
-                addTransactionWindow.Show();
+                _addTransactionWindow = new AddTransactionWindow(_controller);
+                _addTransactionWindow.Show();
             }
         }
 
         private void ChangeMonthlyAllowance(object sender, EventArgs e)
         {
             // If there is no current MonthlyAllowanceChanger active then open a new one.
-            if (monthlyAllowanceChanger == null || monthlyAllowanceChanger.IsDisposed)
+            if (_monthlyAllowanceChanger == null || _monthlyAllowanceChanger.IsDisposed)
             {
-                this.monthlyAllowanceChanger = new MonthlyAllowanceChanger(controller, highlightedMonth);
-                this.monthlyAllowanceChanger.Show();
+                _monthlyAllowanceChanger = new MonthlyAllowanceChanger(_controller, _highlightedMonth);
+                _monthlyAllowanceChanger.Show();
             }
         }
 
@@ -336,14 +336,14 @@ namespace MyMoney.Windows
 
         private void NextMonth(object sender, EventArgs e)
         {
-            highlightedMonth = highlightedMonth.AddMonths(1);
+            _highlightedMonth = _highlightedMonth.AddMonths(1);
             LoadMonth();
         }
 
         private void PreviousMonth(object sender, EventArgs e)
         {
             // Deincrement the month.
-            highlightedMonth = highlightedMonth.AddMonths(-1);
+            _highlightedMonth = _highlightedMonth.AddMonths(-1);
             LoadMonth();
         }
 
@@ -356,7 +356,7 @@ namespace MyMoney.Windows
         private void DisableOperationControls()
         {
 
-            viewer.disable();
+            _viewer.disable();
             addTransactionButton.Enabled = false;
             changeMonthlyAllowanceButtton.Enabled = false;
             rightButton.Enabled = false;
@@ -368,9 +368,9 @@ namespace MyMoney.Windows
         private void EnableOperationControls()
         {
 
-            viewer.enable();
-            viewer.display();
-            plotter.draw();
+            _viewer.enable();
+            _viewer.display();
+            _plotter.draw();
             changeMonthlyAllowanceButtton.Enabled = true;
             addTransactionButton.Enabled = true;
             leftButton.Enabled = true;
@@ -383,8 +383,8 @@ namespace MyMoney.Windows
         private void LoadMonth()
         {
 
-            controller.SetStartDate(highlightedMonth);
-            controller.Load();
+            _controller.SetStartDate(_highlightedMonth);
+            _controller.Load();
 
             UpdateView();
         }
@@ -393,7 +393,7 @@ namespace MyMoney.Windows
         {
             // If month currently being displayed is the present month 
             // then disable the rightButton. Otherwise enable it.
-            if (highlightedMonth.Date <= DateTime.Today.AddMonths(-1))
+            if (_highlightedMonth.Date <= DateTime.Today.AddMonths(-1))
             {
                 rightButton.Enabled = true;
             }
@@ -405,7 +405,7 @@ namespace MyMoney.Windows
             // If the month currently being displayed is above the mimimum 
             // value of the DateTime data type enable the leftButton. Otherwise 
             // enable it.
-            if (highlightedMonth.Date >= DateTime.MinValue.AddMonths(1))
+            if (_highlightedMonth.Date >= DateTime.MinValue.AddMonths(1))
             {
 
                 leftButton.Enabled = true;
@@ -416,19 +416,19 @@ namespace MyMoney.Windows
             }
 
             // Redraw the graph and display the tranactions of that month.
-            plotter.draw(highlightedMonth);
-            viewer.display(highlightedMonth);
+            _plotter.draw(_highlightedMonth);
+            _viewer.display(_highlightedMonth);
 
         }
 
         private void DisplayFailUpdatedFieldToolTip(RichTextBox sender, string errorMessage)
         {
-            toolTipHandler.draw("Failure", errorMessage, sender);
+            _toolTipHandler.draw("Failure", errorMessage, sender);
         }
 
         private void DisplaySuccessUpdatedFieldToolTip(RichTextBox sender)
         {
-            toolTipHandler.draw("Success", "Your changes have been saved.", sender);
+            _toolTipHandler.draw("Success", "Your changes have been saved.", sender);
         }
 
     }
