@@ -157,8 +157,14 @@ namespace MyMoney.Windows
 
         private void DisplayUpdateTransactionToolTip(object sender, EventArgs e)
         {
-            // Display a tool tip to help users understand how to update transactions.
-            _toolTipHandler.draw("Updating Transactions", "Press ENTER to save your changes.", (sender as RichTextBox));
+
+             var ttm = new ToolTipModel(
+                "Updating Transactions", 
+                "Press ENTER to save your changes.", 
+                (sender as RichTextBox)
+             );
+
+            _toolTipHandler.Draw(ttm);
         }
 
         private void ChangeTransactionField(object sender, KeyEventArgs e)
@@ -355,19 +361,16 @@ namespace MyMoney.Windows
 
         private void DisableOperationControls()
         {
-
             _viewer.disable();
             addTransactionButton.Enabled = false;
             changeMonthlyAllowanceButtton.Enabled = false;
             rightButton.Enabled = false;
             leftButton.Enabled = false;
             scrollBar.Enabled = false;
-
         }
 
         private void EnableOperationControls()
         {
-
             _viewer.enable();
             _viewer.display();
             _plotter.draw();
@@ -375,7 +378,6 @@ namespace MyMoney.Windows
             addTransactionButton.Enabled = true;
             leftButton.Enabled = true;
             scrollBar.Enabled = true; ;
-
         }
 
         #endregion operation_controls
@@ -423,12 +425,15 @@ namespace MyMoney.Windows
 
         private void DisplayFailUpdatedFieldToolTip(RichTextBox sender, string errorMessage)
         {
-            _toolTipHandler.draw("Failure", errorMessage, sender);
+           var ttm = new ToolTipModel("Failure", errorMessage, sender);
+ 
+            _toolTipHandler.Draw(ttm);
         }
 
         private void DisplaySuccessUpdatedFieldToolTip(RichTextBox sender)
         {
-            _toolTipHandler.draw("Success", "Your changes have been saved.", sender);
+            var ttm =  new ToolTipModel("Success", "Your changes have been saved.", sender);
+            _toolTipHandler.Draw(ttm);
         }
 
     }

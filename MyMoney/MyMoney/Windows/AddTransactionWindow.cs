@@ -52,15 +52,18 @@ namespace MyMoney.Windows
                 // Check that the description is not empty but is also less than the maximum length of the description.
                 if (amount <= 0)
                 {
-                    toolTipHandler.draw("Error", "Amounts must be positive and greater than zero.", (amountTextBox));
+                    var ttm = new ToolTipModel("Error", "Amounts must be positive and greater than zero.", (amountTextBox));                         
+                    toolTipHandler.Draw(ttm);
                 }
                 else if (descriptionTextBox.Text.Equals(""))
                 {
-                    toolTipHandler.draw("Error", "Please input a description.", descriptionTextBox);
+                    var ttm = new ToolTipModel("Error", "Please input a description.", descriptionTextBox);
+                    toolTipHandler.Draw(ttm);
                 }
                 else if (descriptionTextBox.Text.Length > CashFlowModel.DESCRIPTION_LENGTH)
                 {
-                    toolTipHandler.draw("Error", "The description is too long. Please shorten it.", descriptionTextBox);
+                    var ttm = new ToolTipModel("Error", "The description is too long. Please shorten it.", descriptionTextBox);
+                    toolTipHandler.Draw(ttm);
                 }
                 else
                 {
@@ -72,7 +75,8 @@ namespace MyMoney.Windows
             {
                 // Must not be a valid double value.
                 Console.WriteLine(ex);
-                toolTipHandler.draw("Error", "Please input a valid monetary value.", amountTextBox);
+                var ttm = new ToolTipModel("Error", "Please input a valid monetary value.", amountTextBox);
+                toolTipHandler.Draw(ttm);
             }
 
             // If all the fields are valid.
@@ -131,17 +135,20 @@ namespace MyMoney.Windows
 
         private void showToggleToolTip(object sender, EventArgs e)
         {
-            toolTipHandler.draw("Toggling Income/Outcome", "Click here to toggle whether the transaction is Income or Outcome.", (sender as Button));
+           var ttm = new ToolTipModel("Toggling Income/Outcome", "Click here to toggle whether the transaction is Income or Outcome.", (sender as Button));
+         toolTipHandler.Draw(ttm);
         }
 
         private void showAmountToolTip(object sender, EventArgs e)
         {
-            toolTipHandler.draw("Input Amount", "Input the amount of money in the transaction.", amountTextBox);
+           var ttm = new ToolTipModel("Input Amount", "Input the amount of money in the transaction.", amountTextBox);
+           toolTipHandler.Draw(ttm);
         }
 
         private void showDescriptionToolTip(object sender, EventArgs e)
         {
-            toolTipHandler.draw("Input Description","Input a descrition for the transaction. Less than 50 characters.",descriptionTextBox);
+           var ttm = new ToolTipModel("Input Description", "Input a descrition for the transaction. Less than 50 characters.", descriptionTextBox);
+           toolTipHandler.Draw(ttm);
         }
 
         private void toggleFlip(object sender, EventArgs e)
