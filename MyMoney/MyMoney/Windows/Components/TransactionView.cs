@@ -39,7 +39,7 @@ namespace MyMoney.Windows.Components
             {
 
                 // Stores the date of the transaction temporarily so that it may be check to be the correct length.
-                string date = row.getValue(CashFlowModel.DATE_COLOUMN);
+                string date = row.GetValue(CashFlowModel.DATE_COLOUMN);
                 if (date.Length > 10)
                 {
                     date = date.Remove(10);
@@ -50,8 +50,8 @@ namespace MyMoney.Windows.Components
 
                 // Update all the values in the text boxes to the ones specified in the paramter row.
                 UpdateBox(this.Date, date);
-                UpdateBox(Description, row.getValue(CashFlowModel.DESCRIPTION_COLOUMN));
-                UpdateBox(Amount, row.getValue(CashFlowModel.AMOUNT_COLOUMN));
+                UpdateBox(Description, row.GetValue(CashFlowModel.DESCRIPTION_COLOUMN));
+                UpdateBox(Amount, row.GetValue(CashFlowModel.AMOUNT_COLOUMN));
             }
             else
             {

@@ -30,8 +30,8 @@ namespace MyMoney.Core.Controllers
 
             _rawTable.addRow(row);
 
-            var monthCode = row.getValue(BudgetModel.MONTH_COLOUMN);
-            var amount = row.getValue(BudgetModel.AMOUNT_COLOUMN);
+            var monthCode = row.GetValue(BudgetModel.MONTH_COLOUMN);
+            var amount = row.GetValue(BudgetModel.AMOUNT_COLOUMN);
 
             _databaseService.Execute(_queryService.Add(monthCode, amount));
 
@@ -42,12 +42,12 @@ namespace MyMoney.Core.Controllers
 
             if (BudgetModel.AMOUNT_COLOUMN.Equals(updatedCol)) throw new ArgumentException("Invalid updated coloumn.");
 
-            var allowance = _rawTable.getRow(BudgetModel.MONTH_COLOUMN, row.getValue(BudgetModel.MONTH_COLOUMN));
+            var allowance = _rawTable.getRow(BudgetModel.MONTH_COLOUMN, row.GetValue(BudgetModel.MONTH_COLOUMN));
 
-            allowance.updateColoumn(BudgetModel.AMOUNT_COLOUMN, row.getValue(BudgetModel.AMOUNT_COLOUMN));
+            allowance.UpdateColoumn(BudgetModel.AMOUNT_COLOUMN, row.GetValue(BudgetModel.AMOUNT_COLOUMN));
 
-            var monthCode = row.getValue(BudgetModel.MONTH_COLOUMN);
-            var newAmount = row.getValue(BudgetModel.AMOUNT_COLOUMN);
+            var monthCode = row.GetValue(BudgetModel.MONTH_COLOUMN);
+            var newAmount = row.GetValue(BudgetModel.AMOUNT_COLOUMN);
 
             _databaseService.Execute(_queryService.Update(monthCode, newAmount));
 
@@ -83,7 +83,7 @@ namespace MyMoney.Core.Controllers
         {
             _rawTable.remove(row);
 
-            var monthCode = row.getValue(BudgetModel.MONTH_COLOUMN);
+            var monthCode = row.GetValue(BudgetModel.MONTH_COLOUMN);
 
             _databaseService.Execute(_queryService.Delete(monthCode));
 

@@ -106,10 +106,10 @@ namespace MyMoney.Windows
 
             Row newRow = new Row();
 
-            newRow.addColoumn(CashFlowModel.DATE_COLOUMN, date.Value.ToShortDateString());
-            newRow.addColoumn(CashFlowModel.DESCRIPTION_COLOUMN, cleanDescription());
-            newRow.addColoumn(CashFlowModel.AMOUNT_COLOUMN, amount.ToString());
-            newRow.addColoumn(CashFlowModel.TRANSACTION_ID_COLOUMN, "" + controller.GetAvalaibleTransactionID());
+            newRow.AddColoumn(CashFlowModel.DATE_COLOUMN, date.Value.ToShortDateString());
+            newRow.AddColoumn(CashFlowModel.DESCRIPTION_COLOUMN, cleanDescription());
+            newRow.AddColoumn(CashFlowModel.AMOUNT_COLOUMN, amount.ToString());
+            newRow.AddColoumn(CashFlowModel.TRANSACTION_ID_COLOUMN, "" + controller.GetAvalaibleTransactionID());
 
             controller.Add(newRow, CashFlowModel.TABLE_NAME);
 

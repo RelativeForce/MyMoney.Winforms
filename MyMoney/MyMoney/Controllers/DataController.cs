@@ -154,7 +154,7 @@ namespace MyMoney.Controllers
         {
             string monthCode = (date.Month < 10 ? "0" + date.Month : "" + date.Month) + "" + date.Year;
 
-            bool sameMonthCode(Row row) => monthCode.Equals(row.getValue(BudgetModel.MONTH_COLOUMN));
+            bool sameMonthCode(Row row) => monthCode.Equals(row.GetValue(BudgetModel.MONTH_COLOUMN));
 
             Row[] results = GetRows(sameMonthCode, BudgetModel.TABLE_NAME);
 
@@ -163,7 +163,7 @@ namespace MyMoney.Controllers
                 return 200;
             }
 
-            string currentValueStr = results[0].getValue(BudgetModel.AMOUNT_COLOUMN);
+            string currentValueStr = results[0].GetValue(BudgetModel.AMOUNT_COLOUMN);
 
             return double.Parse(currentValueStr);
         }

@@ -125,7 +125,7 @@ namespace MyMoney.Windows.Components
             Row[] rows = _controller.GetRows(row =>
             {
 
-                DateTime rowDateTime = DateTime.Parse(row.getValue(CashFlowModel.DATE_COLOUMN));
+                DateTime rowDateTime = DateTime.Parse(row.GetValue(CashFlowModel.DATE_COLOUMN));
 
                 return DateTime.Compare(rowDateTime, startOfMonth) >= 0 && DateTime.Compare(rowDateTime, endOfMonth) <= 0;
 
@@ -147,7 +147,7 @@ namespace MyMoney.Windows.Components
 
 
                 // Add the current transaction value to the monthly allowance.
-                monthlyAllowance += double.Parse(row.getValue(CashFlowModel.AMOUNT_COLOUMN));
+                monthlyAllowance += double.Parse(row.GetValue(CashFlowModel.AMOUNT_COLOUMN));
 
                 // Add the new allowance to the list of y values and the index as the 
                 // transaction number in the x values.

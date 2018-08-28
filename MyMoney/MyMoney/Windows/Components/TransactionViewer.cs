@@ -48,7 +48,7 @@ namespace MyMoney.Windows.Components
             Row[] cashFlowRows = _controller.GetRows(row =>
             {
 
-                DateTime rowDateTime = DateTime.Parse(row.getValue(CashFlowModel.DATE_COLOUMN));
+                DateTime rowDateTime = DateTime.Parse(row.GetValue(CashFlowModel.DATE_COLOUMN));
 
                 return DateTime.Compare(rowDateTime, startOfMonth) >= 0 && DateTime.Compare(rowDateTime, endOfMonth) <= 0;
 
@@ -147,12 +147,12 @@ namespace MyMoney.Windows.Components
             {
                 try
                 {
-                    int id = int.Parse(view.Row.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN));
+                    int id = int.Parse(view.Row.GetValue(CashFlowModel.TRANSACTION_ID_COLOUMN));
 
                     if (box.Equals(view.Date))
                     {
 
-                        view.Row.updateColoumn(CashFlowModel.DATE_COLOUMN, box.Text);
+                        view.Row.UpdateColoumn(CashFlowModel.DATE_COLOUMN, box.Text);
                         _controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.DATE_COLOUMN);
 
                         result = "";
@@ -161,7 +161,7 @@ namespace MyMoney.Windows.Components
                     else if (box.Equals(view.Description))
                     {
                         // Parse box as description
-                        view.Row.updateColoumn(CashFlowModel.DESCRIPTION_COLOUMN, box.Text);
+                        view.Row.UpdateColoumn(CashFlowModel.DESCRIPTION_COLOUMN, box.Text);
                         _controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.DESCRIPTION_COLOUMN);
                         result = "";
 
@@ -169,7 +169,7 @@ namespace MyMoney.Windows.Components
                     else if (box.Equals(view.Amount))
                     {
                         // Parse box as amount
-                        view.Row.updateColoumn(CashFlowModel.AMOUNT_COLOUMN, box.Text);
+                        view.Row.UpdateColoumn(CashFlowModel.AMOUNT_COLOUMN, box.Text);
                         _controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.AMOUNT_COLOUMN);
                         result = "";
                     }

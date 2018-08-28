@@ -195,7 +195,7 @@ namespace MyMoney.Core.Table
             {
 
                 // If the current row has the column value pair that is desired then return it.
-                if (row.getValue(coloumn).Equals(value))
+                if (row.GetValue(coloumn).Equals(value))
                 {
 
                     return row;
@@ -318,7 +318,7 @@ namespace MyMoney.Core.Table
             List<string> coloumnChecklist = coloumns.ToList();
 
             // Iterate through all the row titles in the row
-            foreach (string coloumn in row.getColoumns())
+            foreach (string coloumn in row.GetColoumns())
             {
                 /*
                  * If the current column is in the column check list then remove 

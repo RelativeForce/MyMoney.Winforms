@@ -85,8 +85,8 @@ namespace MyMoney.Windows
                 Row newRow = new Row();
 
                 // Add the monthly allowance an the month it is assigned to.
-                newRow.addColoumn(BudgetModel.MONTH_COLOUMN, (month.Value.Month < 10 ? "0" + month.Value.Month : "" + month.Value.Month) + "" + month.Value.Year);
-                newRow.addColoumn(BudgetModel.AMOUNT_COLOUMN, "" + newBudget);
+                newRow.AddColoumn(BudgetModel.MONTH_COLOUMN, (month.Value.Month < 10 ? "0" + month.Value.Month : "" + month.Value.Month) + "" + month.Value.Year);
+                newRow.AddColoumn(BudgetModel.AMOUNT_COLOUMN, "" + newBudget);
 
                 controller.Add(newRow, BudgetModel.TABLE_NAME);
 

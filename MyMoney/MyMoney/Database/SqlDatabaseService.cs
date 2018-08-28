@@ -145,7 +145,7 @@ namespace MyMoney.Database
                         }
 
                         // Add the column - value paor to the new row.
-                        newRow.addColoumn(coloumn, value);
+                        newRow.AddColoumn(coloumn, value);
 
                     }
                     // Add the row to the internal table.

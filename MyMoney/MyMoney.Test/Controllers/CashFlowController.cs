@@ -37,10 +37,10 @@ namespace MyMoney.Core.Controllers
 
             if (row == null) throw new ArgumentNullException(nameof(row) + " cannot be null.");
 
-            var description = row.getValue(CashFlowModel.DESCRIPTION_COLOUMN);
-            var amount = row.getValue(CashFlowModel.AMOUNT_COLOUMN);
-            var date = row.getValue(CashFlowModel.DATE_COLOUMN);
-            var id = row.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN);
+            var description = row.GetValue(CashFlowModel.DESCRIPTION_COLOUMN);
+            var amount = row.GetValue(CashFlowModel.AMOUNT_COLOUMN);
+            var date = row.GetValue(CashFlowModel.DATE_COLOUMN);
+            var id = row.GetValue(CashFlowModel.TRANSACTION_ID_COLOUMN);
 
             var rows = _rawTable.getRows();
 
@@ -77,7 +77,7 @@ namespace MyMoney.Core.Controllers
         {
             _rawTable.remove(row);
 
-            var id = row.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN);
+            var id = row.GetValue(CashFlowModel.TRANSACTION_ID_COLOUMN);
 
             _databaseService.Execute(_queryService.Delete(id));
 
@@ -86,16 +86,16 @@ namespace MyMoney.Core.Controllers
         public void Update(Row row, string updatedCol)
         {
 
-            var newValue = row.getValue(updatedCol);
-            var id = row.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN);
+            var newValue = row.GetValue(updatedCol);
+            var id = row.GetValue(CashFlowModel.TRANSACTION_ID_COLOUMN);
 
             CheckNewValue(updatedCol, newValue);
 
             foreach (var currentRow in _rawTable.getRows())
             {
-                if (!currentRow.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN).Equals(id)) continue;
+                if (!currentRow.GetValue(CashFlowModel.TRANSACTION_ID_COLOUMN).Equals(id)) continue;
 
-                currentRow.updateColoumn(updatedCol, newValue);
+                currentRow.UpdateColoumn(updatedCol, newValue);
                 break;
             }
 
@@ -170,7 +170,7 @@ namespace MyMoney.Core.Controllers
 
         private void InsertRow(Row row, Row[] rows)
         {
-            DateTime paramDate = DateTime.Parse(row.getValue(CashFlowModel.DATE_COLOUMN));
+            DateTime paramDate = DateTime.Parse(row.GetValue(CashFlowModel.DATE_COLOUMN));
 
             int first = 0;
             int last = rows.Length - 1;
@@ -182,7 +182,7 @@ namespace MyMoney.Core.Controllers
 
                 mid = (first + last) / 2;
 
-                DateTime rowDate = DateTime.Parse(rows[mid].getValue(CashFlowModel.DATE_COLOUMN));
+                DateTime rowDate = DateTime.Parse(rows[mid].GetValue(CashFlowModel.DATE_COLOUMN));
 
                 // If the current row's date is before the parameter rows date.
                 if (rowDate > paramDate)
@@ -201,7 +201,7 @@ namespace MyMoney.Core.Controllers
                 }
             }
 
-            DateTime lastRowDate = DateTime.Parse(rows[mid].getValue(CashFlowModel.DATE_COLOUMN));
+            DateTime lastRowDate = DateTime.Parse(rows[mid].GetValue(CashFlowModel.DATE_COLOUMN));
 
             if (lastRowDate > paramDate && !found)
             {
