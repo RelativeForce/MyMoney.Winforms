@@ -9,15 +9,15 @@ namespace MyMoney.Core.Controllers
 {
     public class BudgetController : ITableController
     {
-       private readonly IBudgetQueryService _queryService;
-       private readonly IDatabaseService _databaseService;
-       private readonly Table.Table _rawTable;
+        private readonly IBudgetQueryService _queryService;
+        private readonly IDatabaseService _databaseService;
+        private readonly Table.Table _rawTable;
 
         public BudgetController(IBudgetQueryService queryService, IDatabaseService databaseService)
         {
-           _queryService = queryService;
-           _databaseService = databaseService;
-           _rawTable = new Table.Table(BudgetModel.Coloumns());
+            _queryService = queryService;
+            _databaseService = databaseService;
+            _rawTable = new Table.Table(BudgetModel.Coloumns());
         }
 
         public void Create()
@@ -65,7 +65,7 @@ namespace MyMoney.Core.Controllers
 
         public Row[] GetRows(Predicate<Row> check)
         {
-           return _rawTable.getRows().Where(check.Invoke).ToArray();
+            return _rawTable.getRows().Where(check.Invoke).ToArray();
 
         }
 
