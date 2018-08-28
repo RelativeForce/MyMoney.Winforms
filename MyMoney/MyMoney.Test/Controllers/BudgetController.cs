@@ -28,7 +28,7 @@ namespace MyMoney.Core.Controllers
         public void Add(Row row)
         {
 
-            _rawTable.addRow(row);
+            _rawTable.AddRow(row);
 
             var monthCode = row.GetValue(BudgetModel.MONTH_COLOUMN);
             var amount = row.GetValue(BudgetModel.AMOUNT_COLOUMN);
@@ -42,7 +42,7 @@ namespace MyMoney.Core.Controllers
 
             if (BudgetModel.AMOUNT_COLOUMN.Equals(updatedCol)) throw new ArgumentException("Invalid updated coloumn.");
 
-            var allowance = _rawTable.getRow(BudgetModel.MONTH_COLOUMN, row.GetValue(BudgetModel.MONTH_COLOUMN));
+            var allowance = _rawTable.GetRow(BudgetModel.MONTH_COLOUMN, row.GetValue(BudgetModel.MONTH_COLOUMN));
 
             allowance.UpdateColoumn(BudgetModel.AMOUNT_COLOUMN, row.GetValue(BudgetModel.AMOUNT_COLOUMN));
 
@@ -60,18 +60,18 @@ namespace MyMoney.Core.Controllers
 
         public bool IsValidRow(Row row)
         {
-            return _rawTable.check(row);
+            return _rawTable.Check(row);
         }
 
         public Row[] GetRows(Predicate<Row> check)
         {
-            return _rawTable.getRows().Where(check.Invoke).ToArray();
+            return _rawTable.GetRows().Where(check.Invoke).ToArray();
 
         }
 
         public void Clear()
         {
-            _rawTable.clear();
+            _rawTable.Clear();
         }
 
         public string GetTableName()
@@ -81,7 +81,7 @@ namespace MyMoney.Core.Controllers
 
         public void Delete(Row row)
         {
-            _rawTable.remove(row);
+            _rawTable.Remove(row);
 
             var monthCode = row.GetValue(BudgetModel.MONTH_COLOUMN);
 
@@ -91,7 +91,7 @@ namespace MyMoney.Core.Controllers
 
         public void AddRow(Row row)
         {
-            _rawTable.addRow(row);
+            _rawTable.AddRow(row);
         }
     }
 }

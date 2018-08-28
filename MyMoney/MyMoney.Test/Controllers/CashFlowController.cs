@@ -42,10 +42,10 @@ namespace MyMoney.Core.Controllers
             var date = row.GetValue(CashFlowModel.DATE_COLOUMN);
             var id = row.GetValue(CashFlowModel.TRANSACTION_ID_COLOUMN);
 
-            var rows = _rawTable.getRows();
+            var rows = _rawTable.GetRows();
 
             if (rows.Length <= 0)
-                _rawTable.insertRow(0, row);
+                _rawTable.InsertRow(0, row);
             else
                 InsertRow(row, rows);
 
@@ -55,7 +55,7 @@ namespace MyMoney.Core.Controllers
 
         public void Clear()
         {
-            _rawTable.clear();
+            _rawTable.Clear();
         }
 
         public string GetTableName()
@@ -70,12 +70,12 @@ namespace MyMoney.Core.Controllers
 
         public Row[] GetRows(Predicate<Row> check)
         {
-            return _rawTable.getRows().Where(check.Invoke).ToArray();
+            return _rawTable.GetRows().Where(check.Invoke).ToArray();
         }
 
         public void Delete(Row row)
         {
-            _rawTable.remove(row);
+            _rawTable.Remove(row);
 
             var id = row.GetValue(CashFlowModel.TRANSACTION_ID_COLOUMN);
 
@@ -91,7 +91,7 @@ namespace MyMoney.Core.Controllers
 
             CheckNewValue(updatedCol, newValue);
 
-            foreach (var currentRow in _rawTable.getRows())
+            foreach (var currentRow in _rawTable.GetRows())
             {
                 if (!currentRow.GetValue(CashFlowModel.TRANSACTION_ID_COLOUMN).Equals(id)) continue;
 
@@ -107,7 +107,7 @@ namespace MyMoney.Core.Controllers
         public bool IsValidRow(Row row)
         {
 
-            return _rawTable.check(row);
+            return _rawTable.Check(row);
 
         }
 
@@ -205,17 +205,17 @@ namespace MyMoney.Core.Controllers
 
             if (lastRowDate > paramDate && !found)
             {
-                _rawTable.insertRow(mid + 1, row);
+                _rawTable.InsertRow(mid + 1, row);
             }
             else
             {
-                _rawTable.insertRow(mid, row);
+                _rawTable.InsertRow(mid, row);
             }
         }
 
         public void AddRow(Row row)
         {
-            _rawTable.addRow(row);
+            _rawTable.AddRow(row);
         }
     }
 }
