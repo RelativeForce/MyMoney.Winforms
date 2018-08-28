@@ -45,9 +45,9 @@ namespace MyMoney.Core.Controllers
             var rows = _rawTable.getRows();
 
             if (rows.Length <= 0)
-               _rawTable.insertRow(0, row);
+                _rawTable.insertRow(0, row);
             else
-               InsertRow(row, rows);
+                InsertRow(row, rows);
 
             _databaseService.Execute(_queryService.Add(id, date, amount, description));
 
@@ -70,7 +70,7 @@ namespace MyMoney.Core.Controllers
 
         public Row[] GetRows(Predicate<Row> check)
         {
-           return _rawTable.getRows().Where(check.Invoke).ToArray();
+            return _rawTable.getRows().Where(check.Invoke).ToArray();
         }
 
         public void Delete(Row row)
@@ -93,10 +93,10 @@ namespace MyMoney.Core.Controllers
 
             foreach (var currentRow in _rawTable.getRows())
             {
-               if (!currentRow.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN).Equals(id)) continue;
+                if (!currentRow.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN).Equals(id)) continue;
 
-               currentRow.updateColoumn(updatedCol, newValue);
-               break;
+                currentRow.updateColoumn(updatedCol, newValue);
+                break;
             }
 
             _databaseService.Execute(_queryService.Update(id, newValue, updatedCol));
@@ -104,7 +104,8 @@ namespace MyMoney.Core.Controllers
 
         }
 
-        public bool IsValidRow(Row row) {
+        public bool IsValidRow(Row row)
+        {
 
             return _rawTable.check(row);
 
