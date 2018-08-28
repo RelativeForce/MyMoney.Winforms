@@ -18,7 +18,8 @@ namespace MyMoney.Core.Model
 
         public static DateTime StartDate = DateTime.Now;
 
-        public static string[] Coloumns() {
+        public static string[] Coloumns()
+        {
             return new[] {
                 DESCRIPTION_COLOUMN,
                 TRANSACTION_ID_COLOUMN,
@@ -27,5 +28,5 @@ namespace MyMoney.Core.Model
             };
         }
 
-}
+    }
 }
