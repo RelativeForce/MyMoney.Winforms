@@ -10,7 +10,7 @@ using MyMoney.Database;
 namespace MyMoney.Controllers
 {
 
-   public class DataController : IDataController
+    public class DataController : IDataController
     {
         private readonly HashSet<IView> _views;
 
@@ -18,12 +18,13 @@ namespace MyMoney.Controllers
 
         private readonly IDatabaseService _databaseService;
 
-        public DataController(IDatabaseService databaseService, List<ITableController> tables) {
+        public DataController(IDatabaseService databaseService, List<ITableController> tables)
+        {
 
             this._databaseService = databaseService;
             this._tables = tables;
             _views = new HashSet<IView>();
-                
+
         }
 
         public void Create()
@@ -33,7 +34,8 @@ namespace MyMoney.Controllers
             _tables.ForEach(table => table.Create());
         }
 
-        public void Load() {
+        public void Load()
+        {
 
             Clear();
 
@@ -45,13 +47,15 @@ namespace MyMoney.Controllers
 
         }
 
-        public void Clear() {
+        public void Clear()
+        {
 
             _tables.ForEach(table => table.Clear());
 
         }
 
-        public Row[] GetRows(Predicate<Row> check, string tableName) {
+        public Row[] GetRows(Predicate<Row> check, string tableName)
+        {
 
             var table = GetTable(tableName);
 
@@ -61,7 +65,8 @@ namespace MyMoney.Controllers
 
         }
 
-        public void Add(Row row, string tableName) {
+        public void Add(Row row, string tableName)
+        {
 
             var table = GetTable(tableName);
 
@@ -75,29 +80,31 @@ namespace MyMoney.Controllers
             return GetRows(check, tableName).Length;
         }
 
-       public int GetAvalaibleTransactionID()
-       {
-          const string maxColoumn = "Maximum";
+        public int GetAvalaibleTransactionID()
+        {
+            const string maxColoumn = "Maximum";
 
-          var command = new Command(
-             $"SELECT MAX({CashFlowModel.TRANSACTION_ID_COLOUMN}) AS {maxColoumn} FROM {CashFlowModel.TABLE_NAME};"
-          );
+            var command = new Command(
+               $"SELECT MAX({CashFlowModel.TRANSACTION_ID_COLOUMN}) AS {maxColoumn} FROM {CashFlowModel.TABLE_NAME};"
+            );
 
-          // The highest transaction id in the CashFlowController table plus one.
-          return _databaseService.GetValueInt(command, maxColoumn) + 1;
+            // The highest transaction id in the CashFlowController table plus one.
+            return _databaseService.GetValueInt(command, maxColoumn) + 1;
 
         }
 
-        public void Update(Row row, string tableName, string updatedCol) {
+        public void Update(Row row, string tableName, string updatedCol)
+        {
 
             var table = GetTable(tableName);
 
             if (table == null) throw new ArgumentException("Invalid table name.");
 
-            table.Update(row, updatedCol); 
+            table.Update(row, updatedCol);
         }
 
-        public void Remove(Row row, string tableName) {
+        public void Remove(Row row, string tableName)
+        {
 
             var table = GetTable(tableName);
 
@@ -107,7 +114,8 @@ namespace MyMoney.Controllers
 
         }
 
-        private ITableController GetTable(string tableName) {
+        private ITableController GetTable(string tableName)
+        {
             return _tables.Find(table => table.GetTableName().Equals(tableName));
         }
 
@@ -122,7 +130,8 @@ namespace MyMoney.Controllers
             _databaseService.Disconnect();
         }
 
-        public void SetStartDate(DateTime startDate) {
+        public void SetStartDate(DateTime startDate)
+        {
             CashFlowModel.StartDate = startDate;
         }
 
@@ -136,7 +145,8 @@ namespace MyMoney.Controllers
             _views.Remove(view);
         }
 
-        public void RefreshViews() {
+        public void RefreshViews()
+        {
             foreach (IView view in _views) view.RefreshView();
         }
 
@@ -148,7 +158,8 @@ namespace MyMoney.Controllers
 
             Row[] results = GetRows(sameMonthCode, BudgetModel.TABLE_NAME);
 
-            if (results.Length == 0) {
+            if (results.Length == 0)
+            {
                 return 200;
             }
 
@@ -157,4 +168,4 @@ namespace MyMoney.Controllers
             return double.Parse(currentValueStr);
         }
     }
- }
+}
