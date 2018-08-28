@@ -40,13 +40,13 @@ namespace MyMoney.Windows
                 // If the user has inputted a monthly allowance that is different to the current one.
                 if (oldAllowanceBox.Text.Equals(newAllowanceBox.Text))
                 {
-                   var ttm = new ToolTipModel("Error",
-                        "Allowance is unchanged. Please enter a new allowance or 'Cancel'.",
-                        newAllowanceBox);
-               // Feedback to user.
-               toolTipHandler.Draw(ttm
-                        
-                        );
+                    var ttm = new ToolTipModel("Error",
+                         "Allowance is unchanged. Please enter a new allowance or 'Cancel'.",
+                         newAllowanceBox);
+                    // Feedback to user.
+                    toolTipHandler.Draw(ttm
+
+                             );
 
                     return;
                 }
@@ -54,13 +54,13 @@ namespace MyMoney.Windows
                 // If the user has not left the new monthly allowance text box empty.
                 if ((newAllowanceBox.Text.Equals(string.Empty)))
                 {
-                   var ttm = new ToolTipModel("Error",
-                    "No new Allowance specified. Please enter a new allowance or 'Cancel'.",
-                    newAllowanceBox);
-               // Feedback to user.
-               toolTipHandler.Draw(
-                        ttm
-                    );
+                    var ttm = new ToolTipModel("Error",
+                     "No new Allowance specified. Please enter a new allowance or 'Cancel'.",
+                     newAllowanceBox);
+                    // Feedback to user.
+                    toolTipHandler.Draw(
+                             ttm
+                         );
 
                     return;
 
@@ -71,13 +71,13 @@ namespace MyMoney.Windows
                 // If the monthly allowance is greater than zero.
                 if (newBudget <= 0)
                 {
-                   var ttm = new ToolTipModel("Error",
-                        "New Monthly allowance must be greater than zero.",
-                        newAllowanceBox);
-               // Feedback to user.
-               toolTipHandler.Draw(
-                               ttm
-                        );
+                    var ttm = new ToolTipModel("Error",
+                         "New Monthly allowance must be greater than zero.",
+                         newAllowanceBox);
+                    // Feedback to user.
+                    toolTipHandler.Draw(
+                                    ttm
+                             );
                     return;
                 }
 
@@ -91,20 +91,20 @@ namespace MyMoney.Windows
                 controller.Add(newRow, BudgetModel.TABLE_NAME);
 
                 controller.RefreshViews();
-                
+
                 Dispose();
 
 
             }
             catch (Exception ex)
             {
-               var ttm = new ToolTipModel("Error",
-                        ex.Message,
-                        newAllowanceBox);
-            // Feedback to user.
-            toolTipHandler.Draw(
-                           ttm
-                        );
+                var ttm = new ToolTipModel("Error",
+                         ex.Message,
+                         newAllowanceBox);
+                // Feedback to user.
+                toolTipHandler.Draw(
+                               ttm
+                            );
 
             }
         }
@@ -116,7 +116,7 @@ namespace MyMoney.Windows
 
         private void updateBudget(DateTime date)
         {
-  
+
             double currentValue = controller.GetMonthlyAllowance(date);
 
             // If there actually is no value for that month display a dash. Otherwise display the value.
@@ -157,8 +157,8 @@ namespace MyMoney.Windows
         /// <param name="e">Unused.</param>
         private void showAmountToolTip(object sender, EventArgs e)
         {
-           var ttm = new ToolTipModel("Input Allowance", "Input a new monthly allowance for the selected month.", newAllowanceBox);
-         toolTipHandler.Draw(ttm);
+            var ttm = new ToolTipModel("Input Allowance", "Input a new monthly allowance for the selected month.", newAllowanceBox);
+            toolTipHandler.Draw(ttm);
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace MyMoney.Windows
         /// <param name="e">Unused.</param>
         private void showRecommendToolTip(object sender, EventArgs e)
         {
-           var ttm = new ToolTipModel("Recommend", "Unavailable", recommendButton);
-         toolTipHandler.Draw(ttm);
+            var ttm = new ToolTipModel("Recommend", "Unavailable", recommendButton);
+            toolTipHandler.Draw(ttm);
         }
 
         public void RefreshView()
