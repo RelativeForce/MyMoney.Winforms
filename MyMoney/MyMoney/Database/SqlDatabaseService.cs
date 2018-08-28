@@ -205,15 +205,15 @@ namespace MyMoney.Database
 
         public void Disconnect()
         {
-           _dbConnection?.Close();
-           Console.Out.WriteLine("Connection Treminated");
+            _dbConnection?.Close();
+            Console.Out.WriteLine("Connection Treminated");
         }
 
         private void Dispose(SQLiteCommand command, SQLiteDataReader reader)
         {
-           command?.Dispose();
+            command?.Dispose();
 
-           reader?.Dispose();
+            reader?.Dispose();
         }
     }
 }
