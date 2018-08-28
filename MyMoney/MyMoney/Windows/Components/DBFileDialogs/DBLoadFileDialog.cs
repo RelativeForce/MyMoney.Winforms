@@ -14,24 +14,24 @@ namespace MyMoney.Windows.Components.DBFileDialogs
         {
             this.onFileSelect = onFileSelect;
 
-            dialog = new OpenFileDialog();
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); ;
-            dialog.Multiselect = false;
-            dialog.Title = "Import Database File";
-            dialog.DefaultExt = "sqlite";
-            dialog.Filter = "sqlite files (*.sqlite)|*.sqlite";
-            dialog.CheckFileExists = true;
-            dialog.CheckPathExists = true;
-
+            dialog = new OpenFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Multiselect = false,
+                Title = "Import Database File",
+                DefaultExt = "sqlite",
+                Filter = "sqlite files (*.sqlite)|*.sqlite",
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
         }
 
         public void Show()
         {
 
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                onFileSelect(dialog.FileName);
-            }
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+
+            onFileSelect(dialog.FileName);
 
         }
     }
