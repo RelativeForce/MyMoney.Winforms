@@ -77,7 +77,7 @@ namespace MyMoney.Windows
         public void RefreshView()
         {
 
-            _viewer.display();
+            _viewer.Display();
 
             _plotter.Draw(_highlightedMonth);
 
@@ -104,13 +104,13 @@ namespace MyMoney.Windows
             {
                 // Scroll down the list of Transactions.
                 scrollBar.Value++;
-                _viewer.display();
+                _viewer.Display();
             }
             else if (e.KeyCode == Keys.Up && scrollBar.Enabled && scrollBar.Value > 0)
             {
                 // Scroll up the list of Transactions.
                 scrollBar.Value--;
-                _viewer.display();
+                _viewer.Display();
             }
 
             e.Handled = true;
@@ -119,7 +119,7 @@ namespace MyMoney.Windows
         private void LoadForm(object sender, EventArgs e)
         {
 
-            _viewer.display();
+            _viewer.Display();
 
             _plotter.Draw();
 
@@ -140,7 +140,7 @@ namespace MyMoney.Windows
         private void ScrollTransactions(object sender, EventArgs e)
         {
             // Rerender the viewer.
-            _viewer.display();
+            _viewer.Display();
         }
 
         private void DeleteTransaction(object sender, EventArgs e)
@@ -151,7 +151,7 @@ namespace MyMoney.Windows
             // If the dialog returns yes then delete the transaction.
             if (dialogResult != DialogResult.Yes) return;
 
-            _viewer.deleteTransaction(sender as Button);
+            _viewer.DeleteTransaction(sender as Button);
             _plotter.Draw();
         }
 
@@ -182,7 +182,7 @@ namespace MyMoney.Windows
             if (textBox.Text.Equals(_previousValue)) return;
 
             // Attempt to update the transaction and store the result.
-            var result = _viewer.updateTransaction(textBox);
+            var result = _viewer.UpdateTransaction(textBox);
 
             // If the result is an empty string then the update was successful.
             if (result.Equals(""))
@@ -363,7 +363,7 @@ namespace MyMoney.Windows
 
         private void DisableOperationControls()
         {
-            _viewer.disable();
+            _viewer.Disable();
             addTransactionButton.Enabled = false;
             changeMonthlyAllowanceButtton.Enabled = false;
             rightButton.Enabled = false;
@@ -373,8 +373,8 @@ namespace MyMoney.Windows
 
         private void EnableOperationControls()
         {
-            _viewer.enable();
-            _viewer.display();
+            _viewer.Enable();
+            _viewer.Display();
             _plotter.Draw();
             changeMonthlyAllowanceButtton.Enabled = true;
             addTransactionButton.Enabled = true;
@@ -421,7 +421,7 @@ namespace MyMoney.Windows
 
             // Redraw the graph and display the tranactions of that month.
             _plotter.Draw(_highlightedMonth);
-            _viewer.display(_highlightedMonth);
+            _viewer.Display(_highlightedMonth);
 
         }
 

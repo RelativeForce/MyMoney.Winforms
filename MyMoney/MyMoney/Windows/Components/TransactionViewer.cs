@@ -7,35 +7,35 @@ using MyMoney.Core.Table;
 namespace MyMoney.Windows.Components
 {
 
-   public class TransactionViewer
+    public class TransactionViewer
     {
 
-        private TransactionView[] views;
+        private readonly TransactionView[] views;
 
         private DateTime DTP;
 
-        private ScrollBar scrollBar;
+        private readonly ScrollBar scrollBar;
 
-        private IDataController controller;
+        private readonly IDataController _controller;
 
         public TransactionViewer(TransactionView[] views, ScrollBar scrollBar, DateTime DTP, IDataController controller)
         {
             this.views = views;
             this.DTP = DTP;
             this.scrollBar = scrollBar;
-            this.controller = controller;
+            this._controller = controller;
         }
 
-        public void display(DateTime month)
+        public void Display(DateTime month)
         {
 
             DTP = month;
-            scollBar_changeValue(0);
-            display();
+            ScollBar_changeValue(0);
+            Display();
 
         }
 
-        public void display()
+        public void Display()
         {
 
             // Holds the number of views 
@@ -45,7 +45,8 @@ namespace MyMoney.Windows.Components
             var endOfMonth = new DateTime(DTP.Year, DTP.Month, 1).AddMonths(1).AddDays(-1);
 
             // Get all the transactions of the current month
-            Row[] cashFlowRows = controller.GetRows(row => {
+            Row[] cashFlowRows = _controller.GetRows(row =>
+            {
 
                 DateTime rowDateTime = DateTime.Parse(row.getValue(CashFlowModel.DATE_COLOUMN));
 
@@ -61,17 +62,17 @@ namespace MyMoney.Windows.Components
             {
                 if (scrollBar.Value >= numberOfTransactions)
                 {
-                    scollBar_changeValue(numberOfTransactions - 1);
+                    ScollBar_changeValue(numberOfTransactions - 1);
                 }
 
 
                 if (numberOfTransactions > numberOfViews)
                 {
-                    scrollBar_changeMaxValue(numberOfTransactions - numberOfViews);
+                    ScrollBar_changeMaxValue(numberOfTransactions - numberOfViews);
                 }
                 else
                 {
-                    scrollBar_changeMaxValue(0);
+                    ScrollBar_changeMaxValue(0);
                 }
 
 
@@ -97,7 +98,7 @@ namespace MyMoney.Windows.Components
 
         }
 
-        public void deleteTransaction(Button sender)
+        public void DeleteTransaction(Button sender)
         {
             // The transaction the contains the transaction to be removed.
             TransactionView toDelete = null;
@@ -125,17 +126,17 @@ namespace MyMoney.Windows.Components
                 if (!date.Equals("") && !description.Equals("") && !amount.Equals(""))
                 {
 
-                    controller.Remove(toDelete.Row, CashFlowModel.TABLE_NAME);
+                    _controller.Remove(toDelete.Row, CashFlowModel.TABLE_NAME);
 
                     // As a transaction is being removed move the viewer up the list of transactions.
                     if (scrollBar.Value > 0) scrollBar.Value--;
 
-                    display();
+                    Display();
                 }
             }
         }
 
-        public string updateTransaction(RichTextBox box)
+        public string UpdateTransaction(RichTextBox box)
         {
             // If the parameter text box is not a member of any of the 
             // views then this error message is returned.
@@ -152,8 +153,8 @@ namespace MyMoney.Windows.Components
                     {
 
                         view.Row.updateColoumn(CashFlowModel.DATE_COLOUMN, box.Text);
-                        controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.DATE_COLOUMN);
-                        
+                        _controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.DATE_COLOUMN);
+
                         result = "";
 
                     }
@@ -161,7 +162,7 @@ namespace MyMoney.Windows.Components
                     {
                         // Parse box as description
                         view.Row.updateColoumn(CashFlowModel.DESCRIPTION_COLOUMN, box.Text);
-                        controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.DESCRIPTION_COLOUMN);
+                        _controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.DESCRIPTION_COLOUMN);
                         result = "";
 
                     }
@@ -169,7 +170,7 @@ namespace MyMoney.Windows.Components
                     {
                         // Parse box as amount
                         view.Row.updateColoumn(CashFlowModel.AMOUNT_COLOUMN, box.Text);
-                        controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.AMOUNT_COLOUMN);
+                        _controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.AMOUNT_COLOUMN);
                         result = "";
                     }
 
@@ -183,7 +184,7 @@ namespace MyMoney.Windows.Components
             return result;
         }
 
-        private void enableButton(Button button, Boolean state)
+        private void EnableButton(Button button, Boolean state)
         {
 
             if (button.InvokeRequired)
@@ -200,7 +201,8 @@ namespace MyMoney.Windows.Components
 
         }
 
-        private void scollBar_changeValue(int newValue) {
+        private void ScollBar_changeValue(int newValue)
+        {
 
             // Check if the scroll bar reqires invoke.
             if (scrollBar.InvokeRequired)
@@ -216,10 +218,10 @@ namespace MyMoney.Windows.Components
                 // Assign new value.
                 scrollBar.Value = newValue;
             }
-        
+
         }
 
-        private void scrollBar_changeMaxValue(int newValue)
+        private void ScrollBar_changeMaxValue(int newValue)
         {
 
             if (scrollBar.InvokeRequired)
@@ -235,7 +237,7 @@ namespace MyMoney.Windows.Components
             }
         }
 
-        public void enable()
+        public void Enable()
         {
 
             foreach (TransactionView view in views)
@@ -245,7 +247,7 @@ namespace MyMoney.Windows.Components
 
         }
 
-        public void disable()
+        public void Disable()
         {
 
             foreach (TransactionView view in views)
