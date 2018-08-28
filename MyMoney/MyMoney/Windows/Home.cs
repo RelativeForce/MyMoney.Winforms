@@ -158,11 +158,11 @@ namespace MyMoney.Windows
         private void DisplayUpdateTransactionToolTip(object sender, EventArgs e)
         {
 
-             var ttm = new ToolTipModel(
-                "Updating Transactions", 
-                "Press ENTER to save your changes.", 
-                (sender as RichTextBox)
-             );
+            var ttm = new ToolTipModel(
+               "Updating Transactions",
+               "Press ENTER to save your changes.",
+               (sender as RichTextBox)
+            );
 
             _toolTipHandler.Draw(ttm);
         }
@@ -171,31 +171,31 @@ namespace MyMoney.Windows
         {
 
             // If the user pressed enter.
-           if (e.KeyCode != Keys.Enter) return;
+            if (e.KeyCode != Keys.Enter) return;
 
-           // Define the ENTER as handled so a new line is not created in the text box.
-           e.Handled = true;
+            // Define the ENTER as handled so a new line is not created in the text box.
+            e.Handled = true;
 
-           var textBox = (RichTextBox) sender;
+            var textBox = (RichTextBox)sender;
 
-           // If the user has changed the contents of the text box.
-           if (textBox.Text.Equals(_previousValue)) return;
+            // If the user has changed the contents of the text box.
+            if (textBox.Text.Equals(_previousValue)) return;
 
-           // Attempt to update the transaction and store the result.
-           var result = _viewer.updateTransaction(textBox);
+            // Attempt to update the transaction and store the result.
+            var result = _viewer.updateTransaction(textBox);
 
-           // If the result is an empty string then the update was successful.
-           if (result.Equals(""))
-           {
-              _updated = true;
-              _previousValue = textBox.Text;
+            // If the result is an empty string then the update was successful.
+            if (result.Equals(""))
+            {
+                _updated = true;
+                _previousValue = textBox.Text;
 
-              DisplaySuccessUpdatedFieldToolTip(textBox);
-           }
-           else
-           {
-              DisplayFailUpdatedFieldToolTip(textBox, result);
-           }
+                DisplaySuccessUpdatedFieldToolTip(textBox);
+            }
+            else
+            {
+                DisplayFailUpdatedFieldToolTip(textBox, result);
+            }
 
 
 
@@ -208,10 +208,10 @@ namespace MyMoney.Windows
 
         private void RevertToPreviousValue(object sender, EventArgs e)
         {
-           if (_updated) return;
+            if (_updated) return;
 
-           ((RichTextBox) sender).Text = _previousValue;
-           _previousValue = "";
+            ((RichTextBox)sender).Text = _previousValue;
+            _previousValue = "";
         }
 
         #endregion transactions
@@ -221,7 +221,8 @@ namespace MyMoney.Windows
         private void ImportDBFile(object sender, EventArgs e)
         {
 
-            DBLoadFileDialog dialog = new DBLoadFileDialog(fileName => {
+            DBLoadFileDialog dialog = new DBLoadFileDialog(fileName =>
+            {
 
                 if (FileStoreManager.DB_FILE_PATH.Equals(fileName)) return;
 
@@ -245,7 +246,8 @@ namespace MyMoney.Windows
         private void CreateDBFile(object sender, EventArgs e)
         {
 
-            DBCreateFileDialog dialog = new DBCreateFileDialog(fileName => {
+            DBCreateFileDialog dialog = new DBCreateFileDialog(fileName =>
+            {
 
                 if (FileStoreManager.DB_FILE_PATH.Equals(fileName)) return;
 
@@ -425,14 +427,14 @@ namespace MyMoney.Windows
 
         private void DisplayFailUpdatedFieldToolTip(RichTextBox sender, string errorMessage)
         {
-           var ttm = new ToolTipModel("Failure", errorMessage, sender);
- 
+            var ttm = new ToolTipModel("Failure", errorMessage, sender);
+
             _toolTipHandler.Draw(ttm);
         }
 
         private void DisplaySuccessUpdatedFieldToolTip(RichTextBox sender)
         {
-            var ttm =  new ToolTipModel("Success", "Your changes have been saved.", sender);
+            var ttm = new ToolTipModel("Success", "Your changes have been saved.", sender);
             _toolTipHandler.Draw(ttm);
         }
 
