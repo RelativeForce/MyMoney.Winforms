@@ -79,7 +79,7 @@ namespace MyMoney.Windows
 
             _viewer.display();
 
-            _plotter.draw(_highlightedMonth);
+            _plotter.Draw(_highlightedMonth);
 
         }
 
@@ -121,7 +121,7 @@ namespace MyMoney.Windows
 
             _viewer.display();
 
-            _plotter.draw();
+            _plotter.Draw();
 
         }
 
@@ -152,7 +152,7 @@ namespace MyMoney.Windows
             if (dialogResult != DialogResult.Yes) return;
 
             _viewer.deleteTransaction(sender as Button);
-            _plotter.draw();
+            _plotter.Draw();
         }
 
         private void DisplayUpdateTransactionToolTip(object sender, EventArgs e)
@@ -375,7 +375,7 @@ namespace MyMoney.Windows
         {
             _viewer.enable();
             _viewer.display();
-            _plotter.draw();
+            _plotter.Draw();
             changeMonthlyAllowanceButtton.Enabled = true;
             addTransactionButton.Enabled = true;
             leftButton.Enabled = true;
@@ -420,7 +420,7 @@ namespace MyMoney.Windows
             }
 
             // Redraw the graph and display the tranactions of that month.
-            _plotter.draw(_highlightedMonth);
+            _plotter.Draw(_highlightedMonth);
             _viewer.display(_highlightedMonth);
 
         }

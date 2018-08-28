@@ -8,70 +8,64 @@ using MyMoney.Core;
 using MyMoney.Core.Model;
 using MyMoney.Core.Table;
 
-
 namespace MyMoney.Windows.Components
 {
-    /// <summary>
-    /// Encapsulates the behaviour of a line chart on a form. The chart on which this handler 
-    /// operates is specified in the constructor. This handler is multi-thread safe.
-    /// </summary>
-    class GraphHandler
+    public class GraphHandler
     {
-        
-        private readonly Chart chart;
 
-        private IDataController controller;
+        private readonly Chart _chart;
 
-       
+        private readonly IDataController _controller;
+
         public GraphHandler(Chart chart, IDataController controller)
         {
-            this.chart = chart;
-            this.controller = controller;
+            this._chart = chart;
+            this._controller = controller;
         }
 
-        public void draw(DateTime month)
+        public void Draw(DateTime month)
         {
-            checkInvoke(month);
+            CheckInvoke(month);
         }
 
-        public void draw()
+        public void Draw()
         {
 
             // Get the current date time.
             DateTime now = DateTime.Now;
 
-            checkInvoke(now);
+            CheckInvoke(now);
         }
 
-        private void checkInvoke(DateTime month)
+        private void CheckInvoke(DateTime month)
         {
 
             // Check if the chart requires invoking. This causes the action to be thread safe.
-            if (chart.InvokeRequired)
+            if (_chart.InvokeRequired)
             {
-                chart.BeginInvoke((MethodInvoker)delegate
+                _chart.BeginInvoke((MethodInvoker)delegate
                 {
-                    plot(month);
+                    Plot(month);
                 });
             }
             else
             {
-                plot(month);
+                Plot(month);
             }
 
 
         }
 
-        private void plot(DateTime month)
+        private void Plot(DateTime month)
         {
 
             // Get the long string format of the specified month.
             String monthString = month.ToString("MMMM yyyy");
 
 
-            double monthlyAllowance = controller.GetMonthlyAllowance(month);
+            double monthlyAllowance = _controller.GetMonthlyAllowance(month);
 
-            double currentTotal = getValues(monthlyAllowance.Equals(Double.NaN) ? 200 : monthlyAllowance, month, out int[] xValues, out double[] yValues);
+            double currentTotal = GetValues(monthlyAllowance.Equals(Double.NaN) ? 200 : monthlyAllowance, month, out int[] xValues, out double[] yValues);
 
             // A series to be added to the graph
             Series series = new Series(monthString);
@@ -104,21 +98,21 @@ namespace MyMoney.Windows.Components
             series.Points.DataBindXY(xValues, yValues);
 
             // Add the chart area for axis labals
-            chart.ChartAreas.Clear();
-            chart.ChartAreas.Add(chartArea);
+            _chart.ChartAreas.Clear();
+            _chart.ChartAreas.Add(chartArea);
 
             // Add the series.
-            chart.Series.Clear();
-            chart.Series.Add(series);
-            chart.Series[0].IsVisibleInLegend = false;
-            chart.Titles.Clear();
-            chart.Titles.Add(title);
+            _chart.Series.Clear();
+            _chart.Series.Add(series);
+            _chart.Series[0].IsVisibleInLegend = false;
+            _chart.Titles.Clear();
+            _chart.Titles.Add(title);
 
 
 
         }
 
-        private double getValues(double monthlyAllowance, DateTime now, out int[] xValues, out double[] yValues)
+        private double GetValues(double monthlyAllowance, DateTime now, out int[] xValues, out double[] yValues)
         {
             // Store the values in lists as the length on a list is flexible.
             List<int> xValuesList = new List<int>();
@@ -128,13 +122,14 @@ namespace MyMoney.Windows.Components
             var endOfMonth = new DateTime(now.Year, now.Month, 1).AddMonths(1).AddDays(-1);
 
             // Get all the transactions of the current month
-            Row[] rows = controller.GetRows(row => {
+            Row[] rows = _controller.GetRows(row =>
+            {
 
                 DateTime rowDateTime = DateTime.Parse(row.getValue(CashFlowModel.DATE_COLOUMN));
 
-                return DateTime.Compare(rowDateTime, startOfMonth) >= 0  && DateTime.Compare(rowDateTime, endOfMonth) <= 0;
+                return DateTime.Compare(rowDateTime, startOfMonth) >= 0 && DateTime.Compare(rowDateTime, endOfMonth) <= 0;
 
-            }, CashFlowModel.TABLE_NAME);  
+            }, CashFlowModel.TABLE_NAME);
 
 
             // Holds the transaction number that will be displayed on screen.
