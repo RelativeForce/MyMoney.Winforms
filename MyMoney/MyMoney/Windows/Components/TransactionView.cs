@@ -9,30 +9,30 @@ namespace MyMoney.Windows.Components
     public class TransactionView
     {
 
-        public RichTextBox date;
+        public readonly RichTextBox Date;
 
-        public RichTextBox description;
+        public readonly RichTextBox Description;
 
-        public RichTextBox amount;
+        public readonly RichTextBox Amount;
 
-        public Button delete;
+        public readonly Button Delete;
 
-        public Row row;
+        public Row Row;
 
         public TransactionView(RichTextBox date, RichTextBox description, RichTextBox amount, Button delete)
         {
-            this.delete = delete;
-            this.date = date;
-            this.description = description;
-            this.amount = amount;
-            row = null;
+            Delete = delete;
+            Date = date;
+            Description = description;
+            Amount = amount;
+            Row = null;
 
         }
 
-        public void setView(Row row)
+        public void SetView(Row row)
         {
             // Set the row to be the same as the specified row.
-            this.row = row;
+            Row = row;
 
             // If the row is null then all the fields should be empty
             if (row != null)
@@ -46,28 +46,28 @@ namespace MyMoney.Windows.Components
                 }
 
                 // Set the delete button as enabled
-                updateButton(delete, true);
+                UpdateButton(Delete, true);
 
                 // Update all the values in the text boxes to the ones specified in the paramter row.
-                updateBox(this.date, date);
-                updateBox(description, row.getValue(CashFlowModel.DESCRIPTION_COLOUMN));
-                updateBox(amount, row.getValue(CashFlowModel.AMOUNT_COLOUMN));
+                UpdateBox(this.Date, date);
+                UpdateBox(Description, row.getValue(CashFlowModel.DESCRIPTION_COLOUMN));
+                UpdateBox(Amount, row.getValue(CashFlowModel.AMOUNT_COLOUMN));
             }
             else
             {
                 // Set the delete button as disabled
-                updateButton(delete, false);
+                UpdateButton(Delete, false);
 
                 // Set all the boxes as empty and disabled
-                updateBox(date, "");
-                updateBox(description, "");
-                updateBox(amount, "");
+                UpdateBox(Date, "");
+                UpdateBox(Description, "");
+                UpdateBox(Amount, "");
 
 
             }
         }
 
-        private void updateButton(Button button, bool enabled)
+        private void UpdateButton(Button button, bool enabled)
         {
             if (button.InvokeRequired)
             {
@@ -82,7 +82,7 @@ namespace MyMoney.Windows.Components
             }
         }
 
-        private void updateBox(RichTextBox box, string item)
+        private void UpdateBox(RichTextBox box, string item)
         {
 
             if (box.InvokeRequired)
@@ -116,20 +116,20 @@ namespace MyMoney.Windows.Components
             }
         }
 
-        public void enable()
+        public void Enable()
         {
-            date.Enabled = true;
-            amount.Enabled = true;
-            delete.Enabled = true;
-            description.Enabled = true;
+            Date.Enabled = true;
+            Amount.Enabled = true;
+            Delete.Enabled = true;
+            Description.Enabled = true;
         }
 
-        public void disable()
+        public void Disable()
         {
-            date.Enabled = false;
-            amount.Enabled = false;
-            delete.Enabled = false;
-            description.Enabled = false;
+            Date.Enabled = false;
+            Amount.Enabled = false;
+            Delete.Enabled = false;
+            Description.Enabled = false;
         }
 
     }

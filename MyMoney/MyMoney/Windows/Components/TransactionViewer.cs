@@ -87,11 +87,11 @@ namespace MyMoney.Windows.Components
                 // set the view to display nothing.
                 if (numberOfTransactions > viewIndex)
                 {
-                    views[viewIndex].setView(cashFlowRows[scrollBar.Value + viewIndex]);
+                    views[viewIndex].SetView(cashFlowRows[scrollBar.Value + viewIndex]);
                 }
                 else
                 {
-                    views[viewIndex].setView(null);
+                    views[viewIndex].SetView(null);
                 }
             }
 
@@ -106,7 +106,7 @@ namespace MyMoney.Windows.Components
             foreach (TransactionView view in views)
             {
                 // If the parameter button is the same as the button assigned to the cureent view.
-                if (view.delete.Equals(sender))
+                if (view.Delete.Equals(sender))
                 {
                     toDelete = view;
                     break;
@@ -117,15 +117,15 @@ namespace MyMoney.Windows.Components
             if (toDelete != null)
             {
 
-                string date = toDelete.date.Text;
-                string description = toDelete.description.Text;
-                string amount = toDelete.amount.Text;
+                string date = toDelete.Date.Text;
+                string description = toDelete.Description.Text;
+                string amount = toDelete.Amount.Text;
 
                 // If the view is populated then deleted it from the CashFlowController table.
                 if (!date.Equals("") && !description.Equals("") && !amount.Equals(""))
                 {
 
-                    controller.Remove(toDelete.row, CashFlowModel.TABLE_NAME);
+                    controller.Remove(toDelete.Row, CashFlowModel.TABLE_NAME);
 
                     // As a transaction is being removed move the viewer up the list of transactions.
                     if (scrollBar.Value > 0) scrollBar.Value--;
@@ -146,30 +146,30 @@ namespace MyMoney.Windows.Components
             {
                 try
                 {
-                    int id = int.Parse(view.row.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN));
+                    int id = int.Parse(view.Row.getValue(CashFlowModel.TRANSACTION_ID_COLOUMN));
 
-                    if (box.Equals(view.date))
+                    if (box.Equals(view.Date))
                     {
 
-                        view.row.updateColoumn(CashFlowModel.DATE_COLOUMN, box.Text);
-                        controller.Update(view.row, CashFlowModel.TABLE_NAME, CashFlowModel.DATE_COLOUMN);
+                        view.Row.updateColoumn(CashFlowModel.DATE_COLOUMN, box.Text);
+                        controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.DATE_COLOUMN);
                         
                         result = "";
 
                     }
-                    else if (box.Equals(view.description))
+                    else if (box.Equals(view.Description))
                     {
                         // Parse box as description
-                        view.row.updateColoumn(CashFlowModel.DESCRIPTION_COLOUMN, box.Text);
-                        controller.Update(view.row, CashFlowModel.TABLE_NAME, CashFlowModel.DESCRIPTION_COLOUMN);
+                        view.Row.updateColoumn(CashFlowModel.DESCRIPTION_COLOUMN, box.Text);
+                        controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.DESCRIPTION_COLOUMN);
                         result = "";
 
                     }
-                    else if (box.Equals(view.amount))
+                    else if (box.Equals(view.Amount))
                     {
                         // Parse box as amount
-                        view.row.updateColoumn(CashFlowModel.AMOUNT_COLOUMN, box.Text);
-                        controller.Update(view.row, CashFlowModel.TABLE_NAME, CashFlowModel.AMOUNT_COLOUMN);
+                        view.Row.updateColoumn(CashFlowModel.AMOUNT_COLOUMN, box.Text);
+                        controller.Update(view.Row, CashFlowModel.TABLE_NAME, CashFlowModel.AMOUNT_COLOUMN);
                         result = "";
                     }
 
@@ -240,7 +240,7 @@ namespace MyMoney.Windows.Components
 
             foreach (TransactionView view in views)
             {
-                view.enable();
+                view.Enable();
             }
 
         }
@@ -250,7 +250,7 @@ namespace MyMoney.Windows.Components
 
             foreach (TransactionView view in views)
             {
-                view.disable();
+                view.Disable();
             }
 
         }
