@@ -15,7 +15,7 @@ namespace MyMoney.Windows
         private readonly IDataController controller;
 
         private ToolTipHandler toolTipHandler = new ToolTipHandler();
- 
+
         public AddTransactionWindow(IDataController controller)
         {
             this.controller = controller;
@@ -52,7 +52,7 @@ namespace MyMoney.Windows
                 // Check that the description is not empty but is also less than the maximum length of the description.
                 if (amount <= 0)
                 {
-                    var ttm = new ToolTipModel("Error", "Amounts must be positive and greater than zero.", (amountTextBox));                         
+                    var ttm = new ToolTipModel("Error", "Amounts must be positive and greater than zero.", (amountTextBox));
                     toolTipHandler.Draw(ttm);
                 }
                 else if (descriptionTextBox.Text.Equals(""))
@@ -135,20 +135,20 @@ namespace MyMoney.Windows
 
         private void showToggleToolTip(object sender, EventArgs e)
         {
-           var ttm = new ToolTipModel("Toggling Income/Outcome", "Click here to toggle whether the transaction is Income or Outcome.", (sender as Button));
-         toolTipHandler.Draw(ttm);
+            var ttm = new ToolTipModel("Toggling Income/Outcome", "Click here to toggle whether the transaction is Income or Outcome.", (sender as Button));
+            toolTipHandler.Draw(ttm);
         }
 
         private void showAmountToolTip(object sender, EventArgs e)
         {
-           var ttm = new ToolTipModel("Input Amount", "Input the amount of money in the transaction.", amountTextBox);
-           toolTipHandler.Draw(ttm);
+            var ttm = new ToolTipModel("Input Amount", "Input the amount of money in the transaction.", amountTextBox);
+            toolTipHandler.Draw(ttm);
         }
 
         private void showDescriptionToolTip(object sender, EventArgs e)
         {
-           var ttm = new ToolTipModel("Input Description", "Input a descrition for the transaction. Less than 50 characters.", descriptionTextBox);
-           toolTipHandler.Draw(ttm);
+            var ttm = new ToolTipModel("Input Description", "Input a descrition for the transaction. Less than 50 characters.", descriptionTextBox);
+            toolTipHandler.Draw(ttm);
         }
 
         private void toggleFlip(object sender, EventArgs e)
