@@ -13,21 +13,22 @@ namespace MyMoney.Windows.Components.DBFileDialogs
         {
             this.onFileCreate = onFileCreate;
 
-            dialog = new SaveFileDialog();
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            dialog.Title = "Choice where to save the new Database File";
-            dialog.Filter = "sqlite files (*.sqlite)|*.sqlite";
-            dialog.DefaultExt = "sqlite";
+            dialog = new SaveFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Title = "Choice where to save the new Database File",
+                Filter = "sqlite files (*.sqlite)|*.sqlite",
+                DefaultExt = "sqlite"
+            };
 
         }
 
         public void Show()
         {
 
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                onFileCreate(dialog.FileName);
-            }
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+
+            onFileCreate(dialog.FileName);
 
         }
 
