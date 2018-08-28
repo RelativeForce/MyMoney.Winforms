@@ -1,4 +1,4 @@
-﻿namespace MyMoney.Model.Database
+﻿namespace MyMoney.Core.Model
 {
     public class BudgetModel
     {

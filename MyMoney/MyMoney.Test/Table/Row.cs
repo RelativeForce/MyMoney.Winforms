@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MyMoney.Model.Table
+namespace MyMoney.Core.Table
 {
     /// <summary>
     /// Encapsulates the behaviour of a row in the <see cref="Table"/>.

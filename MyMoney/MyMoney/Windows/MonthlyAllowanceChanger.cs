@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using MyMoney.Controllers;
-using MyMoney.Model.Database;
-using MyMoney.Model.Table;
+using MyMoney.Core;
+using MyMoney.Core.Model;
+using MyMoney.Core.Table;
 using MyMoney.Windows.Components;
 
 namespace MyMoney.Windows

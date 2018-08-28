@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using MyMoney.Controllers.TableControllers;
-using MyMoney.Model.Table;
+using MyMoney.Core.Database;
+using MyMoney.Core.Table;
 
-namespace MyMoney.Controllers
+namespace MyMoney.Database
 {
 
-    public class SQLController : ISQLController
+    public class SqlDatabaseService : IDatabaseService
     {
 
-        private string filePath;
+        private string _filePath;
 
-        private SQLiteConnection DBConnection;
+        private SQLiteConnection _dbConnection;
 
-        public SQLController()
+        public SqlDatabaseService()
         {
-            filePath = "";
+            _filePath = "";
         }
 
         public void Connect(string filePath)
@@ -25,10 +25,10 @@ namespace MyMoney.Controllers
             try
             {
                 // Attempt to open the connection to the database file.
-                DBConnection = new SQLiteConnection(@"Data Source=" + filePath + ";Version=3;");
-                DBConnection.Open();
+                _dbConnection = new SQLiteConnection(@"Data Source=" + filePath + ";Version=3;");
+                _dbConnection.Open();
 
-                this.filePath = filePath;
+                this._filePath = filePath;
                 Console.Out.WriteLine("Connection Establised");
 
             }
@@ -42,50 +42,50 @@ namespace MyMoney.Controllers
             }
         }
 
-        public void Execute(string sql)
+        public void Execute(Command command)
         {
             // Declare the command to be executed.
-            SQLiteCommand command = null;
+            SQLiteCommand sqLiteCommand = null;
 
             try
             {
                 // Process the command
-                command = new SQLiteCommand(sql, DBConnection);
+                sqLiteCommand = new SQLiteCommand(command.Text, _dbConnection);
 
                 // If the commmand is successful then display the number of rows effected.
-                Console.WriteLine("Rows effected: " + command.ExecuteNonQuery());
+                Console.WriteLine("Rows effected: " + sqLiteCommand.ExecuteNonQuery());
             }
             catch (Exception)
             {
                 // Notify user of SQL failure.
-                Console.WriteLine("SQL NON QUERY ERROR:\n" + sql);
+                Console.WriteLine("SQL NON QUERY ERROR:\n" + command.Text);
             }
             finally
             {
                 // If the command was created then dispose of it.
-                if (command != null)
+                if (sqLiteCommand != null)
                 {
-                    command.Dispose();
+                    sqLiteCommand.Dispose();
                 }
             }
 
         }
 
-        public int GetValueInt(string sql, string coloumnName)
+        public int GetValueInt(Command command, string coloumnName)
         {
 
             // Holds the value that will be obtained from the operation.
             int value = 0;
 
             // The sql comand and results reader.
-            SQLiteCommand command = null;
+            SQLiteCommand sqLiteCommand = null;
             SQLiteDataReader reader = null;
 
             try
             {
 
-                command = new SQLiteCommand(sql, DBConnection);
-                reader = command.ExecuteReader();
+                sqLiteCommand = new SQLiteCommand(command.Text, _dbConnection);
+                reader = sqLiteCommand.ExecuteReader();
 
                 // Read the results and take the most recent value.
                 while (reader.Read()) value = int.Parse(reader[coloumnName].ToString());
@@ -94,30 +94,30 @@ namespace MyMoney.Controllers
             catch (Exception ex)
             {
                 // Display an error message.
-                Console.WriteLine("SQL query ERROR:\n" + sql);
+                Console.WriteLine("SQL query ERROR:\n" + command.Text);
                 Console.WriteLine(ex.Message);
             }
             finally
             {
-                Dispose(command, reader);
+                Dispose(sqLiteCommand, reader);
             }
 
             return value;
         }
 
-        public void PopulateTable(string sql, ITableController table)
+        public void PopulateTable(Command command, ITableController table)
         {
 
             table.Clear();
 
-            SQLiteCommand command = null;
+            SQLiteCommand sqLiteCommand = null;
             SQLiteDataReader reader = null;
 
             try
             {
 
-                command = new SQLiteCommand(sql, DBConnection);
-                reader = command.ExecuteReader();
+                sqLiteCommand = new SQLiteCommand(command.Text, _dbConnection);
+                reader = sqLiteCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -149,7 +149,7 @@ namespace MyMoney.Controllers
 
                     }
                     // Add the row to the internal table.
-                    table.Add(newRow);
+                    table.AddRow(newRow);
 
                 }
 
@@ -157,21 +157,21 @@ namespace MyMoney.Controllers
             catch (Exception e)
             {
                 // Display an error message.
-                Console.WriteLine("SQL query ERROR:\n" + sql);
+                Console.WriteLine("SQL query ERROR:\n" + command.Text);
                 Console.WriteLine(e.Message);
             }
             finally
             {
-                Dispose(command, reader);
+                Dispose(sqLiteCommand, reader);
             }
 
         }
 
-        public bool CheckColoumnTitles(string SQL, IReadOnlyList<string> columns)
+        public bool CheckColoumnTitles(Command command, IReadOnlyList<string> columns)
         {
 
-            SQLiteCommand command= new SQLiteCommand(SQL, DBConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
+            SQLiteCommand sqLiteCommand = new SQLiteCommand(command.Text, _dbConnection);
+            SQLiteDataReader reader = sqLiteCommand.ExecuteReader();
 
             List<string> remainingColumns = new List<string>(columns);
 
@@ -198,28 +198,22 @@ namespace MyMoney.Controllers
 
         }
 
-        public void TryCreateDBFile()
+        public void TryCreateDatabaseFile()
         {
-            if (!System.IO.File.Exists(filePath)) SQLiteConnection.CreateFile(filePath);
+            if (!System.IO.File.Exists(_filePath)) SQLiteConnection.CreateFile(_filePath);
         }
 
         public void Disconnect()
         {
-            if (DBConnection != null) DBConnection.Close();
-            Console.Out.WriteLine("Connection Treminated");
+           _dbConnection?.Close();
+           Console.Out.WriteLine("Connection Treminated");
         }
 
         private void Dispose(SQLiteCommand command, SQLiteDataReader reader)
         {
-            if (command != null)
-            {
-                command.Dispose();
-            }
+           command?.Dispose();
 
-            if (reader != null)
-            {
-                reader.Dispose();
-            }
+           reader?.Dispose();
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MyMoney.Model.Table
+namespace MyMoney.Core.Table
 {
     /// <summary>
     /// The internal representation of an SQL table. This encapsulates 

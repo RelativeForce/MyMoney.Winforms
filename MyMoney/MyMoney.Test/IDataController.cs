@@ -1,8 +1,7 @@
 ﻿using System;
-using MyMoney.Model.Table;
-using MyMoney.Windows;
+using MyMoney.Core.Table;
 
-namespace MyMoney.Controllers
+namespace MyMoney.Core
 {
     public interface IDataController
     {

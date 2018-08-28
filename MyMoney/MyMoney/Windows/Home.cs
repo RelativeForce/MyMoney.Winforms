@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
-using MyMoney.Controllers;
+using MyMoney.Core;
 using MyMoney.File;
 using MyMoney.Properties;
 using MyMoney.Windows.Components;

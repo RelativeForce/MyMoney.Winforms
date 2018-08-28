@@ -1,4 +1,4 @@
-﻿namespace MyMoney.Windows
+﻿namespace MyMoney.Core
 {
     public interface IView
     {

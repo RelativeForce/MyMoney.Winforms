@@ -78,15 +78,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\ISQLController.cs" />
-    <Compile Include="Controllers\TableControllers\BudgetController.cs" />
-    <Compile Include="Controllers\TableControllers\CashFlowController.cs" />
-    <Compile Include="Controllers\TableControllers\ITableController.cs" />
-    <Compile Include="Controllers\IDataController.cs" />
+    <Compile Include="Database\SqlBudgetQueryService.cs" />
+    <Compile Include="Database\SqlCashFlowQueryService.cs" />
+    <Compile Include="Database\SqlDatabaseService.cs" />
     <Compile Include="File\FileStoreManager.cs" />
-    <Compile Include="Model\Database\BudgetModel.cs" />
-    <Compile Include="Model\Database\CashFlowModel.cs" />
-    <Compile Include="Model\Table\Row.cs" />
     <Compile Include="Windows\AboutWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,7 +98,6 @@
     <Compile Include="Windows\Components\DBFileDialogs\DBCreateFileDialog.cs" />
     <Compile Include="Windows\Components\DBFileDialogs\DBLoadFileDialog.cs" />
     <Compile Include="Windows\Components\ToolTipModel.cs" />
-    <Compile Include="Windows\IView.cs" />
     <Compile Include="Windows\Components\GraphHandler.cs" />
     <Compile Include="Windows\Home.cs">
       <SubType>Form</SubType>
@@ -121,8 +115,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\SQLController.cs" />
-    <Compile Include="Model\Table\Table.cs" />
     <Compile Include="Windows\Components\TransactionViewer.cs" />
     <EmbeddedResource Include="Windows\AboutWindow.resx">
       <DependentUpon>AboutWindow.cs</DependentUpon>
@@ -176,6 +168,15 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyMoney.Test\MyMoney.Core.csproj">
+      <Project>{ccb750f1-6b93-438a-89c9-87e469b860dc}</Project>
+      <Name>MyMoney.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

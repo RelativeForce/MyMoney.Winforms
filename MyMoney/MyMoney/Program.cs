@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using MyMoney.Controllers;
-using MyMoney.Controllers.TableControllers;
+using MyMoney.Core;
+using MyMoney.Core.Controllers;
+using MyMoney.Core.Database;
+using MyMoney.Core.Table;
+using MyMoney.Database;
 using MyMoney.File;
 using MyMoney.Windows;
 
@@ -14,17 +18,20 @@ namespace MyMoney
         static void Main()
         {
 
-            ISQLController sql = new SQLController();
+            ICashFlowQueryService cfqs = new SqlCashFlowQueryService();
+            IBudgetQueryService bqs = new SqlBudgetQueryService();
 
-            List<ITableController> tables = new List<ITableController>
+            IDatabaseService sql = new SqlDatabaseService();
+
+            var tables = new List<ITableController>
             {
-                new BudgetController(),
-                new CashFlowController()
+                new BudgetController(bqs, sql),
+                new CashFlowController(cfqs, sql)
             };
 
             IDataController controller = new DataController(sql, tables);
 
-            FileStoreManager fileStore = new FileStoreManager();
+            var fileStore = new FileStoreManager();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

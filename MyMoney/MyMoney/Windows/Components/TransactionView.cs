@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
-using MyMoney.Model.Database;
-using MyMoney.Model.Table;
+using MyMoney.Core.Model;
+using MyMoney.Core.Table;
+
 
 namespace MyMoney.Windows.Components
 {
