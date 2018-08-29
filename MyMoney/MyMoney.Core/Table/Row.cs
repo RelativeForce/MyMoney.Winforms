@@ -64,7 +64,7 @@ namespace MyMoney.Core.Table
 
         }
 
-        private Boolean CheckColoumValues(Row row)
+        private bool CheckColoumValues(Row row)
         {
 
             foreach (string coloumn in rawRow.Keys)
