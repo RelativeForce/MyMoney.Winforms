@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="RowTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
