@@ -48,11 +48,21 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="RowTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyMoney.Core\MyMoney.Core.csproj">
+      <Project>{ccb750f1-6b93-438a-89c9-87e469b860dc}</Project>
+      <Name>MyMoney.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyMoney.View\MyMoney.View.csproj">
+      <Project>{0d187bae-6554-4e31-a61f-021771ceb21e}</Project>
+      <Name>MyMoney.View</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

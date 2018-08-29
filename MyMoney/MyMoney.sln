@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoney.Core", "MyMoney.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoney.View", "MyMoney.View\MyMoney.View.csproj", "{0D187BAE-6554-4E31-A61F-021771CEB21E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoney.Test", "MyMoney.Test\MyMoney.Test.csproj", "{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0D187BAE-6554-4E31-A61F-021771CEB21E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D187BAE-6554-4E31-A61F-021771CEB21E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D187BAE-6554-4E31-A61F-021771CEB21E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
