@@ -12,17 +12,6 @@ namespace MyMoney.Core.Table
 
         private readonly string[] _coloumns;
 
-        private class RowException : Exception
-        {
-
-            public RowException(string message)
-                : base(message)
-            {
-
-            }
-
-        }
-
         public Table(string[] coloumnTitles)
         {
 
@@ -31,76 +20,6 @@ namespace MyMoney.Core.Table
             // If no exception is thrown then initalise the table.
             _coloumns = coloumnTitles;
             _rawTable = new List<Row>();
-
-        }
-
-        private void CheckTableColoumnTitles(string[] coloumnTitles)
-        {
-
-            if (coloumnTitles == null)
-            {
-                throw new ArgumentNullException("No coloumn titles specified. 'coloumnTitles' is null.");
-            }
-
-            if (coloumnTitles.Length == 0)
-            {
-                throw new ArgumentException("No coloumn titles specified.");
-            }
-
-            List<string> coloumnTitlesList = coloumnTitles.ToList();
-
-            for (int index = coloumnTitles.Length - 1; index >= 0; index--)
-            {
-
-                string title = coloumnTitlesList[index];
-
-                coloumnTitlesList.RemoveAt(index);
-
-                if (title.Equals(""))
-                {
-                    throw new ArgumentException("Coloumn Titles must not be empty.");
-                }
-
-                if (coloumnTitlesList.Contains(title))
-                {
-                    throw new ArgumentException("Coloumn Titles must be unique.");
-                }
-            }
-
-        }
-
-        private void CheckBaseRows(Row[] rows)
-        {
-
-            // Iterate thorught all the rows.
-            foreach (Row row in rows)
-            {
-
-                if (row == null)
-                {
-                    throw new ArgumentNullException("Row cannot be null.");
-                }
-
-                if (!Check(row))
-                {
-                    throw new RowException("Invalid row");
-                }
-
-            }
-
-        }
-
-        public Table(string[] coloumnTitles, Row[] rows)
-        {
-
-            CheckTableColoumnTitles(coloumnTitles);
-
-            // If no exception is thrown then initalise the table.
-            _coloumns = coloumnTitles;
-
-            CheckBaseRows(rows);
-
-            _rawTable = new List<Row>(rows);
 
         }
 
@@ -114,7 +33,7 @@ namespace MyMoney.Core.Table
  
             if (!Check(row))
             {
-                throw new RowException("Invalid Row: " + row);
+                throw new ArgumentException("Invalid Row: " + row);
             }
 
             if (index < 0 || index > _rawTable.Count)
@@ -149,12 +68,12 @@ namespace MyMoney.Core.Table
         {
             if (row == null)
             {
-                throw new ArgumentNullException("Row is null.");
+                throw new ArgumentNullException("Row cannot be null.");
             }
 
             if (!Check(row))
             {
-                throw new RowException("Invalid Row: " + row);
+                throw new ArgumentException("Invalid Row");
             }
 
             _rawTable.Add(row);
@@ -165,7 +84,7 @@ namespace MyMoney.Core.Table
         {
             if (row == null)
             {
-                throw new ArgumentNullException("Row is null.");
+                throw new ArgumentNullException("Row cannot be null.");
             }
             _rawTable.Remove(row);
         }
@@ -190,23 +109,6 @@ namespace MyMoney.Core.Table
         public string[] GetColoumns()
         {
             return _coloumns;
-        }
-
-
-        public override string ToString()
-        {
-
-            // Holds the output of the method.
-            string output = "";
-
-            // Lists all the rows in the table each on a new line
-            foreach (Row row in _rawTable)
-            {
-                output += row + "\n";
-            }
-
-            return output;
-
         }
 
         public bool Check(Row row)
@@ -252,5 +154,61 @@ namespace MyMoney.Core.Table
         {
             _rawTable.Clear();
         }
+
+        private void CheckTableColoumnTitles(string[] coloumnTitles)
+        {
+
+            if (coloumnTitles == null)
+            {
+                throw new ArgumentNullException("No coloumn titles specified. 'coloumnTitles' is null.");
+            }
+
+            if (coloumnTitles.Length == 0)
+            {
+                throw new ArgumentException("No coloumn titles specified.");
+            } 
+
+            var coloumnTitlesList = coloumnTitles.ToList();
+
+            for (var index = coloumnTitles.Length - 1; index >= 0; index--)
+            {
+
+                var title = coloumnTitlesList[index];
+
+                coloumnTitlesList.RemoveAt(index);
+
+                if (title.Equals(""))
+                {
+                    throw new ArgumentException("Coloumn Titles must not be empty.");
+                }
+
+                if (coloumnTitlesList.Contains(title))
+                {
+                    throw new ArgumentException("Coloumn Titles must be unique.");
+                }
+            }
+
+        }
+
+        private void CheckBaseRows(Row[] rows)
+        {
+
+            foreach (var row in rows)
+            {
+
+                if (row == null)
+                {
+                    throw new ArgumentNullException("Row cannot be null.");
+                }
+
+                if (!Check(row))
+                {
+                    throw new ArgumentException("Invalid row");
+                }
+
+            }
+
+        }
+
     }
 }
