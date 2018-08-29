@@ -8,7 +8,7 @@ namespace MyMoney.Core.Table
     public class Table
     {
 
-        private readonly List<Row> _rawTable;
+        private readonly List<Row> _rows;
 
         private readonly string[] _coloumns;
 
@@ -19,7 +19,7 @@ namespace MyMoney.Core.Table
 
             // If no exception is thrown then initalise the table.
             _coloumns = coloumnTitles;
-            _rawTable = new List<Row>();
+            _rows = new List<Row>();
 
         }
 
@@ -36,12 +36,12 @@ namespace MyMoney.Core.Table
                 throw new ArgumentException("Invalid Row: " + row);
             }
 
-            if (index < 0 || index > _rawTable.Count)
+            if (index < 0 || index > _rows.Count)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            _rawTable.Insert(index, row);
+            _rows.Insert(index, row);
 
         }
 
@@ -49,7 +49,7 @@ namespace MyMoney.Core.Table
         {
 
             // Iterate through all the orws in the table.
-            foreach (Row row in _rawTable)
+            foreach (Row row in _rows)
             {
 
                 // If the current row has the column value pair that is desired then return it.
@@ -76,7 +76,7 @@ namespace MyMoney.Core.Table
                 throw new ArgumentException("Invalid Row");
             }
 
-            _rawTable.Add(row);
+            _rows.Add(row);
 
         }
 
@@ -86,24 +86,24 @@ namespace MyMoney.Core.Table
             {
                 throw new ArgumentNullException("Row cannot be null.");
             }
-            _rawTable.Remove(row);
+            _rows.Remove(row);
         }
 
         public Row[] GetRows()
         {
 
-            return _rawTable.ToArray<Row>();
+            return _rows.ToArray<Row>();
 
         }
 
         public Row GetRow(int index)
         {
-            if (index < 0 || index >= _rawTable.Count)
+            if (index < 0 || index >= _rows.Count)
             {
                 throw new ArgumentOutOfRangeException("Index out of table bounds.");
             }
 
-            return _rawTable.ElementAt(index);
+            return _rows.ElementAt(index);
         }
 
         public string[] GetColoumns()
@@ -152,7 +152,7 @@ namespace MyMoney.Core.Table
 
         public void Clear()
         {
-            _rawTable.Clear();
+            _rows.Clear();
         }
 
         private void CheckTableColoumnTitles(string[] coloumnTitles)
