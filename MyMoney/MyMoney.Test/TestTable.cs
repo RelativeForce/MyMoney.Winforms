@@ -16,6 +16,23 @@ namespace MyMoney.Test
 
       private static readonly string[] ValidColoumns = { ValidColoumn1, ValidColoumn2, ValidColoumn3, ValidColoumn4 };
 
+      private static Row GetValidRow()
+      {
+         const string validValue1 = "value1";
+         const string validValue2 = "value2";
+         const string validValue3 = "value3";
+         const string validValue4 = "value4";
+
+         var row = new Row();
+         row.AddColoumn(ValidColoumn1, validValue1);
+         row.AddColoumn(ValidColoumn2, validValue2);
+         row.AddColoumn(ValidColoumn3, validValue3);
+         row.AddColoumn(ValidColoumn4, validValue4);
+
+         return row;
+
+      }
+
       #region Construct
 
       [TestMethod]
@@ -70,21 +87,12 @@ namespace MyMoney.Test
       #region AddRow
 
       [TestMethod]
-      public void TestInsertValidRow()
+      public void TestAddValidRow()
       {
-
-         const string validValue1 = "value1";
-         const string validValue2 = "value2";
-         const string validValue3 = "value3";
-         const string validValue4 = "value4";
 
          var table = new Table(ValidColoumns);
 
-         var row = new Row();
-         row.AddColoumn(ValidColoumn1, validValue1);
-         row.AddColoumn(ValidColoumn2, validValue2);
-         row.AddColoumn(ValidColoumn3, validValue3);
-         row.AddColoumn(ValidColoumn4, validValue4);
+         var row = GetValidRow();
 
          Assert.AreEqual(table.GetRows().Length, 0);
 
@@ -95,6 +103,117 @@ namespace MyMoney.Test
          Assert.AreEqual(returnedRows.Length, 1);
 
          Assert.AreEqual(returnedRows[0], row);
+
+      }
+
+      [TestMethod]
+      public void TestCannotAddRowThatHasDifferentColoumns()
+      {
+         const string validValue1 = "value1";
+         const string validValue2 = "value2";
+         const string validValue3 = "value3";
+         const string validValue4 = "value4";
+
+         var table = new Table(ValidColoumns);
+
+         var row1 = new Row();
+         row1.AddColoumn(ValidColoumn1, validValue1);
+         row1.AddColoumn(ValidColoumn2, validValue2);
+         row1.AddColoumn(ValidColoumn3, validValue3);
+
+         try
+         {
+             table.AddRow(row1);
+
+             Assert.Fail("Added Row with different number of coloumns.");
+         }
+         catch (ArgumentException)
+         {
+         }
+
+         var row2 = new Row();
+         row2.AddColoumn(ValidColoumn1, validValue1);
+         row2.AddColoumn(ValidColoumn2, validValue2);
+         row2.AddColoumn(ValidColoumn3, validValue3);
+         row2.AddColoumn("randomColoumnName", validValue4);
+
+         try
+         {
+            table.AddRow(row2);
+
+            Assert.Fail("Added Row with a different coloumn.");
+         }
+         catch (ArgumentException)
+         {
+         }
+
+         var row3 = new Row();
+         row3.AddColoumn(ValidColoumn1, validValue1);
+         row3.AddColoumn(ValidColoumn2, validValue2);
+         row3.AddColoumn(ValidColoumn3, validValue3);
+         row1.AddColoumn(ValidColoumn4, validValue4);
+         row1.AddColoumn("test5", "value5");
+
+         try
+         {
+            table.AddRow(row3);
+
+            Assert.Fail("Added Row with different number of coloumns.");
+         }
+         catch (ArgumentException)
+         {
+         }
+
+
+      }
+
+      [TestMethod]
+      [ExpectedException(typeof(ArgumentNullException))]
+      public void TestCannotAddNullRow()
+      {
+         var table = new Table(ValidColoumns);
+
+         table.AddRow(null);
+
+         Assert.Fail("Added a null Row.");
+      }
+
+      #endregion
+
+      #region Remove
+
+      [TestMethod]
+      public void TestRemovePresentRow()
+      {
+
+         var table = new Table(ValidColoumns);
+
+         var row = GetValidRow();
+
+         Assert.AreEqual(table.GetRows().Length, 0);
+
+         table.AddRow(row);
+
+         Assert.AreEqual(table.GetRows().Length, 1);
+
+         Assert.AreEqual(table.GetRows()[0], row);
+
+         table.Remove(row);
+
+         Assert.AreEqual(table.GetRows().Length, 0);
+
+      }
+
+      [TestMethod]
+      [ExpectedException(typeof(ArgumentNullException))]
+      public void TestCannotRemoveNullRow()
+      {
+
+         var table = new Table(ValidColoumns);
+
+         table.Remove(null);
+
+         Assert.Fail("Removed a null row.");
 
       }
 
