@@ -1,21 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace MyMoney.Core.Table
 {
     public class Row
     {
-        private Dictionary<string, string> rawRow = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _rawRow;
+
+        public Row()
+        {
+            _rawRow = new Dictionary<string, string>();
+        }
 
         public void AddColoumn(string coloumn, string value)
         {
-            rawRow.Add(coloumn, value);
+            _rawRow.Add(coloumn, value);
         }
 
         public string[] GetColoumns()
         {
-            return rawRow.Keys.ToArray();
+            return _rawRow.Keys.ToArray();
         }
 
         public override int GetHashCode()
@@ -41,13 +45,13 @@ namespace MyMoney.Core.Table
         public void UpdateColoumn(string updatedCol, string newValue)
         {
 
-            rawRow[updatedCol] = newValue;
+            _rawRow[updatedCol] = newValue;
 
         }
 
         public string GetValue(string coloumn)
         {
-            return rawRow[coloumn];
+            return _rawRow[coloumn];
         }
 
         public override string ToString()
@@ -55,9 +59,9 @@ namespace MyMoney.Core.Table
 
             string output = "";
 
-            foreach (string coloumn in rawRow.Keys)
+            foreach (string coloumn in _rawRow.Keys)
             {
-                output += coloumn + ": " + rawRow[coloumn] + " ";
+                output += coloumn + ": " + _rawRow[coloumn] + " ";
             }
 
             return output;
@@ -67,9 +71,9 @@ namespace MyMoney.Core.Table
         private bool CheckColoumValues(Row row)
         {
 
-            foreach (string coloumn in rawRow.Keys)
+            foreach (string coloumn in _rawRow.Keys)
             {
-                if (!rawRow[coloumn].Equals(row.rawRow[coloumn]))
+                if (!_rawRow[coloumn].Equals(row._rawRow[coloumn]))
                 {
                     return false;
                 }
@@ -81,10 +85,10 @@ namespace MyMoney.Core.Table
         {
 
             // This holds all the rows that should be in the table.
-            List<string> coloumnChecklist = rawRow.Keys.ToList();
+            List<string> coloumnChecklist = _rawRow.Keys.ToList();
 
             // Iterate through all the row titles in the row
-            foreach (string column in row.rawRow.Keys)
+            foreach (string column in row._rawRow.Keys)
             {
                 /*
                  * If the current column is in the column check list then remove 
