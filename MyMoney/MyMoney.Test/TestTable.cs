@@ -33,12 +33,17 @@ namespace MyMoney.Test
 
       }
 
+      private static Table GetValidTable()
+      {
+         return new Table(ValidColoumns);
+      }
+
       #region Construct
 
       [TestMethod]
       public void TestConstructionWithValidColoumns()
       {
-         var table = new Table(ValidColoumns);
+         var table = GetValidTable();
 
          var returnedColoumns = table.GetColoumns();
 
@@ -56,7 +61,9 @@ namespace MyMoney.Test
       [ExpectedException(typeof(ArgumentException))]
       public void TestCannotConstructTableWithNoColoumns()
       {
-         var table = new Table(new string[] { });
+         new Table(new string[] { });
+
+         Assert.Fail("Constructed a table with no coloumns.");
       }
 
       [TestMethod]
@@ -90,7 +97,7 @@ namespace MyMoney.Test
       public void TestAddValidRow()
       {
 
-         var table = new Table(ValidColoumns);
+         var table = GetValidTable();
 
          var row = GetValidRow();
 
@@ -114,7 +121,7 @@ namespace MyMoney.Test
          const string validValue3 = "value3";
          const string validValue4 = "value4";
 
-         var table = new Table(ValidColoumns);
+         var table = GetValidTable();
 
          var row1 = new Row();
          row1.AddColoumn(ValidColoumn1, validValue1);
@@ -171,7 +178,7 @@ namespace MyMoney.Test
       [ExpectedException(typeof(ArgumentNullException))]
       public void TestCannotAddNullRow()
       {
-         var table = new Table(ValidColoumns);
+         var table = GetValidTable();
 
          table.AddRow(null);
 
@@ -186,7 +193,7 @@ namespace MyMoney.Test
       public void TestRemovePresentRow()
       {
 
-         var table = new Table(ValidColoumns);
+         var table = GetValidTable();
 
          var row = GetValidRow();
 
@@ -198,9 +205,10 @@ namespace MyMoney.Test
 
          Assert.AreEqual(table.GetRows()[0], row);
 
-         table.Remove(row);
+         var wasRemoved = table.Remove(row);
 
          Assert.AreEqual(table.GetRows().Length, 0);
+         Assert.IsTrue(wasRemoved);
 
       }
 
@@ -209,11 +217,37 @@ namespace MyMoney.Test
       public void TestCannotRemoveNullRow()
       {
 
-         var table = new Table(ValidColoumns);
+         var table = GetValidTable();
 
          table.Remove(null);
 
          Assert.Fail("Removed a null row.");
+
+      }
+
+      [TestMethod]
+      public void TestCannotRemoveNotPresentRow()
+      {
+         var table = GetValidTable();
+
+         var row = GetValidRow();
+
+         Assert.AreEqual(table.GetRows().Length, 0);
+
+         var wasRemoved = table.Remove(row);
+
+         Assert.IsFalse(wasRemoved);
+
+      }
+
+      #endregion
+
+      #region FindFirst
+
+      [TestMethod]
+      public void TestFindFirstWithRowPresent()
+      {
+
 
       }
 
