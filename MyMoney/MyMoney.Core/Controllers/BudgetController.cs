@@ -42,7 +42,7 @@ namespace MyMoney.Core.Controllers
 
             if (BudgetModel.AMOUNT_COLOUMN.Equals(updatedCol)) throw new ArgumentException("Invalid updated coloumn.");
 
-            var allowance = _rawTable.GetRow(BudgetModel.MONTH_COLOUMN, row.GetValue(BudgetModel.MONTH_COLOUMN));
+            var allowance = _rawTable.FindFirst(BudgetModel.MONTH_COLOUMN, row.GetValue(BudgetModel.MONTH_COLOUMN));
 
             allowance.UpdateColoumn(BudgetModel.AMOUNT_COLOUMN, row.GetValue(BudgetModel.AMOUNT_COLOUMN));
 

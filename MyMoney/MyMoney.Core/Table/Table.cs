@@ -45,7 +45,7 @@ namespace MyMoney.Core.Table
 
         }
 
-        public Row GetRow(string coloumn, string value)
+        public Row FindFirst(string coloumn, string value)
         {
 
             // Iterate through all the orws in the table.
@@ -96,7 +96,7 @@ namespace MyMoney.Core.Table
 
         }
 
-        public Row GetRow(int index)
+        public Row FindFirst(int index)
         {
             if (index < 0 || index >= _rows.Count)
             {
