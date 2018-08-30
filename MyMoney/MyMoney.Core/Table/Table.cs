@@ -80,13 +80,13 @@ namespace MyMoney.Core.Table
 
         }
 
-        public void Remove(Row row)
+        public bool Remove(Row row)
         {
             if (row == null)
             {
                 throw new ArgumentNullException("Row cannot be null.");
             }
-            _rows.Remove(row);
+            return _rows.Remove(row);
         }
 
         public Row[] GetRows()
