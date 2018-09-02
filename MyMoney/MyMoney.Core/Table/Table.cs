@@ -30,7 +30,7 @@ namespace MyMoney.Core.Table
             {
                 throw new ArgumentNullException("Row is null.");
             }
- 
+
             if (!Check(row))
             {
                 throw new ArgumentException("Invalid Row: " + row);
@@ -166,7 +166,7 @@ namespace MyMoney.Core.Table
             if (coloumnTitles.Length == 0)
             {
                 throw new ArgumentException("No coloumn titles specified.");
-            } 
+            }
 
             var coloumnTitlesList = coloumnTitles.ToList();
 
