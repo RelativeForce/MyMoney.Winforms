@@ -14,5 +14,6 @@
 
         bool IsDatabaseConnected { get; }
 
+        void NotifyViews(Type type, Priority priority, string message);
     }
 }
