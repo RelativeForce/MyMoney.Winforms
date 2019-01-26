@@ -26,6 +26,16 @@ namespace MyMoney.Windows
             InitializeComponent();
         }
 
+        public void RefreshView()
+        {
+            // Do Nothing
+        }
+
+        public void Notify(Core.Type type, Priority priority, string message)
+        {
+            // TODO: Add functionality for dislpaying messages on AddTransactionWindow
+        }
+
         private void AddTransactionWindow_Load(object sender, EventArgs e)
         {
             // Set the date to today's date.
@@ -35,18 +45,18 @@ namespace MyMoney.Windows
 
         }
 
-        private void submit_Click(object sender, EventArgs e)
+        private void Submit_Click(object sender, EventArgs e)
         {
 
             double amount = 0;
 
             // If this value remaines fales then a feild was invalid.
-            Boolean valid = false;
+            bool valid = false;
 
             try
             {
                 // Parse the amount as a double
-                amount = Double.Parse(amountTextBox.Text);
+                amount = double.Parse(amountTextBox.Text);
 
                 // Check that the description is not empty but is also less than the maximum length of the description.
                 if (amount <= 0)
@@ -54,7 +64,7 @@ namespace MyMoney.Windows
                     var ttm = new ToolTipModel("Error", "Amounts must be positive and greater than zero.", (amountTextBox));
                     toolTipHandler.Draw(ttm);
                 }
-                else if (descriptionTextBox.Text.Equals(""))
+                else if (descriptionTextBox.Equals(""))
                 {
                     var ttm = new ToolTipModel("Error", "Please input a description.", descriptionTextBox);
                     toolTipHandler.Draw(ttm);
@@ -76,8 +86,22 @@ namespace MyMoney.Windows
             // If all the fields are valid.
             if (valid)
             {
-                // transfer data to main form
-                transferData();
+               
+                if (moneyOut)
+                {
+                    amount *= -1;
+                }
+
+                using (var model = controller.Database())
+                {
+
+                    var transaction = new Transaction(date.Value, CleanDescription(), amount);
+
+                    model.Transactions.Add(transaction);
+
+                }
+
+                controller.RefreshViews();
 
                 Console.WriteLine("Data Sent");
 
@@ -88,30 +112,7 @@ namespace MyMoney.Windows
 
         }
 
-        private void transferData()
-        {
-
-            double amount = double.Parse(amountTextBox.Text);
-
-            if (moneyOut)
-            {
-                amount *= -1;
-            }
-
-            using (var model = controller.Database())
-            {
-
-                var transaction = new Transaction(date.Value, cleanDescription(), amount);
-
-                model.Transactions.Add(transaction);
-
-            }
-
-            controller.RefreshViews();
-
-        }
-
-        private string cleanDescription()
+        private string CleanDescription()
         {
 
             string description = descriptionTextBox.Text;
@@ -128,25 +129,25 @@ namespace MyMoney.Windows
             Dispose();
         }
 
-        private void showToggleToolTip(object sender, EventArgs e)
+        private void ShowToggleToolTip(object sender, EventArgs e)
         {
             var ttm = new ToolTipModel("Toggling Income/Outcome", "Click here to toggle whether the transaction is Income or Outcome.", (sender as Button));
             toolTipHandler.Draw(ttm);
         }
 
-        private void showAmountToolTip(object sender, EventArgs e)
+        private void ShowAmountToolTip(object sender, EventArgs e)
         {
             var ttm = new ToolTipModel("Input Amount", "Input the amount of money in the transaction.", amountTextBox);
             toolTipHandler.Draw(ttm);
         }
 
-        private void showDescriptionToolTip(object sender, EventArgs e)
+        private void ShowDescriptionToolTip(object sender, EventArgs e)
         {
             var ttm = new ToolTipModel("Input Description", "Input a descrition for the transaction. Less than 50 characters.", descriptionTextBox);
             toolTipHandler.Draw(ttm);
         }
 
-        private void toggleFlip(object sender, EventArgs e)
+        private void ToggleFlip(object sender, EventArgs e)
         {
             if (toggleButton.Text.Equals(">"))
             {
@@ -160,9 +161,6 @@ namespace MyMoney.Windows
             }
         }
 
-        public void RefreshView()
-        {
-            // Do Nothing
-        }
+        
     }
 }

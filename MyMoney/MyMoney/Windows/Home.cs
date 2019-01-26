@@ -16,8 +16,6 @@ namespace MyMoney.Windows
 
         private readonly GraphHandler _plotter;
 
-        private readonly TransactionViewer _viewer;
-
         private AddTransactionWindow _addTransactionWindow;
 
         private MonthlyAllowanceChanger _monthlyAllowanceChanger;
@@ -32,10 +30,6 @@ namespace MyMoney.Windows
 
         private DateTime _highlightedMonth;
 
-        private string _previousValue = "";
-
-        private bool _updated;
-
         private readonly IController _controller;
 
         #endregion fields
@@ -49,36 +43,17 @@ namespace MyMoney.Windows
             _highlightedMonth = DateTime.Today;
             _plotter = new GraphHandler(monthPlot, controller);
 
-            var transactionViews = new[] {
-                new TransactionView(date1, description1, amount1, delete1),
-                new TransactionView(date2, description2, amount2, delete2),
-                new TransactionView(date3, description3, amount3, delete3)
-            };
-
-            _viewer = new TransactionViewer(controller, transactionViews, scrollBar, _highlightedMonth);
+            viewer.Controller = controller;
 
             _toolTipHandler = new ToolTipHandler();
 
             controller.AddView(this);
-
-            DisableOperationControls();
-
-            Text = Assembly.GetExecutingAssembly().GetName().Name + " [" + Assembly.GetExecutingAssembly().GetName().Version + "]";
-
-            var filePath = _fileStore.Read();
-
-            if (System.IO.File.Exists(filePath))
-            {
-                _controller.ChangeDatabaseFile(filePath);
-
-                EnableOperationControls();
-            }
         }
 
         public void RefreshView()
         {
 
-            _viewer.Display();
+            viewer.Display();
 
             _plotter.Draw(_highlightedMonth);
 
@@ -101,17 +76,13 @@ namespace MyMoney.Windows
                 // Move to previou month
                 PreviousMonth(null, null);
             }
-            else if (e.KeyCode == Keys.Down && scrollBar.Enabled && scrollBar.Value < scrollBar.Maximum)
+            else if (e.KeyCode == Keys.Down)
             {
-                // Scroll down the list of Transactions.
-                scrollBar.Value++;
-                _viewer.Display();
+                viewer.ScrollDown();
             }
-            else if (e.KeyCode == Keys.Up && scrollBar.Enabled && scrollBar.Value > 0)
+            else if (e.KeyCode == Keys.Up)
             {
-                // Scroll up the list of Transactions.
-                scrollBar.Value--;
-                _viewer.Display();
+                viewer.ScrollUp();
             }
 
             e.Handled = true;
@@ -120,12 +91,18 @@ namespace MyMoney.Windows
         private void LoadForm(object sender, EventArgs e)
         {
 
-            if (!_controller.IsDatabaseConnected) return;
+            DisableOperationControls();
 
-            _viewer.Display();
+            Text = Assembly.GetExecutingAssembly().GetName().Name + " [" + Assembly.GetExecutingAssembly().GetName().Version + "]";
 
-            _plotter.Draw();
+            var filePath = _fileStore.Read();
 
+            if (System.IO.File.Exists(filePath))
+            {
+                _controller.ChangeDatabaseFile(filePath);
+
+                EnableOperationControls();
+            }
         }
 
         private void MainClosed(object sender, FormClosedEventArgs e)
@@ -140,19 +117,7 @@ namespace MyMoney.Windows
         private void ScrollTransactions(object sender, EventArgs e)
         {
             // Rerender the viewer.
-            _viewer.Display();
-        }
-
-        private void DeleteTransaction(object sender, EventArgs e)
-        {
-            // Confirm that the transaction should be deleted.
-            var dialogResult = MessageBox.Show(Resources.DeleteTransactionWarningBody, Resources.DeleteTransactionWarningTitle, MessageBoxButtons.YesNo);
-
-            // If the dialog returns yes then delete the transaction.
-            if (dialogResult != DialogResult.Yes) return;
-
-            _viewer.DeleteTransaction(sender as Button);
-            _plotter.Draw();
+            viewer.Display();
         }
 
         private void DisplayUpdateTransactionToolTip(object sender, EventArgs e)
@@ -165,53 +130,6 @@ namespace MyMoney.Windows
             );
 
             _toolTipHandler.Draw(ttm);
-        }
-
-        private void ChangeTransactionField(object sender, KeyEventArgs e)
-        {
-
-            // If the user pressed enter.
-            if (e.KeyCode != Keys.Enter) return;
-
-            // Define the ENTER as handled so a new line is not created in the text box.
-            e.Handled = true;
-
-            var textBox = (RichTextBox)sender;
-
-            // If the user has changed the contents of the text box.
-            if (textBox.Text.Equals(_previousValue)) return;
-
-            // Attempt to update the transaction and store the result.
-            var result = _viewer.UpdateTransaction(textBox);
-
-            // If the result is an empty string then the update was successful.
-            if (result.Equals(""))
-            {
-                _updated = true;
-                _previousValue = textBox.Text;
-
-                DisplaySuccessUpdatedFieldToolTip(textBox);
-            }
-            else
-            {
-                DisplayFailUpdatedFieldToolTip(textBox, result);
-            }
-
-
-
-        }
-
-        private void CachePreviousValue(object sender, EventArgs e)
-        {
-            _previousValue = (sender as RichTextBox)?.Text;
-        }
-
-        private void RevertToPreviousValue(object sender, EventArgs e)
-        {
-            if (_updated) return;
-
-            ((RichTextBox)sender).Text = _previousValue;
-            _previousValue = "";
         }
 
         #endregion transactions
@@ -306,23 +224,19 @@ namespace MyMoney.Windows
 
         private void DisableOperationControls()
         {
-            _viewer.Disable();
+            viewer.Enabled = false;
             addTransactionButton.Enabled = false;
             changeMonthlyAllowanceButtton.Enabled = false;
             rightButton.Enabled = false;
             leftButton.Enabled = false;
-            scrollBar.Enabled = false;
         }
 
         private void EnableOperationControls()
         {
-            _viewer.Enable();
-            _viewer.Display();
-            _plotter.Draw();
             changeMonthlyAllowanceButtton.Enabled = true;
             addTransactionButton.Enabled = true;
             leftButton.Enabled = true;
-            scrollBar.Enabled = true; ;
+            viewer.Enabled = true;
         }
 
         #endregion operation_controls
@@ -360,7 +274,7 @@ namespace MyMoney.Windows
 
             // Redraw the graph and display the tranactions of that month.
             _plotter.Draw(_highlightedMonth);
-            _viewer.Display(_highlightedMonth);
+            viewer.Display(_highlightedMonth);
 
         }
 
@@ -377,6 +291,10 @@ namespace MyMoney.Windows
             _toolTipHandler.Draw(ttm);
         }
 
+        public void Notify(Core.Type type, Priority priority, string message)
+        {
+            // TODO: show error
+        }
     }
 }
 

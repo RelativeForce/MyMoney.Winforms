@@ -173,5 +173,10 @@ namespace MyMoney.Windows
         {
             updateBudget(month.Value);
         }
+
+        public void Notify(Core.Type type, Priority priority, string message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,124 +1,144 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
+using MyMoney.Core;
 using MyMoney.Core.Model;
+using MyMoney.Properties;
+using Type = MyMoney.Core.Type;
 
 namespace MyMoney.Windows.Components
 {
-
-    public class TransactionView
+    public partial class TransactionView : UserControl
     {
+        public int? TransactionId { get; private set; }
+        public TransactionViewGroup ParentView { set; private get; }
+        public IController Controller { set; private get; }
 
-        public readonly RichTextBox date;
-
-        public readonly RichTextBox description;
-
-        public readonly RichTextBox amount;
-
-        public readonly Button delete;
-
-        public int transactionId;
-
-        public TransactionView(RichTextBox date, RichTextBox description, RichTextBox amount, Button delete)
+        public TransactionView()
         {
-            this.delete = delete;
-            this.date = date;
-            this.description = description;
-            this.amount = amount;
-            transactionId = -1;
+            InitializeComponent();
+            ParentView = null;
+            Controller = null;
+            TransactionId = null;
 
+            amount.ParentView = this;
+            description.ParentView = this;
+            date.ParentView = this;
         }
 
         public void SetView(Transaction transaction)
         {
             // Set the row to be the same as the specified row.
-            this.transactionId = transaction?.Id ?? -1;
+            this.TransactionId = transaction?.Id;
 
             // If the row is null then all the fields should be empty
             if (transaction != null)
             {
                 // Set the delete button as enabled
-                UpdateButton(delete, true);
+                delete.Enabled = true;
 
                 // Update all the values in the text boxes to the ones specified in the paramter row.
-                UpdateBox(date, transaction.Date.ToShortDateString());
-                UpdateBox(description, transaction.Description);
-                UpdateBox(amount, transaction.Amount.ToString());
+                date.SetText(transaction.Date.ToShortDateString());
+                description.SetText(transaction.Description);
+                amount.SetText(transaction.Amount.ToString());
             }
             else
             {
-                // Set the delete button as disabled
-                UpdateButton(delete, false);
-
-                // Set all the boxes as empty and disabled
-                UpdateBox(date, "");
-                UpdateBox(description, "");
-                UpdateBox(amount, "");
+                Clear();
             }
         }
 
-        private void UpdateButton(Button button, bool enabled)
-        {
-            if (button.InvokeRequired)
-            {
-                button.BeginInvoke((MethodInvoker)delegate
-                {
-                    button.Enabled = enabled;
-                });
-            }
-            else
-            {
-                button.Enabled = enabled;
-            }
+        public void Clear() {
+            // Set the delete button as disabled
+            delete.Enabled = false;
+
+            // Set all the boxes as empty and disabled
+            date.ClearAndDisable();
+            description.ClearAndDisable();
+            amount.ClearAndDisable();
         }
 
-        private void UpdateBox(RichTextBox box, string item)
-        {
+        private void Delete() {
 
-            if (box.InvokeRequired)
+            using (var model = Controller.Database())
             {
-                box.BeginInvoke((MethodInvoker)delegate
-                {
-                    box.Text = item;
 
-                    if (item.Equals(""))
-                    {
-                        box.Enabled = false;
-                    }
-                    else
-                    {
-                        box.Enabled = true;
-                    }
-                });
-            }
-            else
-            {
-                box.Text = item;
+                var transaction = model.Transactions.Find(t => t.Id.Equals(TransactionId));
 
-                if (item.Equals(""))
+                var success = model.Transactions.Delete(transaction);
+
+                if (success)
                 {
-                    box.Enabled = false;
+                    Clear();
+                    Controller.RefreshViews();
                 }
                 else
                 {
-                    box.Enabled = true;
+                    Controller.NotifyViews(
+                        Type.Error,
+                        Priority.High,
+                        "Failed to delete transaction!"
+                    );
+                }
+            }
+
+        }
+
+        private void Delete_Btn_Click(object sender, EventArgs e)
+        {
+            // Confirm that the transaction should be deleted.
+            var dialogResult = MessageBox.Show(Resources.DeleteTransactionWarningBody, Resources.DeleteTransactionWarningTitle, MessageBoxButtons.YesNo);
+
+            // If the dialog returns yes then delete the transaction.
+            if (dialogResult != DialogResult.Yes) return;
+
+            Delete();
+            Controller.RefreshViews();
+        }
+
+        public void SaveChanges()
+        {
+            // If nothing has changed then skip
+            if (!date.HasChanged && !description.HasChanged && !amount.HasChanged) return;
+
+            using (var model = Controller.Database())
+            {
+                var transaction = model.Transactions.Find(t => t.Id.Equals(TransactionId));
+
+                try
+                {
+                    if (date.HasChanged) {
+                        transaction.Date = DateTime.Parse(date.Text);
+                    }
+
+                    if (description.HasChanged) {
+                        transaction.Description = description.Text;
+                    }
+
+                    if (amount.HasChanged) {
+                        transaction.Amount = double.Parse(amount.Text);
+                    }
+
+                    model.SaveChanges();
+
+                    date.ChangesSaved();
+                    description.ChangesSaved();
+                    amount.ChangesSaved();
+                }
+                catch (Exception ex)
+                {
+
+                    Controller.NotifyViews(
+                        Type.Error,
+                        Priority.High,
+                        $"Error while saving changes - {ex.Message}"
+                    );
                 }
             }
         }
 
-        public void Enable()
+        private void description_Load(object sender, EventArgs e)
         {
-            date.Enabled = true;
-            amount.Enabled = true;
-            delete.Enabled = true;
-            description.Enabled = true;
-        }
 
-        public void Disable()
-        {
-            date.Enabled = false;
-            amount.Enabled = false;
-            delete.Enabled = false;
-            description.Enabled = false;
         }
-
     }
 }

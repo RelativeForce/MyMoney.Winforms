@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using MyMoney.Windows.Components;
+using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -32,25 +33,12 @@ namespace MyMoney.Windows
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             this.errorOutput = new System.Windows.Forms.Label();
             this.transactionsBox = new System.Windows.Forms.GroupBox();
-            this.delete3 = new System.Windows.Forms.Button();
-            this.amount3 = new System.Windows.Forms.RichTextBox();
-            this.description3 = new System.Windows.Forms.RichTextBox();
-            this.date3 = new System.Windows.Forms.RichTextBox();
-            this.scrollBar = new System.Windows.Forms.VScrollBar();
-            this.amount2 = new System.Windows.Forms.RichTextBox();
-            this.amount1 = new System.Windows.Forms.RichTextBox();
-            this.description2 = new System.Windows.Forms.RichTextBox();
-            this.description1 = new System.Windows.Forms.RichTextBox();
-            this.date2 = new System.Windows.Forms.RichTextBox();
-            this.date1 = new System.Windows.Forms.RichTextBox();
-            this.delete2 = new System.Windows.Forms.Button();
-            this.delete1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -65,6 +53,7 @@ namespace MyMoney.Windows
             this.updateDBSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rightButton = new System.Windows.Forms.Button();
             this.leftButton = new System.Windows.Forms.Button();
+            this.viewer = new MyMoney.Windows.Components.TransactionViewGroup();
             this.transactionsBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.monthPlot)).BeginInit();
             this.FileOptionMenu.SuspendLayout();
@@ -80,176 +69,15 @@ namespace MyMoney.Windows
             // 
             // transactionsBox
             // 
-            this.transactionsBox.Controls.Add(this.delete3);
-            this.transactionsBox.Controls.Add(this.amount3);
-            this.transactionsBox.Controls.Add(this.description3);
-            this.transactionsBox.Controls.Add(this.date3);
-            this.transactionsBox.Controls.Add(this.scrollBar);
-            this.transactionsBox.Controls.Add(this.amount2);
-            this.transactionsBox.Controls.Add(this.amount1);
-            this.transactionsBox.Controls.Add(this.description2);
-            this.transactionsBox.Controls.Add(this.description1);
-            this.transactionsBox.Controls.Add(this.date2);
-            this.transactionsBox.Controls.Add(this.date1);
-            this.transactionsBox.Controls.Add(this.delete2);
-            this.transactionsBox.Controls.Add(this.delete1);
+            this.transactionsBox.Controls.Add(this.viewer);
             this.transactionsBox.Controls.Add(this.label3);
             this.transactionsBox.Controls.Add(this.label2);
             this.transactionsBox.Controls.Add(this.label1);
             this.transactionsBox.Location = new System.Drawing.Point(12, 284);
             this.transactionsBox.Name = "transactionsBox";
-            this.transactionsBox.Size = new System.Drawing.Size(441, 145);
+            this.transactionsBox.Size = new System.Drawing.Size(441, 132);
             this.transactionsBox.TabIndex = 14;
             this.transactionsBox.TabStop = false;
-            // 
-            // delete3
-            // 
-            this.delete3.ForeColor = System.Drawing.Color.Red;
-            this.delete3.Location = new System.Drawing.Point(371, 104);
-            this.delete3.Name = "delete3";
-            this.delete3.Size = new System.Drawing.Size(37, 30);
-            this.delete3.TabIndex = 33;
-            this.delete3.Text = "X";
-            this.delete3.UseVisualStyleBackColor = true;
-            // 
-            // amount3
-            // 
-            this.amount3.Location = new System.Drawing.Point(294, 104);
-            this.amount3.Name = "amount3";
-            this.amount3.Size = new System.Drawing.Size(71, 30);
-            this.amount3.TabIndex = 32;
-            this.amount3.Text = "";
-            this.amount3.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.amount3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.amount3.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.amount3.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // description3
-            // 
-            this.description3.Location = new System.Drawing.Point(137, 104);
-            this.description3.Name = "description3";
-            this.description3.Size = new System.Drawing.Size(151, 30);
-            this.description3.TabIndex = 31;
-            this.description3.Text = "";
-            this.description3.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.description3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.description3.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.description3.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // date3
-            // 
-            this.date3.Location = new System.Drawing.Point(10, 104);
-            this.date3.Name = "date3";
-            this.date3.Size = new System.Drawing.Size(121, 30);
-            this.date3.TabIndex = 30;
-            this.date3.Text = "";
-            this.date3.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.date3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.date3.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.date3.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // scrollBar
-            // 
-            this.scrollBar.LargeChange = 1;
-            this.scrollBar.Location = new System.Drawing.Point(411, 32);
-            this.scrollBar.Name = "scrollBar";
-            this.scrollBar.Size = new System.Drawing.Size(17, 100);
-            this.scrollBar.TabIndex = 29;
-            this.scrollBar.ValueChanged += new System.EventHandler(this.ScrollTransactions);
-            // 
-            // amount2
-            // 
-            this.amount2.Location = new System.Drawing.Point(294, 68);
-            this.amount2.Name = "amount2";
-            this.amount2.Size = new System.Drawing.Size(71, 30);
-            this.amount2.TabIndex = 28;
-            this.amount2.Text = "";
-            this.amount2.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.amount2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.amount2.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.amount2.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // amount1
-            // 
-            this.amount1.Location = new System.Drawing.Point(294, 32);
-            this.amount1.Name = "amount1";
-            this.amount1.Size = new System.Drawing.Size(71, 30);
-            this.amount1.TabIndex = 27;
-            this.amount1.Text = "";
-            this.amount1.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.amount1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.amount1.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.amount1.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // description2
-            // 
-            this.description2.Location = new System.Drawing.Point(137, 68);
-            this.description2.Name = "description2";
-            this.description2.Size = new System.Drawing.Size(151, 30);
-            this.description2.TabIndex = 26;
-            this.description2.Text = "";
-            this.description2.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.description2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.description2.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.description2.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // description1
-            // 
-            this.description1.Location = new System.Drawing.Point(137, 32);
-            this.description1.Name = "description1";
-            this.description1.Size = new System.Drawing.Size(151, 30);
-            this.description1.TabIndex = 25;
-            this.description1.Text = "";
-            this.description1.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.description1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.description1.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.description1.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // date2
-            // 
-            this.date2.Location = new System.Drawing.Point(10, 68);
-            this.date2.Name = "date2";
-            this.date2.Size = new System.Drawing.Size(121, 30);
-            this.date2.TabIndex = 24;
-            this.date2.Text = "";
-            this.date2.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.date2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.date2.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.date2.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // date1
-            // 
-            this.date1.Location = new System.Drawing.Point(10, 32);
-            this.date1.Name = "date1";
-            this.date1.Size = new System.Drawing.Size(121, 30);
-            this.date1.TabIndex = 23;
-            this.date1.Text = "";
-            this.date1.Enter += new System.EventHandler(this.CachePreviousValue);
-            this.date1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CachePreviousValue);
-            this.date1.Leave += new System.EventHandler(this.RevertToPreviousValue);
-            this.date1.MouseHover += new System.EventHandler(this.DisplayUpdateTransactionToolTip);
-            // 
-            // delete2
-            // 
-            this.delete2.ForeColor = System.Drawing.Color.Red;
-            this.delete2.Location = new System.Drawing.Point(371, 68);
-            this.delete2.Name = "delete2";
-            this.delete2.Size = new System.Drawing.Size(37, 30);
-            this.delete2.TabIndex = 22;
-            this.delete2.Text = "X";
-            this.delete2.UseVisualStyleBackColor = true;
-            this.delete2.Click += new System.EventHandler(this.DeleteTransaction);
-            // 
-            // delete1
-            // 
-            this.delete1.ForeColor = System.Drawing.Color.Red;
-            this.delete1.Location = new System.Drawing.Point(371, 32);
-            this.delete1.Name = "delete1";
-            this.delete1.Size = new System.Drawing.Size(37, 30);
-            this.delete1.TabIndex = 21;
-            this.delete1.Text = "X";
-            this.delete1.UseVisualStyleBackColor = true;
-            this.delete1.Click += new System.EventHandler(this.DeleteTransaction);
             // 
             // label3
             // 
@@ -280,16 +108,16 @@ namespace MyMoney.Windows
             // 
             // monthPlot
             // 
-            chartArea1.Name = "ChartArea1";
-            this.monthPlot.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.monthPlot.Legends.Add(legend1);
+            chartArea2.Name = "ChartArea1";
+            this.monthPlot.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.monthPlot.Legends.Add(legend2);
             this.monthPlot.Location = new System.Drawing.Point(12, 42);
             this.monthPlot.Name = "monthPlot";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.monthPlot.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.monthPlot.Series.Add(series2);
             this.monthPlot.Size = new System.Drawing.Size(441, 207);
             this.monthPlot.TabIndex = 18;
             this.monthPlot.Text = "chart1";
@@ -321,7 +149,7 @@ namespace MyMoney.Windows
             this.FileOptionsBox});
             this.FileOptionMenu.Location = new System.Drawing.Point(0, 0);
             this.FileOptionMenu.Name = "FileOptionMenu";
-            this.FileOptionMenu.Size = new System.Drawing.Size(465, 24);
+            this.FileOptionMenu.Size = new System.Drawing.Size(463, 24);
             this.FileOptionMenu.TabIndex = 20;
             // 
             // FileOptionsBox
@@ -338,23 +166,28 @@ namespace MyMoney.Windows
             // importButton
             // 
             this.importButton.Name = "importButton";
-            this.importButton.Size = new System.Drawing.Size(157, 22);
+            this.importButton.Size = new System.Drawing.Size(110, 22);
             this.importButton.Text = "Import";
             this.importButton.Click += new System.EventHandler(this.ImportDBFile);
             // 
             // createButton
             // 
             this.createButton.Name = "createButton";
-            this.createButton.Size = new System.Drawing.Size(157, 22);
+            this.createButton.Size = new System.Drawing.Size(110, 22);
             this.createButton.Text = "Create";
             this.createButton.Click += new System.EventHandler(this.CreateDBFile);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.OpenAboutWindow);
+            // 
+            // updateDBSchemaToolStripMenuItem
+            // 
+            this.updateDBSchemaToolStripMenuItem.Name = "updateDBSchemaToolStripMenuItem";
+            this.updateDBSchemaToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             // 
             // rightButton
             // 
@@ -388,12 +221,18 @@ namespace MyMoney.Windows
             this.leftButton.UseVisualStyleBackColor = true;
             this.leftButton.Click += new System.EventHandler(this.PreviousMonth);
             // 
-            // Main_Form
+            // viewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.viewer.Location = new System.Drawing.Point(7, 33);
+            this.viewer.Name = "viewer";
+            this.viewer.Size = new System.Drawing.Size(428, 92);
+            this.viewer.TabIndex = 21;
+            // 
+            // Home
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(465, 441);
+            this.ClientSize = new System.Drawing.Size(463, 427);
             this.Controls.Add(this.leftButton);
             this.Controls.Add(this.rightButton);
             this.Controls.Add(this.addTransactionButton);
@@ -402,10 +241,11 @@ namespace MyMoney.Windows
             this.Controls.Add(this.transactionsBox);
             this.Controls.Add(this.errorOutput);
             this.Controls.Add(this.FileOptionMenu);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.MaximumSize = new System.Drawing.Size(481, 480);
-            this.MinimumSize = new System.Drawing.Size(481, 480);
-            this.Name = "Main_Form";
+            this.MaximumSize = new System.Drawing.Size(479, 466);
+            this.MinimumSize = new System.Drawing.Size(479, 466);
+            this.Name = "Home";
             this.Text = "MyMoney";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainClosed);
             this.Load += new System.EventHandler(this.LoadForm);
@@ -430,14 +270,6 @@ namespace MyMoney.Windows
         private Label label2;
         private Button changeMonthlyAllowanceButtton;
         private Button addTransactionButton;
-        private Button delete1;
-        private Button delete2;
-        private RichTextBox amount2;
-        private RichTextBox amount1;
-        private RichTextBox description2;
-        private RichTextBox description1;
-        private RichTextBox date2;
-        private RichTextBox date1;
         private MenuStrip FileOptionMenu;
         private ToolStripMenuItem FileOptionsBox;
         private ToolStripMenuItem importButton;
@@ -445,12 +277,8 @@ namespace MyMoney.Windows
         private Button rightButton;
         private Button leftButton;
         private ToolStripMenuItem aboutToolStripMenuItem;
-        private Button delete3;
-        private RichTextBox amount3;
-        private RichTextBox description3;
-        private RichTextBox date3;
-        private VScrollBar scrollBar;
         private ToolStripMenuItem updateDBSchemaToolStripMenuItem;
+        private TransactionViewGroup viewer;
     }
 }
 

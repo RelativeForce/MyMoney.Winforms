@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMoney.Core\MyMoney.Core.csproj">
-      <Project>{3a1a0574-d27d-4ef4-ba97-0d010b241ae3}</Project>
+      <Project>{4bdb383c-a121-40af-a73a-e242419aa4a7}</Project>
       <Name>MyMoney.Core</Name>
     </ProjectReference>
   </ItemGroup>

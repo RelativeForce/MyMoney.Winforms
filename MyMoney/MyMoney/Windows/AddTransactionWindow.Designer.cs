@@ -50,7 +50,7 @@ namespace MyMoney.Windows
             this.descriptionTextBox.Size = new System.Drawing.Size(260, 67);
             this.descriptionTextBox.TabIndex = 0;
             this.descriptionTextBox.Text = "";
-            this.descriptionTextBox.MouseHover += new System.EventHandler(this.showDescriptionToolTip);
+            this.descriptionTextBox.MouseHover += new System.EventHandler(this.ShowDescriptionToolTip);
             // 
             // amountTextBox
             // 
@@ -58,7 +58,7 @@ namespace MyMoney.Windows
             this.amountTextBox.Name = "amountTextBox";
             this.amountTextBox.Size = new System.Drawing.Size(115, 20);
             this.amountTextBox.TabIndex = 2;
-            this.amountTextBox.MouseHover += new System.EventHandler(this.showAmountToolTip);
+            this.amountTextBox.MouseHover += new System.EventHandler(this.ShowAmountToolTip);
             // 
             // label1
             // 
@@ -95,7 +95,7 @@ namespace MyMoney.Windows
             this.submit.TabIndex = 6;
             this.submit.Text = "Submit";
             this.submit.UseVisualStyleBackColor = true;
-            this.submit.Click += new System.EventHandler(this.submit_Click);
+            this.submit.Click += new System.EventHandler(this.Submit_Click);
             // 
             // date
             // 
@@ -114,8 +114,8 @@ namespace MyMoney.Windows
             this.toggleButton.TabIndex = 9;
             this.toggleButton.Text = ">";
             this.toggleButton.UseVisualStyleBackColor = true;
-            this.toggleButton.Click += new System.EventHandler(this.toggleFlip);
-            this.toggleButton.MouseHover += new System.EventHandler(this.showToggleToolTip);
+            this.toggleButton.Click += new System.EventHandler(this.ToggleFlip);
+            this.toggleButton.MouseHover += new System.EventHandler(this.ShowToggleToolTip);
             // 
             // outLabel
             // 

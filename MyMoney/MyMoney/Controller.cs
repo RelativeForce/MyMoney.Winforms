@@ -37,6 +37,11 @@ namespace MyMoney
             return new Infrastructure.Database();
         }
 
+        public void NotifyViews(Type type, Priority priority, string message)
+        {
+            
+        }
+
         public void RefreshViews()
         {
             views.ForEach(v => v.RefreshView());
