@@ -22,8 +22,9 @@ namespace MyMoney.Windows.Components.DBFileDialogs
                 DefaultExt = "mdf",
                 Filter = "database files (*.mdf)|*.mdf",
                 CheckFileExists = true,
-                CheckPathExists = true
-            };
+                CheckPathExists = true,
+                ValidateNames = false
+        };
         }
 
         public void Show()

@@ -1,10 +1,6 @@
 ﻿using MyMoney.Infrastructure.Repositories;
 using MyMoney.Infrastructure.EntityFramework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MyMoney.Core;
 using MyMoney.Core.Repositories;
 
@@ -35,7 +31,7 @@ namespace MyMoney.Infrastructure
         }
 
         public static void SetConnection(string filePath) {
-            ConnectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={filePath};Integrated Security=True;Connect Timeout=30";
+            ConnectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={filePath};MultipleActiveResultSets=False;Integrated Security=True;Connect Timeout=30";
         }
 
         public bool SaveChanges()
@@ -55,10 +51,10 @@ namespace MyMoney.Infrastructure
         public void Dispose()
         {
 
-            Transactions.Dispose();
-            Budgets.Dispose();
+            Transactions?.Dispose();
+            Budgets?.Dispose();
 
-            context.Dispose();
+            context?.Dispose();
             context = null;
         }
     }
