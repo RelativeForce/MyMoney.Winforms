@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyMoney.Core.Model
+namespace MyMoney.Core.Data
 {
     public class Transaction
     {

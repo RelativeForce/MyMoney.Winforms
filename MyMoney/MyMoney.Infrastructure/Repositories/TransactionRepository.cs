@@ -1,5 +1,5 @@
 ﻿using MyMoney.Infrastructure.EntityFramework;
-using MyMoney.Core.Model;
+using MyMoney.Core.Data;
 using MyMoney.Core.Repositories;
 using System;
 using System.Collections.Generic;

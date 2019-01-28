@@ -1,5 +1,4 @@
-﻿using MyMoney.Core.Model;
-using MyMoney.Core.Repositories;
+﻿using MyMoney.Core.Repositories;
 using System;
 
 namespace MyMoney.Core

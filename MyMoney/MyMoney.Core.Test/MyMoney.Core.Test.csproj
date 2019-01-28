@@ -84,9 +84,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\MyMoney.Core\MyMoney.Core.csproj">
       <Project>{4BDB383C-A121-40AF-A73A-E242419AA4A7}</Project>

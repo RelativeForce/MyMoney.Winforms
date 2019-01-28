@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using MyMoney.Core;
-using MyMoney.Core.Model;
+using MyMoney.Core.Data;
 using MyMoney.Windows.Components;
 
 namespace MyMoney.Windows
