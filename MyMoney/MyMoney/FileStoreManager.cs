@@ -6,7 +6,7 @@ namespace MyMoney
 
     public class FileStoreManager
     {
-        public static string STORAGE_FILE = Path.GetFullPath("\\" + "MyMoneyDataStore.txt");
+        public static string STORAGE_FILE = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "\\" + "MyMoneyDataStore.txt");
 
         private const string DEFAULT_FILE_NAME = "Finance.mdf";
 

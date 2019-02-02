@@ -66,6 +66,7 @@ namespace MyMoney.Windows
             this.recommendButton.TabIndex = 2;
             this.recommendButton.Text = "Recommend";
             this.recommendButton.UseVisualStyleBackColor = true;
+            this.recommendButton.Visible = false;
             this.recommendButton.Click += new System.EventHandler(this.recommendButton_Click);
             this.recommendButton.MouseHover += new System.EventHandler(this.showRecommendToolTip);
             // 
