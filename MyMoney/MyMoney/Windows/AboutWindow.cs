@@ -10,9 +10,9 @@ namespace MyMoney.Windows
         public AboutWindow()
         {
             InitializeComponent();
-            labelProductName.Text = AssemblyProduct;
+            labelProductName.Text = "Product Name: " + AssemblyProduct;
             labelVersion.Text = "Version: " + AssemblyVersion;
-            labelCompanyName.Text = AssemblyCompany;
+            labelCompanyName.Text = "Company Name: " + AssemblyCompany;
             textBoxDescription.Text = AssemblyDescription;
         }
 
