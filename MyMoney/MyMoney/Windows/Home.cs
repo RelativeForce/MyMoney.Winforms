@@ -293,7 +293,16 @@ namespace MyMoney.Windows
 
         public void Notify(Core.Type type, Priority priority, string message)
         {
-            // TODO: show error
+            string heading;
+            switch (type) {
+                case Core.Type.Error: heading = "Error"; break;
+                case Core.Type.Notification: heading = "Notification"; break;
+                case Core.Type.Warning: heading = "Warning"; break;
+                default: heading = string.Empty; break;
+            }
+
+            var ttm = new ToolTipModel(heading, message, this);
+            _toolTipHandler.Draw(ttm);
         }
     }
 }
