@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,10 +11,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MyMoney</RootNamespace>
     <AssemblyName>MyMoney</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Joshua\OneDrive\Finance Handler\</PublishUrl>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>B:\Documents\Visual Studio\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -22,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>5</ApplicationRevision>
-    <ApplicationVersion>0.8.8.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -57,15 +62,34 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>MyMoney.Startup</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Visual Studio 2013\Projects\TabsAttempt\TabsAttempt\System.Data.SQLite.dll</HintPath>
-    </Reference>
+    <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Windows.Forms.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -75,12 +99,22 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.4.1\lib\net452\xunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\Budget.cs" />
-    <Compile Include="Database\CashFlow.cs" />
-    <Compile Include="Database\Repeat.cs" />
-    <Compile Include="Data_Storage\Row.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="FileStoreManager.cs" />
     <Compile Include="Windows\AboutWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,18 +127,35 @@
     <Compile Include="Windows\AddTransactionWindow.Designer.cs">
       <DependentUpon>AddTransactionWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Database\DatabaseHandler.cs" />
-    <Compile Include="Windows\User_Display\GraphHandler.cs" />
-    <Compile Include="Windows\Data_Transfer\Buffered.cs" />
-    <Compile Include="Windows\Data_Transfer\Packet.cs" />
-    <Compile Include="Windows\Main.cs">
+    <Compile Include="Windows\Components\DBFileDialogs\DBCreateFileDialog.cs" />
+    <Compile Include="Windows\Components\DBFileDialogs\DBLoadFileDialog.cs" />
+    <Compile Include="Windows\Components\ToolTipModel.cs" />
+    <Compile Include="Windows\Components\GraphHandler.cs" />
+    <Compile Include="Windows\Components\TransactionTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\Components\TransactionTextBox.Designer.cs">
+      <DependentUpon>TransactionTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Components\TransactionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\Components\TransactionView.Designer.cs">
+      <DependentUpon>TransactionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Components\TransactionViewGroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\Components\TransactionViewGroup.Designer.cs">
+      <DependentUpon>TransactionViewGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Home.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
+    <Compile Include="Windows\Home.Designer.cs">
+      <DependentUpon>Home.cs</DependentUpon>
     </Compile>
-    <Compile Include="Windows\User_Display\ToolTipHandler.cs" />
-    <Compile Include="Windows\User_Display\TransactionView.cs" />
+    <Compile Include="Windows\Components\ToolTipHandler.cs" />
     <Compile Include="Windows\MonthlyAllowanceChanger.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,17 +164,23 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Data_Storage\SQLHandler.cs" />
-    <Compile Include="Data_Storage\Table.cs" />
-    <Compile Include="Windows\User_Display\TransactionViewer.cs" />
     <EmbeddedResource Include="Windows\AboutWindow.resx">
       <DependentUpon>AboutWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\AddTransactionWindow.resx">
       <DependentUpon>AddTransactionWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Windows\Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\Components\TransactionTextBox.resx">
+      <DependentUpon>TransactionTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Components\TransactionView.resx">
+      <DependentUpon>TransactionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Components\TransactionViewGroup.resx">
+      <DependentUpon>TransactionViewGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Home.resx">
+      <DependentUpon>Home.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\MonthlyAllowanceChanger.resx">
       <DependentUpon>MonthlyAllowanceChanger.cs</DependentUpon>
@@ -138,19 +195,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="MyMoney_TemporaryKey.pfx" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -169,7 +218,35 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyMoney.Core\MyMoney.Core.csproj">
+      <Project>{4bdb383c-a121-40af-a73a-e242419aa4a7}</Project>
+      <Name>MyMoney.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyMoney.Infrastructure\MyMoney.Infrastructure.csproj">
+      <Project>{ccb750f1-6b93-438a-89c9-87e469b860dc}</Project>
+      <Name>MyMoney.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props'))" />
+  </Target>
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

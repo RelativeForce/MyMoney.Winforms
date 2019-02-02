@@ -1,11 +1,14 @@
-﻿namespace MyMoney.Windows
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace MyMoney.Windows
 {
     partial class MonthlyAllowanceChanger
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -63,6 +66,7 @@
             this.recommendButton.TabIndex = 2;
             this.recommendButton.Text = "Recommend";
             this.recommendButton.UseVisualStyleBackColor = true;
+            this.recommendButton.Visible = false;
             this.recommendButton.Click += new System.EventHandler(this.recommendButton_Click);
             this.recommendButton.MouseHover += new System.EventHandler(this.showRecommendToolTip);
             // 
@@ -139,13 +143,13 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox newAllowanceBox;
-        private System.Windows.Forms.Button recommendButton;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox oldAllowanceBox;
-        private System.Windows.Forms.Button submit;
-        private System.Windows.Forms.Button cancel;
-        private System.Windows.Forms.DateTimePicker month;
+        private Label label1;
+        private TextBox newAllowanceBox;
+        private Button recommendButton;
+        private Label label2;
+        private TextBox oldAllowanceBox;
+        private Button submit;
+        private Button cancel;
+        private DateTimePicker month;
     }
 }
