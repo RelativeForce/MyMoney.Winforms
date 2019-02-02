@@ -12,7 +12,7 @@ namespace MyMoney.Infrastructure.Repositories
         protected DbSet<T> _table;
         private IDatabaseContext _model;
 
-        internal Repository(IDatabaseContext model, DbSet<T> table)
+        public Repository(IDatabaseContext model, DbSet<T> table)
         {
             _model = model;
             _table = table;
@@ -24,14 +24,12 @@ namespace MyMoney.Infrastructure.Repositories
             _table = null;
         }
 
-        internal void CheckDisposed()
+        protected void CheckDisposed()
         {
-
             if (_model == null || _table == null)
             {
                 throw new Exception("Database connection has been disposed!");
             }
-
         }
 
         public T Add(T newItem)
@@ -120,6 +118,5 @@ namespace MyMoney.Infrastructure.Repositories
                 return null;
             }
         }
-
     }
 }

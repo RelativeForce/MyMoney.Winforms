@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoney.Core", "MyMoney.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoney.Core.Test", "MyMoney.Core.Test\MyMoney.Core.Test.csproj", "{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMoney.Infrastructure.Tests", "MyMoney.Infrastructure.Tests\MyMoney.Infrastructure.Tests.csproj", "{A34DCC43-A02B-4096-8E64-43E2B24A3F71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B28AF41D-6BC4-44C7-AB35-D8524BE81F52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A34DCC43-A02B-4096-8E64-43E2B24A3F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A34DCC43-A02B-4096-8E64-43E2B24A3F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A34DCC43-A02B-4096-8E64-43E2B24A3F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A34DCC43-A02B-4096-8E64-43E2B24A3F71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
