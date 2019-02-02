@@ -225,6 +225,7 @@ namespace MyMoney.Windows
         private void DisableOperationControls()
         {
             viewer.Enabled = false;
+            monthPlot.Visible = false;
             addTransactionButton.Enabled = false;
             changeMonthlyAllowanceButtton.Enabled = false;
             rightButton.Enabled = false;
@@ -237,6 +238,7 @@ namespace MyMoney.Windows
             addTransactionButton.Enabled = true;
             leftButton.Enabled = true;
             viewer.Enabled = true;
+            monthPlot.Visible = true;
         }
 
         #endregion operation_controls
