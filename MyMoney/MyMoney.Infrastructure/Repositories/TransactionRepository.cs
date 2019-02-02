@@ -1,15 +1,15 @@
-﻿using MyMoney.Infrastructure.EntityFramework;
-using MyMoney.Core.Data;
+﻿using MyMoney.Core.Data;
 using MyMoney.Core.Repositories;
 using System;
 using System.Collections.Generic;
+using MyMoney.Infrastructure.Interfaces;
 
 namespace MyMoney.Infrastructure.Repositories
 {
     public class TransactionRepository : Repository<Transaction>, ITransactionRepository
     {
 
-        internal TransactionRepository(DatabaseContext model) : base(model, model.Transactions) {
+        internal TransactionRepository(IDatabaseContext model) : base(model, model.Transactions) {
 
         }
 

@@ -1,18 +1,19 @@
 ﻿using MyMoney.Core.Data;
 using MyMoney.Core.Repositories;
-using MyMoney.Infrastructure.EntityFramework;
+using MyMoney.Infrastructure.Interfaces;
 using System;
 
 namespace MyMoney.Infrastructure.Repositories
 {
     public class BudgetRepository : Repository<Budget>, IBudgetRepository
     {
-        internal BudgetRepository(DatabaseContext model) : base(model, model.Budgets)
+        public BudgetRepository(IDatabaseContext model) : base(model, model.Budgets)
         {
 
         }
 
         public new Budget Add(Budget budget) {
+
             CheckDisposed();
 
             if (budget == null) return null;

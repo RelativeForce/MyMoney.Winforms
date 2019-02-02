@@ -1,18 +1,18 @@
-﻿using MyMoney.Infrastructure.EntityFramework;
-using MyMoney.Core.Repositories;
+﻿using MyMoney.Core.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
+using MyMoney.Infrastructure.Interfaces;
+using System.Data.Entity;
 
 namespace MyMoney.Infrastructure.Repositories
 {
     public abstract class Repository<T> : IRepository<T> where T : class
     {
-        internal DbSet<T> _table;
-        private DatabaseContext _model;
+        protected DbSet<T> _table;
+        private IDatabaseContext _model;
 
-        internal Repository(DatabaseContext model, DbSet<T> table)
+        internal Repository(IDatabaseContext model, DbSet<T> table)
         {
             _model = model;
             _table = table;
